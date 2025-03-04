@@ -31,6 +31,7 @@ public class AddMidwifeRecAction implements AddAction, Scoreable{
 	
 	private PatientIllnessScript patIllScript;
 	
+	public AddMidwifeRecAction() {}
 	public AddMidwifeRecAction(PatientIllnessScript patIllScript){
 		this.patIllScript = patIllScript;
 	}

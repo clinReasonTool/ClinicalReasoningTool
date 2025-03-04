@@ -83,6 +83,24 @@ public class DBList extends DBClinReason {
     	//return li;
     }
     
+    public ListInterface selectListItemByLangAndLabel(String lang, String label){
+    	String[] sources = new String[]{ListItem.TYPE_ADDED, ListItem.TYPE_MESH};
+    	Session s = instance.getInternalSession(Thread.currentThread(), false);
+    	Criteria criteria = s.createCriteria(ListItem.class,"ListItem");
+    	criteria.add(Restrictions.eq("language", new Locale(lang)));
+    	criteria.add(Restrictions.like("name", label));
+    	criteria.add(Restrictions.in("source", sources));
+    	ListItem li =  (ListItem) criteria.uniqueResult();
+    	if(li!=null) return li;
+    	
+    	Criteria criteria2 = s.createCriteria(Synonym.class,"ListItem");
+    	criteria2.add(Restrictions.eq("ignored", false));
+    	if(lang!=null && !lang.trim().equals("")) criteria2.add(Restrictions.eq("language", new Locale(lang)));
+    	criteria2.add(Restrictions.like("name", label));
+    	return (ListInterface) criteria2.uniqueResult();
+    	
+    }
+    
     /**
      * Searching for ListItems (admin interface)
      * @param lang
@@ -135,7 +153,7 @@ public class DBList extends DBClinReason {
     	Criteria criteria = s.createCriteria(Synonym.class,"ListItem");
     	criteria.add(Restrictions.eq("ignored", false));
     	if(lang!=null && !lang.trim().equals("")) criteria.add(Restrictions.eq("language", new Locale(lang)));
-    	criteria.add(Restrictions.ilike("name", term, MatchMode.ANYWHERE));
+    	criteria.add(Restrictions.like("name", term, MatchMode.ANYWHERE));
 
     	return criteria.list();
     	//s.close();

@@ -1,9 +1,12 @@
 package beans.relation;
+import java.awt.Point;
 import java.io.Serializable;
 import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 
+import actions.beanActions.AddDiagnosisAction;
+import actions.beanActions.AddProblemAction;
 import beans.scripts.*;
 import beans.user.SessionSetting;
 import beans.graph.Graph;
@@ -317,5 +320,9 @@ public class RelationDiagnosis extends Relation implements Serializable {
 	 */
 	public boolean getIsExpEdit(){
 		return NavigationController.getInstance().getMyFacesContext().getPatillscript().isExpScript();}
-
+	
+	public void calculatePoints(int pos, boolean isExp) {
+		Point p = new AddDiagnosisAction().calculateNewItemPosInCanvas(pos, isExp);
+		this.setXAndY(p);
+	}
 }

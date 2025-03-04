@@ -18,6 +18,7 @@
 		<property name="x" column="x" type="int"/>
 		<property name="y" column="y" type="int"/>
 		<property name="stage" column="stage" type="int"/>
+		<property name="comment" column="ccomment" type="string"/>
 		<!--<property name="prefix" column="prefix" type="string"/>-->
 				
 		<many-to-one name="recommendation" class="beans.list.ListItem" column="source_id"  lazy="false" insert="false" update="false" fetch="join" />

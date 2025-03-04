@@ -309,6 +309,10 @@ public class RelationNursingDiagnosis extends Relation implements Serializable {
 	 */
 	public boolean getIsExpEdit(){
 		return NavigationController.getInstance().getMyFacesContext().getPatillscript().isExpScript();}
+	
+	public void calculatePoints(int pos, boolean isExp) {
+		//TODO
+	}
 
 }
 

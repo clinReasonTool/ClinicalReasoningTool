@@ -35,6 +35,7 @@ public class AddDiagnosisAction implements AddAction, Scoreable{
 
 	private PatientIllnessScript patIllScript;
 	
+	public AddDiagnosisAction() {}
 	public AddDiagnosisAction(PatientIllnessScript patIllScript){
 		this.patIllScript = patIllScript;
 	}
@@ -105,15 +106,24 @@ public class AddDiagnosisAction implements AddAction, Scoreable{
 	 * @return
 	 */
 	private Point calculateNewItemPosInCanvas(){
-		int y = AddAction.MIN_Y;
+		int size=0;
 		if(patIllScript.getDiagnoses()!=null || !patIllScript.getDiagnoses().isEmpty()){
-			y = patIllScript.getDiagnoses().size() * 26;//CAVE max y!
+			size = patIllScript.getDiagnoses().size();
 		}
-		if(patIllScript.isExpScript()){
+		return calculateNewItemPosInCanvas(size, patIllScript.isExpScript());		
+	}
+	
+	public Point calculateNewItemPosInCanvas(int size, boolean isExpert){
+		int y = AddAction.MIN_Y;
+		y = size * 26; //CAVE max y! 
+		
+		//if an expert script we have to position the item on the x axis to the left:
+		if(isExpert){
 			return new Point(RelationDiagnosis.DEFAULT_X+100,y);
 		}
 		return new Point(RelationDiagnosis.DEFAULT_X,y);
 	}
+	
 	
 	/* (non-Javadoc)
 	 * @see beanActions.AddAction#save(beans.relation.Relation)

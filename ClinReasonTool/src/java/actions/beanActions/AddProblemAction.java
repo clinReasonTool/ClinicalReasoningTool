@@ -42,6 +42,7 @@ public class AddProblemAction implements AddAction, Scoreable{
 	private PatientIllnessScript patIllScript;
 	private String prefix = null;
 	
+	public AddProblemAction() {}
 	public AddProblemAction(PatientIllnessScript patIllScript){
 		this.patIllScript = patIllScript;
 	}
@@ -118,12 +119,19 @@ public class AddProblemAction implements AddAction, Scoreable{
 	 * @return
 	 */
 	private Point calculateNewItemPosInCanvas(){
-		int y = AddAction.MIN_Y;
+		int size=0;
 		if(patIllScript.getProblems()!=null || !patIllScript.getProblems().isEmpty()){
-			y = patIllScript.getProblems().size() * 26; //CAVE max y! 
+			size = patIllScript.getProblems().size();
 		}
+		return calculateNewItemPosInCanvas(size, patIllScript.isExpScript());
+	}
+	
+	public Point calculateNewItemPosInCanvas(int size, boolean isExpert){
+		int y = AddAction.MIN_Y;
+		y = size * 26; //CAVE max y! 
+		
 		//if an expert script we have to position the item on the x axis to the left:
-		if(patIllScript.isExpScript()){
+		if(isExpert){
 			return new Point(RelationProblem.DEFAULT_X+100,y);
 		}
 		return new Point(RelationProblem.DEFAULT_X,y);

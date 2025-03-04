@@ -5,11 +5,13 @@ package beans.helper;
  * models ranges that we need for values in illnesscripts. For example the typical age range of a disease
  * 
  * @author ingahege
+ * @deprecated
+ *
  *
  */
-public class Range extends IllnessScriptKey implements IllnessScriptValue{
+public class Range /*extends IllnessScriptKey implements IllnessScriptValue*/{
 
-	private long id;
+	/*private long id;
 	private int min = -1;
 	private int max = -1;
 	private long illnessScriptId;
@@ -28,5 +30,5 @@ public class Range extends IllnessScriptKey implements IllnessScriptValue{
 	public void setIllnessScriptId(long illnessScriptId) {this.illnessScriptId = illnessScriptId;}
 	public long getId() {return id;}
 	public void setId(long id) {this.id = id;}
-			
+		*/	
 }

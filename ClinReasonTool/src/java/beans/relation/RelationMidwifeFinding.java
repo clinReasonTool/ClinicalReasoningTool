@@ -82,4 +82,8 @@ public class RelationMidwifeFinding extends Relation implements Serializable{
 	 */
 	public Set<Synonym> getSynonyma(){ return problem.getSynonyma();}
 	
+	public void calculatePoints(int pos, boolean isExp) {
+		//TODO
+	}
+	
 }

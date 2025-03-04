@@ -13,6 +13,10 @@ import beans.graph.MultiEdge;
  * @author ingahege
  *
  */
+/**
+ * @author ingahege
+ *
+ */
 public class Connection extends Beans implements Serializable, Comparable<Connection>{
 	
 	public static final int WEIGHT_NONE = MultiEdge.WEIGHT_NONE;	
@@ -45,9 +49,7 @@ public class Connection extends Beans implements Serializable, Comparable<Connec
 	private int targetType; //see definitions in ConceptMapController
 	private int weight; 
 	/**
-	 * currently only used for learning analytics purposes for learner scripts, but might be used later on for 
-	 * other purposes (e.g. display connection not automatically if source and target are visible, but only after the 
-	 * given stage)...
+	 * stage at which connection will be displayed.
 	 */
 	private int stage = -1;
 	/**
@@ -61,6 +63,20 @@ public class Connection extends Beans implements Serializable, Comparable<Connec
 	/** exact positioning of the target ep (now the whole node can be a target) **/
 	private int targetEpX = -1;
 	private int targetEpY = -1;
+	
+	/**
+	 * only use temporarily for import - not stored in database!
+	 */
+	private String concept1;
+	
+	/**
+	 * only use temporarily for import - not stored in database!
+	 */
+	private String concept2; 
+	/**
+	 * only use temporarily for import - not stored in database!
+	 */
+	private int order;
 	
 	public Connection(){}
 	public Connection(long startId, long targetId, long illScriptId, int startType, int targetType, int stage){
@@ -97,7 +113,14 @@ public class Connection extends Beans implements Serializable, Comparable<Connec
 	public int getTargetEpX() {return targetEpX;}
 	public void setTargetEpX(int targetEpX) {this.targetEpX = targetEpX;}
 	public int getTargetEpY() {return targetEpY;}
-	public void setTargetEpY(int targetEpY) {this.targetEpY = targetEpY;}
+	public void setTargetEpY(int targetEpY) {this.targetEpY = targetEpY;}	
+	public String getConcept1() {return concept1;}
+	public void setConcept1(String concept1) {this.concept1 = concept1;}
+	public String getConcept2() {return concept2;}
+	public void setConcept2(String concept2) {this.concept2 = concept2;}
+	public int getOrder() {return order;}
+	public void setOrder(int order) {this.order = order;}
+	
 	public void setTargetEndpoint(Point p){
 		if(p==null) return;
 		setTargetEpX(p.x);

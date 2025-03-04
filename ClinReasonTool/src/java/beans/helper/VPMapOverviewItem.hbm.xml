@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="beans.helper"> 
+
+	<class name="VPMapOverviewItem" table="crt.maps_overview_view">
+		<cache usage="nonstrict-read-write" />
+		<comment>Feedback</comment>	
+	
+		<id name="mapId" type="long" column="pis_id"></id>
+		<property name="caseId" column="case_id" type="long" />			
+		<property name="orgCaseId" column="org_case_id" type="long" />
+		<property name="childType" column="child_type" type="int" />
+		<property name="numFirstAttempts" column="num_final_attempts" type="int" />
+		<property name="ddxSubmittedStage" column="ddx_submitted_stage" type="int" />
+		
+		
+</class>
+</hibernate-mapping>

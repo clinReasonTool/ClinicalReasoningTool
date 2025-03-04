@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="beans.helper"> 
+
+	<class name="CaseDifficulty" table="casus.case_difficulty">
+		<cache usage="nonstrict-read-write" />
+		<comment>Case Difficulty</comment>	
+	
+		<id name="caseId" type="long" column="case_id"></id>
+		<property name="difficulty" column="difficulty" type="float" />			
+		<property name="numSess" column="num_case_sess" type="int" />
+		<property name="calcDate" column="calc_date" type="timestamp" />		
+		
+</class>
+</hibernate-mapping>

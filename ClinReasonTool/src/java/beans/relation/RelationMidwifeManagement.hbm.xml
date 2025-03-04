@@ -20,6 +20,7 @@
 		<property name="stage" column="stage" type="int"/>
 		<property name="prefix" column="prefix" type="string"/>
 		<property name="discriminator" column="discriminator" type="int"/>
+		<property name="comment" column="ccomment" type="string"/>
 		<!--  <property name="creationDate" column="creation_date" update="false" type="timestamp"/>-->
 		
 		<!--  <property name="name" column="name" type="string"/>	-->
