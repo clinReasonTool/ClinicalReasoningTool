@@ -6,6 +6,7 @@ import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 
+import actions.beanActions.AddAction;
 import beans.graph.Graph;
 import beans.graph.MultiEdge;
 import beans.graph.MultiVertex;
@@ -82,11 +83,25 @@ public abstract class Relation extends Beans implements Rectangle{
 	 */
 	private long synId;
 	
+	/**
+	 * Primarily for CM uploading to store original name of relation, but can be used later on for authors to leave comments for 
+	 * students on why this concept is in the map. 
+	 */
+	private String comment;
+	
 
 	public long getListItemId() {return listItemId;}
 	public void setListItemId(long listItemId) {this.listItemId = listItemId;}
 	public abstract ListItem getListItem(); 
+
 	public abstract String getLabel();
+	
+	/**
+	 * we call this when importing concepts - do not use for interface interactions! 
+	 * @param pos 
+	 * @param isExp
+	 */
+	//public abstract void calculatePoints(int pos, boolean isExp);
 	/**
 	 * if isSyndrome is set, we add the related items here...
 	 */
@@ -146,10 +161,13 @@ public abstract class Relation extends Beans implements Rectangle{
 	public void setSynId(long synId) {this.synId = synId;}
 	public Set<RelationSyndrome> getSyndromItems() {return syndromItems;}
 	public void setSyndromItems(Set<RelationSyndrome> syndromItems) {this.syndromItems = syndromItems;}
-
-	public abstract String getIdWithPrefix();
+	public String getComment() {return comment;}
+	public void setComment(String comment) {this.comment = comment;}
 	
+	
+	public abstract String getIdWithPrefix();
 	public abstract String getLabelOrSynLabel();
+	public abstract void calculatePoints(int pos, boolean isExp);
 	
 	public void setXAndY(Point p){
 		this.setX(p.x);
@@ -259,5 +277,4 @@ public abstract class Relation extends Beans implements Rectangle{
 		return getIsSyndromePart();
 		
 	}
-	
 }

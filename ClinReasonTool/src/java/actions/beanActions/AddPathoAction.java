@@ -33,6 +33,7 @@ public class AddPathoAction implements AddAction, Scoreable/*, FeedbackCreator*/
 	
 	private PatientIllnessScript patIllScript;
 	
+	public AddPathoAction() {}
 	public AddPathoAction(PatientIllnessScript patIllScript){
 		this.patIllScript = patIllScript;
 	}

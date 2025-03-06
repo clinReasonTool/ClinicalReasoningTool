@@ -307,7 +307,9 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 </script>
 </head>
 <body style="font-family:arial;" data-demo-id="draggableConnectors" data-library="dom">
-<div >
+<div>
+
+
 <span class="nonapi">ScriptId:  #{adminContext.patillscript.id}
 <br/>VPId: #{adminContext.patillscript.vpId} (Casus)<br/>
 VP Name:  #{adminContext.patillscript.VPName} <br/>
@@ -333,7 +335,10 @@ Stage: <span id="stageSpan">#{adminContext.patillscript.stage}(#{adminContext.pa
         <script language="JavaScript">
         if(sessionStorage.displayMode==1) document.write ("Show full map"); else document.write("Show map at current stage")</script></a></div>
 
-</div>
+</div><br/>
+
+<a href="import/cm_upload.xhtml" target="new">Upload CM</a>
+
 <div class="boxes_container">
 	<div id="canvas" class="canvas jtk-surface drag-drop jtk-surface-nopan" >
 		 		  <!-- pathos -->

@@ -35,6 +35,7 @@ public class AddMngAction implements AddAction, Scoreable{
 	
 	private PatientIllnessScript patIllScript;
 	
+	public AddMngAction() {}
 	public AddMngAction(PatientIllnessScript patIllScript){
 		this.patIllScript = patIllScript;
 	}
@@ -103,13 +104,31 @@ public class AddMngAction implements AddAction, Scoreable{
 
 	}
 	
-
 	/**
 	 * we calculate a position for the new item. 
 	 * TODO: we could check whether the position is already taken,or others are vacant due to deleting of others
 	 * @return
 	 */
 	private Point calculateNewItemPosInCanvas(){
+		int size=0;
+		if(patIllScript.getMngs()!=null || !patIllScript.getMngs().isEmpty()){
+			size = patIllScript.getMngs().size();
+		}
+		return calculateNewItemPosInCanvas(size, patIllScript.isExpScript());		
+	}
+	
+	public Point calculateNewItemPosInCanvas(int size, boolean isExpert){
+		int y = AddAction.MIN_Y;
+		y = size * 26; //CAVE max y! 
+		
+		//if an expert script we have to position the item on the x axis to the left:
+		if(isExpert){
+			return new Point(RelationManagement.DEFAULT_X+100,y);
+		}
+		return new Point(RelationManagement.DEFAULT_X,y);
+	}
+
+	/*private Point calculateNewItemPosInCanvas(){
 		int y = AddAction.MIN_Y;
 		if(patIllScript.getMngs()!=null || !patIllScript.getMngs().isEmpty()){
 			y = patIllScript.getMngs().size() * 26; //CAVE max y! 
@@ -118,7 +137,7 @@ public class AddMngAction implements AddAction, Scoreable{
 			return new Point(RelationManagement.DEFAULT_X+100,y);
 		}
 		return new Point(RelationManagement.DEFAULT_X,y);
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see actions.scoringActions.Scoreable#triggerScoringAction(java.beans.Beans)

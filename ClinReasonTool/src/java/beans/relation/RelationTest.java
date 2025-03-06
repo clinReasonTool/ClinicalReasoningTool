@@ -1,9 +1,11 @@
 package beans.relation;
 
+import java.awt.Point;
 import java.io.Serializable;
 import java.util.*;
 
-
+import actions.beanActions.AddDiagnosisAction;
+import actions.beanActions.AddTestAction;
 import controller.GraphController;
 import net.casus.util.Utility;
 import util.CRTLogger;
@@ -78,5 +80,10 @@ public class RelationTest extends Relation implements Serializable{
 			CRTLogger.out(Utility.stackTraceToString(e), CRTLogger.LEVEL_ERROR);
 			return "";
 		}
+	}
+	
+	public void calculatePoints(int pos, boolean isExp) {
+		Point p = new AddTestAction().calculateNewItemPosInCanvas(pos, isExp);
+		this.setXAndY(p);
 	}
 }

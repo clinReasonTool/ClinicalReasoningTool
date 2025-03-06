@@ -59,4 +59,8 @@ public class RelationNursingAim extends Relation implements Serializable {
 	public String getIdWithPrefix() {
 		return GraphController.PREFIX_NURSINGAIM+this.getId();
 	}
+	
+	public void calculatePoints(int pos, boolean isExp) {
+		//TODO
+	}
 }

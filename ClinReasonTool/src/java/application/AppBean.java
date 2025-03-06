@@ -129,11 +129,15 @@ public class AppBean extends ApplicationWrapper implements HttpSessionListener{
 	    	//we load the semantic qualifiers and analyze any summary statements that have not yet been analyzed.
 	    	if(semanticQuals==null) semanticQuals = SummaryStatementController.loadSemanticQuals();
 	    	//SummaryStatementController.testSummStRating();
+	    
 	    	
-	    	//old version...
-	    	//if(semanticQuals!=null) SummaryStatementController.analyzeSemanticQualsStatements();
-	    	//testing:
-		    
+	    	//testing calculating case difficulty: 
+	    	/*try {
+	    		new CaseDifficultyCalculator().calculateDifficulty();
+	    	}
+	    	catch(Exception e) {
+	    		CRTLogger.out("AppBean(): " + StringUtilities.stackTraceToString(e), CRTLogger.LEVEL_ERROR);
+	    	}	    	*/
 	    }
 	    catch(Exception e){
 	    	CRTLogger.out("AppBean(): " + StringUtilities.stackTraceToString(e), CRTLogger.LEVEL_ERROR);

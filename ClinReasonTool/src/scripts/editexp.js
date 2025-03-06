@@ -238,8 +238,11 @@ function initBoxesSel(){
 
 }
 
-/*function chgBox(boxNo){
-	var newType = $("#chgbox"+boxNo).val();
-	sendAjax(newType, callBackReload, "changeBoxType"+boxNo, "");
-	//location.reload();
-}*/
+/**  uploaded CM is submitted with selected items and then window can be closed*/
+function submitUploadedCM(){
+	sendAjax("", callBackUpload, "addSelectedRelations", "");
+}
+
+function callBackUpload(){
+	alert("back");
+}

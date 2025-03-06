@@ -1,8 +1,10 @@
 package beans.relation;
 
+import java.awt.Point;
 import java.io.Serializable;
 import java.util.*;
 
+import actions.beanActions.AddProblemAction;
 import controller.GraphController;
 import net.casus.util.Utility;
 import util.CRTLogger;
@@ -99,4 +101,9 @@ public class RelationProblem extends Relation implements Serializable{
 	 */
 	public Set<Synonym> getSynonyma(){ return problem.getSynonyma();}
 	
+
+	public void calculatePoints(int pos, boolean isExp) {
+		Point p = new AddProblemAction().calculateNewItemPosInCanvas(pos, isExp);
+		this.setXAndY(p);
+	}
 }

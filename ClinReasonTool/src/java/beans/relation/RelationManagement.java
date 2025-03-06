@@ -1,8 +1,11 @@
 package beans.relation;
 
+import java.awt.Point;
 import java.io.Serializable;
 import java.util.*;
 
+import actions.beanActions.AddDiagnosisAction;
+import actions.beanActions.AddMngAction;
 import controller.GraphController;
 import net.casus.util.Utility;
 import util.CRTLogger;
@@ -61,5 +64,10 @@ public class RelationManagement extends Relation implements Serializable{
 			CRTLogger.out(Utility.stackTraceToString(e), CRTLogger.LEVEL_ERROR);
 			return "";
 		}
+	}
+	
+	public void calculatePoints(int pos, boolean isExp) {
+		Point p = new AddMngAction().calculateNewItemPosInCanvas(pos, isExp);
+		this.setXAndY(p);
 	}
 }

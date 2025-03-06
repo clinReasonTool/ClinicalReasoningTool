@@ -21,6 +21,7 @@
 		<property name="prefix" column="prefix" type="string"/>
 		<property name="prototypical" column="prototypical" type="int"/>
 		<property name="discriminator" column="discriminator" type="int" />
+		<property name="comment" column="ccomment" type="string"/>
 				
 		<many-to-one name="problem" class="beans.list.ListItem" column="source_id"  lazy="false" insert="false" update="false" />
 				

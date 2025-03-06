@@ -31,6 +31,7 @@ public class AddInfoAction implements AddAction, Scoreable{
 	
 	private PatientIllnessScript patIllScript;
 	
+	public AddInfoAction() {}
 	public AddInfoAction(PatientIllnessScript patIllScript){
 		this.patIllScript = patIllScript;
 	}

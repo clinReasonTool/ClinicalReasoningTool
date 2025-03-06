@@ -60,4 +60,9 @@ public class RelationPatho extends Relation implements Serializable {
 	public String getIdWithPrefix() {
 		return GraphController.PREFIX_PATHO+this.getId();
 	}
+	
+	public void calculatePoints(int pos, boolean isExp) {
+		//TODO
+	}
+	
 }

@@ -18,6 +18,7 @@ import beans.scripts.*;
 import beans.graph.Graph;
 import beans.helper.TypeAheadBean;
 import beans.relation.Relation;
+import beans.relation.RelationManagement;
 import beans.relation.RelationTest;
 import beans.scoring.ScoreBean;
 import beans.scripts.IllnessScriptInterface;
@@ -33,6 +34,7 @@ public class AddTestAction implements AddAction, Scoreable/*, FeedbackCreator*/{
 	
 	private PatientIllnessScript patIllScript;
 	
+	public AddTestAction() {}
 	public AddTestAction(PatientIllnessScript patIllScript){
 		this.patIllScript = patIllScript;
 	}
@@ -106,6 +108,25 @@ public class AddTestAction implements AddAction, Scoreable/*, FeedbackCreator*/{
 	 * @return
 	 */
 	private Point calculateNewItemPosInCanvas(){
+		int size=0;
+		if(patIllScript.getTests()!=null || !patIllScript.getTests().isEmpty()){
+			size = patIllScript.getTests().size();
+		}
+		return calculateNewItemPosInCanvas(size, patIllScript.isExpScript());		
+	}
+	
+	public Point calculateNewItemPosInCanvas(int size, boolean isExpert){
+		int y = AddAction.MIN_Y;
+		y = size * 26; //CAVE max y! 
+		
+		//if an expert script we have to position the item on the x axis to the left:
+		if(isExpert){
+			return new Point(RelationTest.DEFAULT_X+100,y);
+		}
+		return new Point(RelationTest.DEFAULT_X,y);
+	}
+	
+	/*private Point calculateNewItemPosInCanvas(){
 		int y = AddAction.MIN_Y;
 		if(patIllScript.getTests()!=null || !patIllScript.getTests().isEmpty()){
 			y = patIllScript.getTests().size() * 26; //CAVE max y! 
@@ -114,7 +135,7 @@ public class AddTestAction implements AddAction, Scoreable/*, FeedbackCreator*/{
 			return new Point(RelationTest.DEFAULT_X+100,y);
 		}
 		return new Point(RelationTest.DEFAULT_X,y);
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see actions.scoringActions.Scoreable#triggerScoringAction(java.beans.Beans)

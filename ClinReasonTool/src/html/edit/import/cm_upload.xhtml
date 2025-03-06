@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:v="urn:schemas-microsoft-com:vml">
+ <f:view>     
+
+<head>
+ <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<title>CM Upload</title>
+<script type="text/javascript" src="../../scripts/jquery112/jquery.js"></script>
+<script type="text/javascript" src="../../scripts/jquery112/jquery-ui.min.js"></script>
+<script src="../../scripts/ajax.js"></script>
+<script src="../../scripts/editexp.js"></script>
+<script language="JavaScript">
+var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
+</script>
+</head>
+
+<h:body>
+
+<h:form enctype="multipart/form-data">
+		<h:inputFile id="uploader" value="#{importbean.file}" validator="#{importbean.validate}">
+			<f:ajax listener="#{importbean.upload}" render="@form"/>
+		</h:inputFile>
+		<h:message for="uploader"/>
+		<h:commandButton value="Upload" action="#{importbean.upload}" ></h:commandButton>
+
+</h:form>
+Excel file with concepts in English and structure stage | concept | type | meshUid can be uploaded<br/>
+On 2nd tab named "cnxs" there can be stage | concept1 | concept2
+<br/>
+ VPId: #{adminContext.patillscript.vpId}<br/>
+<h:form>
+	<table>
+	<tr><td>Stage</td><td>Item</td><td>Add?</td></tr>
+		<ui:repeat value="#{importbean.uploadedrelations}" var="rel" varStatus="status">
+			<tr><ui:include src="cm_upload_row.xhtml" /></tr>
+		</ui:repeat>	
+		<ui:repeat value="#{importbean.uploadedconnections}" var="conn" varStatus="status">
+			<tr><ui:include src="cnx_upload_row.xhtml" /></tr>
+		</ui:repeat>		
+
+	</table>
+	
+	
+	<h:commandButton value="submit" action="#{importbean.addSelectedRelations}" />
+</h:form>
+
+<!-- <a href="javascript:submitUploadedCM();">Submit</a>-->
+</h:body>
+</f:view>
+</html> 

@@ -31,6 +31,7 @@ public class AddMidwifeHypAction implements AddAction, Scoreable{
 	
 	private PatientIllnessScript patIllScript;
 	
+	public AddMidwifeHypAction() {}
 	public AddMidwifeHypAction(PatientIllnessScript patIllScript){
 		this.patIllScript = patIllScript;
 	}

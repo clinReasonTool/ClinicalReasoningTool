@@ -100,7 +100,7 @@ public class HibernateSession {
 			cfg.addClass(beans.relation.RelationManagement.class);			
 			cfg.addClass(beans.relation.RelationTest.class);	
 			cfg.addClass(beans.relation.summary.SummaryStatement.class);	
-			cfg.addClass(beans.helper.Range.class);
+			//cfg.addClass(beans.helper.Range.class);
 			cfg.addClass(beans.scoring.ScoreBean.class);
 			cfg.addClass(beans.error.MyError.class);
 			cfg.addClass(beans.scoring.FeedbackBean.class);
@@ -120,6 +120,8 @@ public class HibernateSession {
 			cfg.addClass(beans.context.Actor.class);
 			cfg.addClass(beans.context.Context.class);
 			cfg.addClass(beans.relation.summary.JsonTest.class); //testing only
+			cfg.addClass(beans.helper.VPMapOverviewItem.class);
+			cfg.addClass(beans.helper.CaseDifficulty.class);
 			//cfg.addClass(test.LMMeshMapping.class);
 			
 			if (factory==null) {

@@ -31,6 +31,7 @@ public class AddNursingMngAction implements AddAction, Scoreable{
 	
 	private PatientIllnessScript patIllScript;
 	
+	public AddNursingMngAction() {}
 	public AddNursingMngAction(PatientIllnessScript patIllScript){
 		this.patIllScript = patIllScript;
 	}

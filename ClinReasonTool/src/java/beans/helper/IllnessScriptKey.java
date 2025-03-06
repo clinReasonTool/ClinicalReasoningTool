@@ -1,5 +1,8 @@
 package beans.helper;
 
+/**
+ * @deprecated
+ */
 public abstract class IllnessScriptKey {
 
 	public static final int KEY_AGE = 1;

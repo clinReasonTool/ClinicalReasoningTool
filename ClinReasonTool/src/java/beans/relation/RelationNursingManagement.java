@@ -62,4 +62,8 @@ public class RelationNursingManagement extends Relation implements Serializable{
 			return "";
 		}
 	}
+	
+	public void calculatePoints(int pos, boolean isExp) {
+		//TODO
+	}
 }

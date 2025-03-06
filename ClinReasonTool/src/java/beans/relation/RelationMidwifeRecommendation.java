@@ -59,4 +59,8 @@ public class RelationMidwifeRecommendation extends Relation implements Serializa
 			return "";
 		}
 	}
+	
+	public void calculatePoints(int pos, boolean isExp) {
+		//TODO
+	}
 }
