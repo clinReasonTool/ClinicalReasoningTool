@@ -29,18 +29,17 @@ public class RelationController {
 
 		
 		if(idStr.startsWith(Synonym.SYN_VERTEXID_PREFIX)){ //synonym selected
-			//type = AddAction.ADD_TYPE_SYNITEM;
 			id = Long.valueOf(idStr.substring(Synonym.SYN_VERTEXID_PREFIX.length()));
 			Synonym syn = new DBList().selectSynonymById(id);
 			li = getListItemById(syn.getListItemId(), scriptLoc);
-			aa.addRelation(/*syn.getListItemId(), name*/li, (int)x, (int)y, id); //then we add a synonym
+			aa.addRelation(li, (int)x, (int)y, id); //then we add a synonym
 			return;
 		}
 		if(idStr!=null && idStr.startsWith("IGNORE")) //for certain entries in the list, we do not want to trigger an event.
 			return;
 		id = Long.valueOf(idStr.trim());
 		li = getListItemById(id, scriptLoc);
-		if(li!=null) aa.addRelation(/*id, name*/li, (int)x, (int)y, -1);
+		if(li!=null) aa.addRelation(li, (int)x, (int)y, -1);
 		
 	}
 	

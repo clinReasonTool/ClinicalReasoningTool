@@ -29,7 +29,11 @@ import beans.list.ListItem;
 import properties.IntlConfiguration;
 import util.CRTLogger;
 
-public class AddPathoAction implements AddAction, Scoreable/*, FeedbackCreator*/{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class AddPathoAction /*implements AddAction, Scoreable*/{
 	
 	private PatientIllnessScript patIllScript;
 	
@@ -65,16 +69,16 @@ public class AddPathoAction implements AddAction, Scoreable/*, FeedbackCreator*/
 	 * @param yStr
 	 */
 	public void add(String idStr, String name, String xStr, String yStr){ 
-		new RelationController().initAdd(idStr, name, xStr, yStr, this, patIllScript.getLocale());
+	//	new RelationController().initAdd(idStr, name, xStr, yStr, this, patIllScript.getLocale());
 	}
 	
-	public void addRelation(/*long id, String prefix*/ListItem li, int x, int y, long synId){		
-		addRelation(li/*id, prefix*/, x, y, synId, false);
+	public void addRelation(ListItem li, int x, int y, long synId){		
+		//addRelation(li, x, y, synId, false);
 	}
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#addRelation(long, java.lang.String, int, int, long)
 	 */
-	public void addRelation(/*long id, String name*/ListItem li, int x, int y, long synId, boolean isJoker){
+	/*public void addRelation(ListItem li, int x, int y, long synId, boolean isJoker){
 		if(patIllScript.getPatho()==null) patIllScript.setPatho(new ArrayList<RelationPatho>());
 		RelationPatho rel = new RelationPatho(li.getItem_id(), patIllScript.getId(), synId);		
 		if(patIllScript.getPatho().contains(rel)){
@@ -98,14 +102,14 @@ public class AddPathoAction implements AddAction, Scoreable/*, FeedbackCreator*/
 		if(!patIllScript.isExpScript()) updateXAPIStatement(rel);
 		//((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).setAttribute("tst", rel);
 
-	}
+	}*/
 	
 	/**
 	 * we calculate a position for the new item. 
 	 * TODO: we could check whether the position is already taken,or others are vacant due to deleting of others
 	 * @return
 	 */
-	private Point calculateNewItemPosInCanvas(){
+	/*private Point calculateNewItemPosInCanvas(){
 		int y = AddAction.MIN_Y;
 		if(patIllScript.getPatho()!=null || !patIllScript.getPatho().isEmpty()){
 			y = patIllScript.getPatho().size() * 26; //CAVE max y! 
@@ -114,7 +118,7 @@ public class AddPathoAction implements AddAction, Scoreable/*, FeedbackCreator*/
 			return new Point(RelationPatho.DEFAULT_X+100,y);
 		}
 		return new Point(RelationPatho.DEFAULT_X,y);
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see actions.scoringActions.Scoreable#triggerScoringAction(java.beans.Beans)
@@ -132,7 +136,7 @@ public class AddPathoAction implements AddAction, Scoreable/*, FeedbackCreator*/
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel) {
+	/*public void updateGraph(Relation rel) {
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED);
 	
@@ -143,7 +147,7 @@ public class AddPathoAction implements AddAction, Scoreable/*, FeedbackCreator*/
 			}
 		}
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
-	}
+	}*/
 	
 	public void updateXAPIStatement(Relation rel){
 		XAPIController.getInstance().addOrUpdateAddStatement(rel);

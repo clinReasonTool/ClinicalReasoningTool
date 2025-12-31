@@ -31,7 +31,11 @@ import beans.list.ListItem;
 import properties.IntlConfiguration;
 import util.CRTLogger;
 
-public class AddDiagnosisAction implements AddAction, Scoreable{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class AddDiagnosisAction /*implements AddAction, Scoreable*/{
 
 	private PatientIllnessScript patIllScript;
 	
@@ -43,11 +47,11 @@ public class AddDiagnosisAction implements AddAction, Scoreable{
 	/* (non-Javadoc)
 	 * @see beanActions.AddAction#add(java.lang.String)
 	 */
-	public void add(String idStr, String name){ 
+	/*public void add(String idStr, String name){ 
 		//addProblem(idStr, name);
 		//long id = Long.valueOf(idStr.trim());
 		add(idStr, name, "-1", "-1");
-	}
+	}*/
 	
 	/**
 	 * @param idStr either an id or syn_id (for a synonym)
@@ -55,16 +59,16 @@ public class AddDiagnosisAction implements AddAction, Scoreable{
 	 * @param xStr (e.g. "199.989894") -> we have to convert it into int
 	 * @param yStr
 	 */
-	public void add(String idStr, String name, String xStr, String yStr){ 
+	/*public void add(String idStr, String name, String xStr, String yStr){ 
 		new RelationController().initAdd(idStr, name, xStr, yStr, this, patIllScript.getLocale());
-	}
+	}*/
 	
-	public void addRelation(/*long id, String name,*/ListItem li, int x, int y, long synId){
+	/*public void addRelation(ListItem li, int x, int y, long synId){
 		 addRelation(li, x, y, synId, false);
 
-	}
+	}*/
 	
-	public void addRelation(ListItem li, /*long id, String name2,*/ int x, int y, long synId, boolean isJoker){
+	/*public void addRelation(ListItem li, int x, int y, long synId, boolean isJoker){
 		if(patIllScript.getDiagnoses()==null) patIllScript.setDiagnoses(new ArrayList<RelationDiagnosis>());
 		RelationDiagnosis rel = new RelationDiagnosis(li.getItem_id(), patIllScript.getId(), synId);		
 		if(patIllScript.getDiagnoses().contains(rel)){
@@ -89,7 +93,7 @@ public class AddDiagnosisAction implements AddAction, Scoreable{
 		if(!patIllScript.isExpScript()) updateXAPIStatement(rel);
 		//((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).setAttribute("ddx", rel);
 
-	}
+	}*/
 	
 
 	
@@ -105,7 +109,7 @@ public class AddDiagnosisAction implements AddAction, Scoreable{
 	 * TODO: we could check whether the position is already taken,.....
 	 * @return
 	 */
-	private Point calculateNewItemPosInCanvas(){
+	/*private Point calculateNewItemPosInCanvas(){
 		int size=0;
 		if(patIllScript.getDiagnoses()!=null || !patIllScript.getDiagnoses().isEmpty()){
 			size = patIllScript.getDiagnoses().size();
@@ -122,7 +126,7 @@ public class AddDiagnosisAction implements AddAction, Scoreable{
 			return new Point(RelationDiagnosis.DEFAULT_X+100,y);
 		}
 		return new Point(RelationDiagnosis.DEFAULT_X,y);
-	}
+	}*/
 	
 	
 	/* (non-Javadoc)
@@ -154,12 +158,12 @@ public class AddDiagnosisAction implements AddAction, Scoreable{
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel) {
+	public void updateGraph(Relation rel, int box) {
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
-		graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED);
+		graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED, box);
 
 		// add implicit edges:
-		if(patIllScript.getTests()!=null){
+		/*if(patIllScript.getTests()!=null){
 			for(int i=0; i < patIllScript.getTests().size(); i++){
 				graph.addImplicitEdge(rel.getListItemId(), patIllScript.getTests().get(i).getListItemId(), IllnessScriptInterface.TYPE_LEARNER_CREATED);
 			}
@@ -173,7 +177,7 @@ public class AddDiagnosisAction implements AddAction, Scoreable{
 			for(int i=0; i < patIllScript.getProblems().size(); i++){
 				graph.addImplicitEdge(patIllScript.getProblems().get(i).getListItemId(), rel.getListItemId(), IllnessScriptInterface.TYPE_LEARNER_CREATED);
 			}
-		}
+		}*/
 		//addHierarchyRelation(rel, graph); //creates a lot of unwanted connections
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
 	}

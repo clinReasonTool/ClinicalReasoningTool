@@ -8,6 +8,10 @@ import net.casus.util.Utility;
 import util.CRTLogger;
 import beans.list.*;
 
+/**
+ * @author ingahege
+ * @deprecated
+ */
 public class RelationMidwifeManagement extends Relation implements Serializable{
 	
 	public static final int DEFAULT_X = 5; //245; //325; //default x position of problems in canvas
@@ -22,18 +26,19 @@ public class RelationMidwifeManagement extends Relation implements Serializable{
 		this.setDestId(destId);
 		if(synId>0) setSynId(synId);
 	}
-	public int getDiscriminator() {return TYPE_MMNG;}
+	public int getDiscriminator() {return SUBTYPE_MMNG;}
 	public void setDiscriminator(int i){}
 	
 	//do not change name (needed for mapping)	
 	public ListItem getManagement() {return mwmanagement;}
 	public void setManagement(ListItem mwmanagement) {this.mwmanagement = mwmanagement;}
-	public String getIdWithPrefix(){ return GraphController.PREFIX_MMNG+this.getId();}
+	public void setListItem(ListItem li) {mwmanagement = li;}
+	public String getIdWithPrefix(){ return ""; /*GraphController.PREFIX_MMNG+this.getId();*/}
 
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getRelationType()
 	 */
-	public int getRelationType() {return TYPE_MMNG;}	
+	public int getRelationType() {return SUBTYPE_MMNG;}	
 
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getLabel()

@@ -3,31 +3,59 @@
  * javascript for displaying the illness script tabs representation
  */
 
-/******************** general add/del*******************************/
+//**************** new box functions  ************/
 
-/**
- * user changes the course of time, we trigger an ajax call to save change.
- */
-/*function changeCourseOfTime(){
-	var courseTime = $("#courseTime").val(); 
-	sendAjax(courseTime, doNothing, "chgCourseOfTime", "");
-}*/
-
-
-/******************** problems tab*******************************/
-
-/**
- * a problem is added to the list of the already added problems:
- **/
-function addProblem(problemId, name, typedinName){
+function addBoxItem(itemId, name, typedinName, box){
 	clearErrorMsgs();
-	var prefix = $("#fdg_prefix").val();
+	var prefix = $("#box"+box+"_prefix").val();
 	
 	if(name!=""){
-		checkBoxColorOnAdd("fdg_title", "fdgs");
-		sendAjax(problemId, problemCallBack, "addProblem", prefix, typedinName);
+		checkBoxColorOnAdd("box"+box+"_title", "box"+box+"s");
+		sendAjax(itemId, boxCallBack, "addBox"+box+"Item", prefix, typedinName, box);
 	}
 }
+
+//id, callback, type, methodName, typedinName, box
+function delBoxItem(id, box){
+	clearErrorMsgs();
+	sendAjax(id, delBoxItemCallBack, "delBox"+box+"Item", "", "", box);
+}
+
+
+function delBoxItemCallBack(id, name, box){ //name is not needed
+	deleteEndpoints("box"+box+"_"+id);
+	boxCallBack(id, name, box);
+}
+
+function boxCallBack(id, name, box){
+	hideAllDropDowns();
+	$("#box"+box+"list").val("");	
+	$("#box"+box+"_prefix").val("");
+	removeElems("box"+box+"s");
+	removeElems("expbox"+box+"s");
+	$("[id='box"+box+"form:hiddenBox"+box+"Button']").click();		
+	$("[id='cnxsform:hiddenCnxButton']").click();
+}
+
+function updateBox1Callback(data){updateBoxCallback(data, 1);}
+function updateBox2Callback(data){updateBoxCallback(data, 2);}
+function updateBox3Callback(data){updateBoxCallback(data, 3);}
+function updateBox4Callback(data){updateBoxCallback(data, 4);}
+
+function updateBoxCallback(data, box){
+	if(isCallbackStatusSuccess(data)){
+		initElems(box);
+		initBoxHeights();
+	}   
+}
+
+/** TODO */
+function addJokerBox(box){
+	clearErrorMsgs();
+	sendAjax("", boxItemCallBack, "addJoker", box);
+	//sendAjaxUrlHtml("", problemAddCallBack, "addJoker", 1, "probbox2.xhtml");
+}
+
 
 /**
  * we check whether we have to change the box color from red to light red/gray when an item has been added.
@@ -48,118 +76,22 @@ function checkBoxColorOnAdd(titleId, boxnames){
 }
 
 
-function chgProblem(id, type){
+function toggleBoxFeedback(box){
 	clearErrorMsgs();
-	sendAjax(id, problemCallBack, "changeProblem", type);
-	
+	toggleExpBoxFeedback("expFeedbackBox"+box, "boxs", box);
 }
 
-function delProblem(id){
+function togglePeersBox(box){
 	clearErrorMsgs();
-	sendAjax(id, delProbCallBack, "delProblem", "");
+	togglePeerBoxFeedback("peerFeedback"+box, "peer_score_box"+box, box);
 }
 
-
-function delProbCallBack(probId, selProb){
-	deleteEndpoints("fdg_"+probId);
-	problemCallBack(probId, selProb);
-}
-
-function problemCallBack(){
-	$("#problems").val("");	
-	$("#fdg_prefix").val("");
-	//var arr = $(".fdgs");
-	removeElems("fdgs");
-	removeElems("expfdgs");
-	//we update the problems list and the json string
-	$("[id='probform:hiddenProbButton']").click();		
-	$("[id='cnxsform:hiddenCnxButton']").click();
-}
-
-function updateProbCallback(data){
-	if(isCallbackStatusSuccess(data)){
-		updateItemCallback(data, "fdg", "fdg_box");
-		if(isOverallExpertOn()) //re-display expert items:
-			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
-	}
-	
-}
-
-
-function addJokerFdg(){
-	clearErrorMsgs();
-	sendAjax("", problemCallBack, "addJoker", 1);
-	//sendAjaxUrlHtml("", problemAddCallBack, "addJoker", 1, "probbox2.xhtml");
-}
-
-function toggleFdgFeedback(){
-	clearErrorMsgs();
-	toggleExpBoxFeedback("expFeedbackFdg", "fdgs", 1);
-}
-
-function togglePeersFdg(){
-	clearErrorMsgs();
-	togglePeerBoxFeedback("peerFeedbackFdg", "peer_score_fdg", 1);
-}
-
-
-/******************** diagnoses *******************************/
-
-/**
- * a diagnosis is added to the list of the already added diagnoses:
- **/
-function addDiagnosis(diagnId, name, typedinName){
-	clearErrorMsgs();
-	if(name!=""){
-		checkBoxColorOnAdd("ddx_title", "ddxs");
-		sendAjax(diagnId, diagnosisCallBack, "addDiagnosis", name, typedinName);
-	}
-		//sendAjaxUrlHtml(diagnId, diagnosisAddCallBack, "addDiagnosis", name, "ddxbox2.xhtml");
-}
-
-function delDiagnosis(id){
-	clearErrorMsgs();
-	sendAjax(id, delDiagnosisCallBack, "delDiagnosis", "");
-}
-
-/** we come back from deleting a diagnosis **/
-function delDiagnosisCallBack(ddxId, selDDX){
-	//we have to delete the endpoint separately, otherwise they persist....
-	//deleteEndpoints("ddx_"+ddxId);
-	diagnosisCallBack();
-}
-
-/**
- * we come back from adding a diagnosis (either manually or with a joker)
- */
-function diagnosisCallBack(){
-	$("#ddx").val("");		
-	//$(".ddxs").remove();	
-	removeElems("ddxs");
-	removeElems("expddxs");
-
-	//we update the ddx boxes (re-printing all boxes)
-	$("[id='ddxform:hiddenDDXButton']").click();	
-	$("[id='cnxsform:hiddenCnxButton']").click();	
-}
-
-/**
- * click on the hidden ddx button calls this function
- * @param data
- */
-function updateDDXCallback(data){
-	if(isCallbackStatusSuccess(data)){
-		checkSubmitBtn();
-		updateItemCallback(data, "ddx", "ddx_box");
-		if(isOverallExpertOn()) //re-display expert items:
-			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
-	}
-}
 
 /** a diagnosis is changed to must not missed -red icon or toggled back*/
-function toggleMnM(id){
+function toggleMnM(id, box){
 	clearErrorMsgs();
-	hideDropDown("ddddx_"+id);
+	//hideDropDown("ddbox"+box+"_"+id);
+	hideAllDropDowns();
 	var id2 = "mnmicon_"+id;
 	if ($("#"+id2).hasClass("fa-exclamation-circle1")){
 		$("#"+id2).removeClass("fa-exclamation-circle1");
@@ -169,26 +101,26 @@ function toggleMnM(id){
 		$("#"+id2).removeClass("fa-exclamation-circle0");
 		$("#"+id2).addClass("fa-exclamation-circle1");
 	}
-	sendAjax(id, doNothing, "changeMnM",  "");
+	sendAjax(id, doNothing, "changeMnM",  "", "", box);
 }
 
 
-function addJokerDDX(){
+/*function addJokerDDX(){
 	clearErrorMsgs();
 	//sendAjax("", diagnosisCallBack, "addJoker", 2);
 	sendAjaxUrlHtml("", diagnosisCallBack, "addJoker", 2, "ddxbox2.xhtml");
 
 }
 
-function toggleDDXFeedback(){
+function toggleBox2Feedback(){
 	clearErrorMsgs();
-	toggleExpBoxFeedback("expFeedbackDDX", "ddxs", 2);
+	toggleExpBoxFeedback("expFeedbackBox2", "ddxs", 2);
 }
 
-function togglePeersDDX(){
+function togglePeersBox2(){
 	clearErrorMsgs();
-	togglePeerBoxFeedback("peerFeedbackDDX", "peer_score_ddx", 2);
-}
+	togglePeerBox2Feedback("peerFeedbackBox2", "peer_score_box2", 2);
+}*/
 
 
 /** 1. we show the submit ddx dialog and ask for confidence **/
@@ -331,56 +263,60 @@ function closeSubmitDialog(){
 	}
 }
 
-function ruleOut(id){
+function ruleOut(id, box){
 	clearErrorMsgs();
-	hideDropDown("ddddx_"+id);
-	var item = $("#ddx_"+id);	
+	//hideDropDown("ddbox"+boxNumber+"_"+id);	
+	var item = $("#box"+box+"_"+id);	//box#{boxNumber}_#{itembox.id}
 	item.css("border-color", "#cccccc"); 
 	item.css("color", "#cccccc");
 	$("#ri_a_"+id).removeClass();
 	$("#ro_a_"+id).removeClass();
 	$("#ro_a_"+id).hide();
 	$("#ri_a_"+id).show();
-	sendAjax(id, doNothing, "changeTier",  5);
+	hideAllDropDowns();
+	sendAjax(id, doNothing, "changeTier", 5, "", box);
 }
 
-function ruleIn(id){
+function ruleIn(id, box){
 	clearErrorMsgs();
-	hideDropDown("ddddx_"+id);
-	var item = $("#ddx_"+id);	
+	//ideDropDown("ddbox"+boxNumber+"_"+id);
+	var item = $("#box"+box+"_"+id);	//box#{boxNumber}_#{itembox.id}
 	item.css("border-color", "#000000"); 
 	item.css("color", "#000000");
 	$("#ri_a_"+id).removeClass();
 	$("#ro_a_"+id).removeClass();
 	$("#ri_a_"+id).hide();
 	$("#ro_a_"+id).show();
-	sendAjax(id, doNothing, "changeTier",  5);
+	hideAllDropDowns();
+	sendAjax(id, doNothing, "changeTier", 5, "", box);
 }
 
-function workingDDXOn(id){
+function workingDDXOn(id, box){
 	clearErrorMsgs();
-	hideDropDown("ddddx_"+id);
-	var item = $("#ddx_"+id);
+	//hideDropDown("ddbox"+boxNumber+"_"+id);
+	var item = $("#box"+box+"_"+id);	//box#{boxNumber}_#{itembox.id}
 	item.css("background-color", getRectColor(6))
 	//item.css("color", "#c00815");
 	$("#wdon_a_"+id).removeClass();
 	$("#wdoff_a_"+id).removeClass();
 	$("#wdon_a_"+id).hide();
 	$("#wdoff_a_"+id).show();
-	sendAjax(id, doNothing, "changeTier",  6);
+	hideAllDropDowns();
+	sendAjax(id, doNothing, "changeTier",  6, "", box);
 }
 
-function workingDDXOff(id){
+function workingDDXOff(id, box){
 	clearErrorMsgs();
-	hideDropDown("ddddx_"+id);
-	var item = $("#ddx_"+id);
+	//hideDropDown("ddbox"+boxNumber+"_"+id);
+	var item = $("#box"+box+"_"+id);	//box#{boxNumber}_#{itembox.id}
 	item.css("background-color", getRectColor(-1))
 	//item.css("color", "#000000");
 	$("#wdoff_a_"+id).removeClass();
 	$("#wdon_a_"+id).removeClass();
 	$("#wdoff_a_"+id).hide();
 	$("#wdon_a_"+id).show();
-	sendAjax(id, doNothing, "changeTier",  6);
+	hideAllDropDowns();
+	sendAjax(id, doNothing, "changeTier",  6, "", box);
 }
 
  function getRectColor(tier){
@@ -405,7 +341,6 @@ function checkSubmitBtn(){
 		$("#submitBtnA").html(submittedButonName);
 	}
 	else $("#submitBtnA").html(submitButonName);
-
 }
 
 /*
@@ -459,259 +394,6 @@ function initSubmittedDialog(){
 	}
 
 }
-
-/******************** management *******************************/
-
-/*
- * a management item is added to the list of the already added items:
- */
-function addManagement(mngId, name, typedinName){
-	clearErrorMsgs();
-	if(name!=""){
-		checkBoxColorOnAdd("mng_title", "mngs");
-		sendAjax(mngId, managementCallBack, "addMng", name, typedinName);
-	}
-}
-
-function delManagement(id){
-	clearErrorMsgs();
-	sendAjax(id, delManagementCallBack, "delMng", "");
-}
-
-function chgManagement(id, type){
-	clearErrorMsgs();
-	sendAjax(id, managementCallBack, "changeMng", type);
-	
-}
-
-function delManagementCallBack(mngId, selMng){
-	//if(isCallbackStatusSuccess(data)){
-		//deleteEndpoints("mng_"+mngId);
-		managementCallBack(mngId, selMng);
-	//}
-}
-
-function managementCallBack(mngId, selMng){
-	//if(isCallbackStatusSuccess(data)){
-		$("#mng").val("");	
-		//$(".mngs").remove();
-		removeElems("mngs");
-		removeElems("expmngs");
-		//we update the problems list and the json string
-		$("[id='mngform:hiddenMngButton']").click();	
-		$("[id='cnxsform:hiddenCnxButton']").click();
-	//}
-}
-
-function updatMngCallback(data){
-	if(isCallbackStatusSuccess(data)){
-		updateItemCallback(data, "mng", "mng_box");
-		if(isOverallExpertOn()) //re-display expert items:
-			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
-	}
-}
-
-function addJokerMng(){
-	clearErrorMsgs();
-	sendAjax("", managementCallBack, "addJoker", 4);
-}
-
-function toggleMngFeedback(){
-	clearErrorMsgs();
-	toggleExpBoxFeedback("expFeedbackMng", "mngs", 4);
-}
-
-function togglePeersMng(){
-	clearErrorMsgs();
-	togglePeerBoxFeedback("peerFeedbackMng", "peer_score_mng", 4);
-}
-
-/******************** diagnostic steps *******************************/
-
-/*
- * a test is added to the list of the already added tests:
- */
-function addTest(testId, name, typedinName){
-	clearErrorMsgs();
-	if(name!=""){
-		checkBoxColorOnAdd("tst_title", "tests");
-		sendAjax(testId, testCallBack, "addTest", name, typedinName);
-	}
-}
-
-function delTest(id){
-	clearErrorMsgs();
-	sendAjax(id, delTestCallBack, "delTest", "");
-}
-
-function delTestCallBack(testId, selTest){
-	//deleteEndpoints("tst_"+testId);
-	testCallBack(testId, selTest);
-}
-
-function testCallBack(testId, selTest){
-	$("#test").val("");	
-	//$(".tests").remove();
-	removeElems("tests");
-	removeElems("exptests");
-	//we update the problems list and the json string
-	$("[id='testform:hiddenTestButton']").click();		
-	$("[id='cnxsform:hiddenCnxButton']").click();
-}
-
-function updateTestCallback(data){
-	if(isCallbackStatusSuccess(data)){
-		updateItemCallback(data, "tst","tst_box");
-		if(isOverallExpertOn()) //re-display expert items:
-			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
-	}
-}
-
-function chgTest(id, type){
-	clearErrorMsgs();
-	sendAjax(id, testCallBack, "changeTest", type);
-	
-}
-
-function addJokerTest(){
-	clearErrorMsgs();
-	sendAjax("", testCallBack, "addJoker", 3);
-}
-
-function toggleTestFeedback(){
-	clearErrorMsgs();
-	toggleExpBoxFeedback("expFeedbackTest", "tests", 3);
-}
-
-function togglePeersTest(){
-	clearErrorMsgs();
-	togglePeerBoxFeedback("peerFeedbackTest", "peer_score_test", 3);
-}
-
-/******************** pathophysiology *******************************/
-
-/*
- * a test is added to the list of the already added tests:
- */
-function addPatho(pathoId, name, typedinName){
-	clearErrorMsgs();
-	if(name!=""){
-		checkBoxColorOnAdd("patho_title", "patho");
-		sendAjax(pathoId, pathoCallBack, "addPatho", name, typedinName);
-	}
-}
-
-function delPatho(id){
-	clearErrorMsgs();
-	sendAjax(id, delPathoCallBack, "delPatho", "");
-}
-
-function delPathoCallBack(pathoId, selPatho){
-	pathoCallBack(pathoId, selPatho);
-}
-
-function pathoCallBack(pathoId, selPatho){
-	$("#patho").val("");	
-	//$(".tests").remove();
-	removeElems("patho");
-	removeElems("exppatho");
-	//we update the problems list and the json string
-	$("[id='pathoform:hiddenPathoButton']").click();		
-	$("[id='cnxsform:hiddenCnxButton']").click();
-}
-
-function updatePathoCallback(data){
-	if(isCallbackStatusSuccess(data)){
-		updateItemCallback(data, "pat","patho_box");
-		if(isOverallExpertOn()) //re-display expert items:
-			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
-	}
-}
-
-function chgPatho(id, type){
-	clearErrorMsgs();
-	sendAjax(id, pathoCallBack, "changePatho", type);
-	
-}
-
-function addJokerPatho(){
-	clearErrorMsgs();
-	sendAjax("", pathoCallBack, "addJoker", 3);
-}
-
-function togglePathoFeedback(){
-	clearErrorMsgs();
-	toggleExpBoxFeedback("expFeedbackPatho", "patho", 6);
-}
-
-function togglePeersPatho(){
-	clearErrorMsgs();
-	togglePeerBoxFeedback("peerFeedbackPatho", "peer_score_patho", 6);
-}
-
-/****************items in general *************** */
-
-function addItem(itemId, name, typedinName, itemType){
-	clearErrorMsgs();
-	if(name!=""){
-		checkBoxColorOnAdd(itemType.toLowerCase()+"_title", itemType.toLowerCase());
-		//sendAjaxItemUrl(id, callback, type, name, typedInName, action)
-		sendAjaxItemUrl(itemId, itemCallBack, itemType, name, typedinName, "add");
-	}
-}
-
-function delItem(itemId, itemType){
-	clearErrorMsgs();
-	//sendAjax(id, delItemCallBack, "del"+itemNameUpper, "");
-	sendAjaxItemUrl(itemId, itemCallBack, itemType, "", "", "del");
-}
-
-/*function delItemCallBack(itemId, selItem, itemNameUpper){
-	itemCallBack(itemId, selItem, itemNameUpper);
-}*/
-
-function itemCallBack(itemId, action, itemTypeUpper){
-	$("#"+itemTypeUpper.toLowerCase()).val("");	
-	//$(".tests").remove();
-	hideDropDown("dd"+itemTypeUpper.toLowerCase()+"_"+itemId);
-	removeElems(itemTypeUpper.toLowerCase());
-	removeElems("exp"+itemTypeUpper.toLowerCase());
-	//we update the problems list and the json string
-	$("[id='"+itemTypeUpper.toLowerCase()+"form:hidden"+ itemTypeUpper+"Button'").click();		
-	$("[id='cnxsform:hiddenCnxButton']").click();
-}
-
-function updateItemCallback(data, itemNameLower){
-	if(isCallbackStatusSuccess(data)){
-		updateItemCallback(data, "pat",itemNameLower+"_box");
-		if(isOverallExpertOn()) //re-display expert items:
-			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
-	}
-}
-
-function chgItem(id, type, itemNameUpper){
-	clearErrorMsgs();
-	//sendAjax(id, itemCallBack, "change"+itemNameUpper, type);
-	sendAjaxItemUrl(id, itemCallBack, itemNameUpper, "", "", "change");
-	
-}
-
-function addJokerItem(itemIdentifier){
-	clearErrorMsgs();
-	sendAjax("", itemCallBack, "addJoker", itemIdentifier);
-}
-
-function toggleItemFeedback(itemNameUpper, itemIdentifier){
-	clearErrorMsgs();
-	toggleExpBoxFeedback("expFeedback"+itemNameUpper, itemNameUpper.toLowerCase(), itemIdentifier);
-}
-
-function togglePeersItem(itemIdentifier){
-	clearErrorMsgs();
-	togglePeerBoxFeedback("peerFeedback"+itemNameUpper, "peer_score_"+itemNameUpper.toLowerCase(), itemIdentifier);
-}
-
-/******************end items in general*************+ */
 
 
 /******************** summary statement *******************************/
@@ -829,16 +511,14 @@ function isOverallExpertOn(){
 	return false;
 }
 
-
-
 function clickExpFeedbackOn(){
 	$("#expFeedback").prop("checked", "true");
 }
 
 /* when displaying the expert summSt we have to increase the height of the box.*/
-function calcAddPixForExpSum(){
+/*function calcAddPixForExpSum(){
 	
-}
+}*/
 /*
  * we display the peer feedback for the given box/type
  */
@@ -891,19 +571,10 @@ function turnOverallExpFeedbackOn(iconId, itemClass){
 	$(".expbox").addClass("expboxstatus_show");
 	$(".expbox").removeClass("expboxstatus");
 	$(".expbox").removeClass("expboxinvis");
-	if(probBoxMode==1)turnExpBoxFeedbackOn("expFeedbackFdg", "fdgs");
-	if(ddxBoxMode==1) turnExpBoxFeedbackOn("expFeedbackDDX", "ddxs");
-	if(testBoxMode==1)turnExpBoxFeedbackOn("expFeedbackTest", "tests");
-	if(pathoBoxMode==1)turnExpBoxFeedbackOn("expFeedbackPatho", "patho");
-	if(mngBoxMode==1)turnExpBoxFeedbackOn("expFeedbackMng", "mngs");
-	if(nmngBoxMode==1)turnExpBoxFeedbackOn("expFeedbackNmng", "nmng");
-	if(ddxBoxMode==1)turnExpBoxFeedbackOn("expFeedbackNddx", "nddx");
-	if(infoBoxMode==1)turnExpBoxFeedbackOn("expFeedbackInfo", "info");
-	if(naimBoxMode==1)turnExpBoxFeedbackOn("expFeedbackNaim", "naim");	
-	if(mmngBoxMode==1)turnExpBoxFeedbackOn("expFeedbackMmng", "mmng");
-	if(mrecBoxMode==1)turnExpBoxFeedbackOn("expFeedbackMrec", "mrec");
-	if(mfdgBoxMode==1)turnExpBoxFeedbackOn("expFeedbackMfdg", "mfdg");
-	if(mhypBoxMode==1)turnExpBoxFeedbackOn("expFeedbackMhyp", "mhyp");
+	if(box1Mode==1)turnExpBoxFeedbackOn("expFeedbackBox1", "box1s");
+	if(box2Mode==1) turnExpBoxFeedbackOn("expFeedbackBox2", "box2s");
+	if(box3Mode==1)turnExpBoxFeedbackOn("expFeedbackBox3", "box3s");
+	if(box4Mode==1)turnExpBoxFeedbackOn("expFeedbackBox4", "box4s");
 	if(isOverallCnxOn()){
 		$(".jtk-exp-connector").addClass("jtk-exp-connector-show");
 		$(".jtk-exp-connector").removeClass("jtk-exp-connector-hide");
@@ -942,36 +613,17 @@ function turnViewModeBoxOff(box, prefix, prefix2){
  * if boxes are displayed in view mode we show the expert items and hide the search box.
  */
 function turnViewModeOn(){
-	turnViewModeBoxOn(probBoxMode, "fdg", "prob");
-	turnViewModeBoxOn(ddxBoxMode, "ddx", "ddx");
-	turnViewModeBoxOn(testBoxMode, "test", "test");
-	turnViewModeBoxOn(pathoBoxMode, "patho", "pat");
-	turnViewModeBoxOn(mngBoxMode, "mng", "mng");
-	turnViewModeBoxOn(nmngBoxMode, "nmng", "nmng");
-	turnViewModeBoxOn(nddxBoxMode, "nddx", "nddx");
-	turnViewModeBoxOn(naimBoxMode, "naim", "naim");
-	turnViewModeBoxOn(infoBoxMode, "info", "info");	
-	turnViewModeBoxOn(mmngBoxMode, "mmng", "mmng");
-	turnViewModeBoxOn(mhypBoxMode, "mhyp", "mhyp");
-	turnViewModeBoxOn(mfdgBoxMode, "mfd", "mfd");
-	turnViewModeBoxOn(mrecBoxMode, "mrec", "mrec");
-
+	turnViewModeBoxOn(box1Mode, "box1", "box1");
+	turnViewModeBoxOn(box2Mode, "box2", "box2");
+	turnViewModeBoxOn(box3Mode, "box3", "box3");
+	turnViewModeBoxOn(box4Mode, "box4", "box4");
 }
 
 function turnViewModeOff(){
-	turnViewModeBoxOff(probBoxMode, "fdg", "prob");
-	turnViewModeBoxOff(ddxBoxMode, "ddx", "ddx");
-	turnViewModeBoxOff(testBoxMode, "test", "tst");
-	turnViewModeBoxOff(pathoBoxMode, "patho", "pat");
-	turnViewModeBoxOff(mngBoxMode, "mng", "mng");
-	turnViewModeBoxOff(nmngBoxMode, "nmng", "nmng");
-	turnViewModeBoxOff(nddxBoxMode, "nddx", "nddx");
-	turnViewModeBoxOff(infoBoxMode, "info", "info");
-	turnViewModeBoxOff(naimBoxMode, "naim", "naim");
-	turnViewModeBoxOff(mmngBoxMode, "mmng", "mmng");
-	turnViewModeBoxOff(mhypBoxMode, "mhyp", "mhyp");
-	turnViewModeBoxOff(mfdgBoxMode, "mfd", "mfd");
-	turnViewModeBoxOff(mrecBoxMode, "mrec", "mrec");
+	turnViewModeBoxOff(box1Mode, "box1", "box1");
+	turnViewModeBoxOff(box2Mode, "box2", "box2");
+	turnViewModeBoxOff(box3Mode, "box3", "box3");
+	turnViewModeBoxOff(box4Mode, "box4", "box4");
 }
 
 function turnOverallExpFeedbackOff(iconId, itemClass){
@@ -982,19 +634,10 @@ function turnOverallExpFeedbackOff(iconId, itemClass){
 	}
 	$(".expbox").removeClass("expboxstatus_show");
 	$(".expbox").addClass("expboxstatus");
-	turnExpBoxFeedbackOff("expFeedbackFdg", "fdgs");
-	turnExpBoxFeedbackOff("expFeedbackDDX", "ddxs");
-	turnExpBoxFeedbackOff("expFeedbackTest", "tests");
-	turnExpBoxFeedbackOff("expFeedbackPatho", "patho");
-	turnExpBoxFeedbackOff("expFeedbackMng", "mngs");
-	turnExpBoxFeedbackOff("expFeedbackNmng", "nmng");
-	turnExpBoxFeedbackOff("expFeedbackInfo", "info");
-	turnExpBoxFeedbackOff("expFeedbackNaim", "naim");
-	turnExpBoxFeedbackOff("expFeedbackNddx", "nddx");
-	turnExpBoxFeedbackOff("expFeedbackMmng", "mmng");
-	turnExpBoxFeedbackOff("expFeedbackMrec", "mrec");
-	turnExpBoxFeedbackOff("expFeedbackMhyp", "mhyp");
-	turnExpBoxFeedbackOff("expFeedbackMfdg", "mfdg");
+	turnExpBoxFeedbackOff("expFeedbackBox1", "box1s");
+	turnExpBoxFeedbackOff("expFeedbackBox2", "box2s");
+	turnExpBoxFeedbackOff("expFeedbackBox3", "box3s");
+	turnExpBoxFeedbackOff("expFeedbackBox4", "box4s");
 	$(".jtk-exp-connector").addClass("jtk-exp-connector-hide");
 	$(".jtk-exp-connector").removeClass("jtk-exp-connector-show");
 	turnViewModeOn();
@@ -1019,7 +662,7 @@ function showExpStages(){
 }
 
 /**
- * global switch using jq dlg api fir drop downs
+ * global switch using jq dlg api for drop downs
  */
 var dropDownJQueryDlg = true;
 
@@ -1027,7 +670,7 @@ var dropDownJQueryDlg = true;
  * update experimental using jq dlg!
  * We get the position of the pos element (the itembox) and position the dropdown menu close to it
  */
-function showDropDown(id, pos){	
+function showDropDown(id, category){	
 	hideAllDropDowns(); //we first hide all in case any are still open...
 	clearErrorMsgs();
 	
@@ -1039,16 +682,21 @@ function showDropDown(id, pos){
 		
 		$("#jdialogToolbox").html($("#"+id).html());
 		//$("#jdialogError").load("errors.xhtml");
+		
 		$('#jdialogToolbox .dropdownX').hide();
-		$("#jdialogToolbox" ).dialog( "open" );
+		if(category<2)
+			$(".linkscategory").hide();
+		else $(".linkscategory").show();
+		
+		$("#jdialogToolbox").dialog( "open" );
 		$("#jdialogToolbox").show();
 	}
-	else {
+	/*else {
 		$("#"+id).show();
 		var x =  $("#"+pos).position().left-10; //changed to -10 from +10 because otherwise cut-off on right side
 		var y = $("#"+pos).position().top+5;
 		$("#"+id).css( { left: x + "px", top: y + "px" } ) 
-	}
+	}*/
 	
 }
 
@@ -1056,15 +704,18 @@ function showDropDown(id, pos){
  * Onmouseleave (! not onmouseout) we hide the dropdown again
  * when jq dlg by dlg api!
  */
-function hideDropDown(id){
+/*function hideDropDown(id){
 	$("#"+id).hide();
-}
+	$("#jdialogToolbox").hide();
+}*/
 
 /**
  * not needed when using jq dlg, as this is modal!
  */
 function hideAllDropDowns(){
 	$(".dropdown-content").hide();
+	$("#jdialogToolbox").hide();
+	$("#jdialogToolbox").dialog('close');
 }
 
 // ********************************************************
@@ -1165,3 +816,380 @@ function toggleExpItemFeedback(){
 		$(".icons_score").hide();
 	
 }
+
+
+/******************** general add/del*******************************/
+
+/**
+ * user changes the course of time, we trigger an ajax call to save change.
+ */
+/*function changeCourseOfTime(){
+	var courseTime = $("#courseTime").val(); 
+	sendAjax(courseTime, doNothing, "chgCourseOfTime", "");
+}*/
+
+
+/******************** problems tab*******************************/
+
+/**
+ * a problem is added to the list of the already added problems:
+ **/
+/*function addProblem(problemId, name, typedinName){
+	clearErrorMsgs();
+	var prefix = $("#fdg_prefix").val();
+	
+	if(name!=""){
+		checkBoxColorOnAdd("fdg_title", "fdgs");
+		sendAjax(problemId, problemCallBack, "addProblem", prefix, typedinName);
+	}
+}
+*/
+
+/*unction chgProblem(id, type){
+	clearErrorMsgs();
+	sendAjax(id, problemCallBack, "changeProblem", type);
+	
+}
+
+function delProblem(id){
+	clearErrorMsgs();
+	sendAjax(id, delProbCallBack, "delProblem", "");
+}
+
+
+function delProbCallBack(probId, selProb){
+	deleteEndpoints("fdg_"+probId);
+	problemCallBack(probId, selProb);
+}
+
+function problemCallBack(){
+	$("#problems").val("");	
+	$("#fdg_prefix").val("");
+	//var arr = $(".fdgs");
+	removeElems("fdgs");
+	removeElems("expfdgs");
+	//we update the problems list and the json string
+	$("[id='probform:hiddenProbButton']").click();		
+	$("[id='cnxsform:hiddenCnxButton']").click();
+}
+
+function updateProbCallback(data){
+	if(isCallbackStatusSuccess(data)){
+		updateItemCallback(data, "fdg", "fdg_box");
+		if(isOverallExpertOn()) //re-display expert items:
+			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
+	}
+	
+}
+
+
+function addJokerFdg(){
+	clearErrorMsgs();
+	sendAjax("", problemCallBack, "addJoker", 1);
+	//sendAjaxUrlHtml("", problemAddCallBack, "addJoker", 1, "probbox2.xhtml");
+} */
+
+/******************** diagnoses *******************************/
+
+/**
+ * a diagnosis is added to the list of the already added diagnoses:
+ **/
+/*function addDiagnosis(diagnId, name, typedinName){
+	clearErrorMsgs();
+	if(name!=""){
+		checkBoxColorOnAdd("ddx_title", "ddxs");
+		sendAjax(diagnId, diagnosisCallBack, "addDiagnosis", name, typedinName);
+	}
+		//sendAjaxUrlHtml(diagnId, diagnosisAddCallBack, "addDiagnosis", name, "ddxbox2.xhtml");
+}
+
+function delDiagnosis(id){
+	clearErrorMsgs();
+	sendAjax(id, delDiagnosisCallBack, "delDiagnosis", "");
+}*/
+
+/** we come back from deleting a diagnosis **/
+/*function delDiagnosisCallBack(ddxId, selDDX){
+	//we have to delete the endpoint separately, otherwise they persist....
+	//deleteEndpoints("ddx_"+ddxId);
+	diagnosisCallBack();
+}*/
+
+/**
+ * we come back from adding a diagnosis (either manually or with a joker)
+ */
+/*function diagnosisCallBack(){
+	$("#ddx").val("");		
+	//$(".ddxs").remove();	
+	removeElems("ddxs");
+	removeElems("expddxs");
+
+	//we update the ddx boxes (re-printing all boxes)
+	$("[id='ddxform:hiddenDDXButton']").click();	
+	$("[id='cnxsform:hiddenCnxButton']").click();	
+}*/
+
+/**
+ * click on the hidden ddx button calls this function
+ */
+/*function updateDDXCallback(data){
+	if(isCallbackStatusSuccess(data)){
+		checkSubmitBtn();
+		updateItemCallback(data, "ddx", "ddx_box");
+		if(isOverallExpertOn()) //re-display expert items:
+			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
+	}
+}*/
+
+/******************** management *******************************/
+
+/*
+ * a management item is added to the list of the already added items:
+ */
+/*function addManagement(mngId, name, typedinName){
+	clearErrorMsgs();
+	if(name!=""){
+		checkBoxColorOnAdd("mng_title", "mngs");
+		sendAjax(mngId, managementCallBack, "addMng", name, typedinName);
+	}
+}
+
+function delManagement(id){
+	clearErrorMsgs();
+	sendAjax(id, delManagementCallBack, "delMng", "");
+}
+
+function chgManagement(id, type){
+	clearErrorMsgs();
+	sendAjax(id, managementCallBack, "changeMng", type);
+	
+}
+
+function delManagementCallBack(mngId, selMng){
+	//if(isCallbackStatusSuccess(data)){
+		//deleteEndpoints("mng_"+mngId);
+		managementCallBack(mngId, selMng);
+	//}
+}
+
+function managementCallBack(mngId, selMng){
+	//if(isCallbackStatusSuccess(data)){
+		$("#mng").val("");	
+		//$(".mngs").remove();
+		removeElems("mngs");
+		removeElems("expmngs");
+		//we update the problems list and the json string
+		$("[id='mngform:hiddenMngButton']").click();	
+		$("[id='cnxsform:hiddenCnxButton']").click();
+	//}
+}
+
+function updatMngCallback(data){
+	if(isCallbackStatusSuccess(data)){
+		updateItemCallback(data, "mng", "mng_box");
+		if(isOverallExpertOn()) //re-display expert items:
+			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
+	}
+}
+
+function addJokerMng(){
+	clearErrorMsgs();
+	sendAjax("", managementCallBack, "addJoker", 4);
+}
+
+function toggleMngFeedback(){
+	clearErrorMsgs();
+	toggleExpBoxFeedback("expFeedbackBox4g", "mngs", 4);
+}
+
+function togglePeersMng(){
+	clearErrorMsgs();
+	togglePeerBoxFeedback("peerFeedbackMng", "peer_score_box4", 4);
+}
+*/
+/******************** diagnostic steps *******************************/
+
+/*
+ * a test is added to the list of the already added tests:
+ */
+/*function addTest(testId, name, typedinName){
+	clearErrorMsgs();
+	if(name!=""){
+		checkBoxColorOnAdd("tst_title", "tests");
+		sendAjax(testId, testCallBack, "addTest", name, typedinName);
+	}
+}
+
+function delTest(id){
+	clearErrorMsgs();
+	sendAjax(id, delTestCallBack, "delTest", "");
+}
+
+function delTestCallBack(testId, selTest){
+	//deleteEndpoints("tst_"+testId);
+	testCallBack(testId, selTest);
+}
+
+function testCallBack(testId, selTest){
+	$("#test").val("");	
+	//$(".tests").remove();
+	removeElems("tests");
+	removeElems("exptests");
+	//we update the problems list and the json string
+	$("[id='testform:hiddenTestButton']").click();		
+	$("[id='cnxsform:hiddenCnxButton']").click();
+}
+
+function updateTestCallback(data){
+	if(isCallbackStatusSuccess(data)){
+		updateItemCallback(data, "tst","tst_box");
+		if(isOverallExpertOn()) //re-display expert items:
+			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
+	}
+}
+
+function chgTest(id, type){
+	clearErrorMsgs();
+	sendAjax(id, testCallBack, "changeTest", type);
+	
+}
+
+function addJokerTest(){
+	clearErrorMsgs();
+	sendAjax("", testCallBack, "addJoker", 3);
+}
+
+function toggleTestFeedback(){
+	clearErrorMsgs();
+	toggleExpBoxFeedback("expFeedbackTest", "tests", 3);
+}
+
+function togglePeersTest(){
+	clearErrorMsgs();
+	togglePeerBoxFeedback("peerFeedbackTest", "peer_score_test", 3);
+}
+*/
+/******************** pathophysiology *******************************/
+
+/*
+ * a test is added to the list of the already added tests:
+ */
+/*function addPatho(pathoId, name, typedinName){
+	clearErrorMsgs();
+	if(name!=""){
+		checkBoxColorOnAdd("patho_title", "patho");
+		sendAjax(pathoId, pathoCallBack, "addPatho", name, typedinName);
+	}
+}
+
+function delPatho(id){
+	clearErrorMsgs();
+	sendAjax(id, delPathoCallBack, "delPatho", "");
+}
+
+function delPathoCallBack(pathoId, selPatho){
+	pathoCallBack(pathoId, selPatho);
+}
+
+function pathoCallBack(pathoId, selPatho){
+	$("#patho").val("");	
+	//$(".tests").remove();
+	removeElems("patho");
+	removeElems("exppatho");
+	//we update the problems list and the json string
+	$("[id='pathoform:hiddenPathoButton']").click();		
+	$("[id='cnxsform:hiddenCnxButton']").click();
+}
+
+function updatePathoCallback(data){
+	if(isCallbackStatusSuccess(data)){
+		updateItemCallback(data, "pat","patho_box");
+		if(isOverallExpertOn()) //re-display expert items:
+			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
+	}
+}
+
+function chgPatho(id, type){
+	clearErrorMsgs();
+	sendAjax(id, pathoCallBack, "changePatho", type);
+	
+}
+
+function addJokerPatho(){
+	clearErrorMsgs();
+	sendAjax("", pathoCallBack, "addJoker", 3);
+}
+
+function togglePathoFeedback(){
+	clearErrorMsgs();
+	toggleExpBoxFeedback("expFeedbackPatho", "patho", 6);
+}
+
+function togglePeersPatho(){
+	clearErrorMsgs();
+	togglePeerBoxFeedback("peerFeedbackPatho", "peer_score_patho", 6);
+}*/
+
+
+
+/****************items in general *************** */
+
+/*function addItem(itemId, name, typedinName, itemType, box){
+	clearErrorMsgs();
+	if(name!=""){
+		checkBoxColorOnAdd(itemType.toLowerCase()+"_title", itemType.toLowerCase());
+		//sendAjaxItemUrl(id, callback, type, name, typedInName, action)
+		sendAjaxItemUrl(itemId, itemCallBack, itemType, name, typedinName, "add", box);
+	}
+}*/
+
+/*function delItem(itemId, itemType, box){
+	clearErrorMsgs();
+	//sendAjax(id, delItemCallBack, "del"+itemNameUpper, "");
+	sendAjaxItemUrl(itemId, itemCallBack, itemType, "", "", "del", box);
+}*/
+
+/*function itemCallBack(itemId, action, itemTypeUpper, box){
+	$("#"+itemTypeUpper.toLowerCase()).val("");	
+	//$(".tests").remove();
+	hideDropDown("dd"+itemTypeUpper.toLowerCase()+"_"+itemId);
+	removeElems(itemTypeUpper.toLowerCase());
+	removeElems("exp"+itemTypeUpper.toLowerCase());
+	//we update the problems list and the json string
+	$("[id='"+itemTypeUpper.toLowerCase()+"form:hidden"+ itemTypeUpper+"Button'").click();		
+	$("[id='cnxsform:hiddenCnxButton']").click();
+}
+
+function updateItemCallback(data, itemNameLower, box){
+	if(isCallbackStatusSuccess(data)){
+		updateItemCallback(data, "pat",itemNameLower+"_box");
+		if(isOverallExpertOn()) //re-display expert items:
+			turnOverallExpFeedbackOn('expFeedback', 'icon-user-md');
+	}
+}*/
+
+/*function chgItem(id, type, itemNameUpper, box){
+	clearErrorMsgs();
+	//sendAjax(id, itemCallBack, "change"+itemNameUpper, type);
+	sendAjaxItemUrl(id, itemCallBack, itemNameUpper, "", "", "change", box);
+	
+}
+
+function addJokerItem(itemIdentifier, box){
+	clearErrorMsgs();
+	sendAjax("", itemCallBack, "addJoker", itemIdentifier, box);
+}
+
+function toggleItemFeedback(itemNameUpper, itemIdentifier, box){
+	clearErrorMsgs();
+	toggleExpBoxFeedback("expFeedback"+itemNameUpper, itemNameUpper.toLowerCase(), itemIdentifier, box);
+}
+
+function togglePeersItem(itemIdentifier, box){
+	clearErrorMsgs();
+	togglePeerBoxFeedback("peerFeedback"+itemNameUpper, "peer_score_"+itemNameUpper.toLowerCase(), itemIdentifier, box);
+}
+*/
+/******************end items in general*************+ */
+
+

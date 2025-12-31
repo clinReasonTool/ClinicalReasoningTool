@@ -16,7 +16,7 @@ import beans.scripts.*;
 import beans.graph.Graph;
 import beans.helper.TypeAheadBean;
 import beans.relation.Relation;
-import beans.relation.RelationNursingAim;
+import beans.relation.RelationAim;
 import beans.scoring.ScoreBean;
 import beans.scripts.IllnessScriptInterface;
 import controller.NavigationController;
@@ -27,12 +27,16 @@ import beans.list.ListItem;
 import properties.IntlConfiguration;
 import util.CRTLogger;
 
-public class AddNursingAimAction implements AddAction, Scoreable{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class AddAimAction /*implements AddAction, Scoreable*/{
 	
 	private PatientIllnessScript patIllScript;
 	
-	public AddNursingAimAction() {}
-	public AddNursingAimAction(PatientIllnessScript patIllScript){
+	public AddAimAction() {}
+	public AddAimAction(PatientIllnessScript patIllScript){
 		this.patIllScript = patIllScript;
 	}
 	
@@ -46,8 +50,8 @@ public class AddNursingAimAction implements AddAction, Scoreable{
 	 * @see beanActions.AddAction#notifyLog(beans.relation.Relation)
 	 */
 	public void notifyLog(Relation rel) {
-		new LogEntry(LogEntry.ADDNMNG_ACTION, patIllScript.getId(), rel.getListItemId()).save();
-		if(!patIllScript.isExpScript()) new TypeAheadBean(rel.getListItemId(), Relation.TYPE_NMNG).save();
+		new LogEntry(LogEntry.ADDAIM_ACTION, patIllScript.getId(), rel.getListItemId()).save();
+		if(!patIllScript.isExpScript()) new TypeAheadBean(rel.getListItemId(), Relation.TYPE_AIM).save();
 
 	}
 
@@ -67,20 +71,20 @@ public class AddNursingAimAction implements AddAction, Scoreable{
 	 * @param yStr
 	 */
 	public void add(String idStr, String name, String xStr, String yStr){ 
-		new RelationController().initAdd(idStr, name, xStr, yStr, this, patIllScript.getLocale() );
+		//new RelationController().initAdd(idStr, name, xStr, yStr, this, patIllScript.getLocale() );
 	}
 	
 	public void addRelation(/*long id, String prefix*/ListItem li, int x, int y, long synId){		
 		addRelation(/*id, prefix*/li, x, y, synId, false);
 	}
 	public void addRelation(/*long id, String name*/ ListItem li, int x, int y, long synId, boolean isJoker){
-		if(patIllScript.getNursingAims()==null) patIllScript.setNursingAims(new ArrayList<RelationNursingAim>());
-		RelationNursingAim rel = new RelationNursingAim(li.getItem_id(), patIllScript.getId(), synId);		
-		if(patIllScript.getNursingAims().contains(rel)){
+	/*	if(patIllScript.getAims()==null) patIllScript.setAims(new ArrayList<RelationAim>());
+		RelationAim rel = new RelationAim(li.getItem_id(), patIllScript.getId(), synId);		
+		if(patIllScript.getAims().contains(rel)){
 			createErrorMessage(IntlConfiguration.getValue("naim.duplicate"),"optional details", FacesMessage.SEVERITY_WARN);
 			return;
 		}
-		rel.setOrder(patIllScript.getNursingAims().size());
+		rel.setOrder(patIllScript.getAims().size());
 		rel.setStage(patIllScript.getCurrentStage());
 		if(patIllScript.isExpScript()){
 			rel.setStage(patIllScript.getStage());
@@ -88,14 +92,14 @@ public class AddNursingAimAction implements AddAction, Scoreable{
 		if(x<0 && y<0) rel.setXAndY(calculateNewItemPosInCanvas());		
 		else rel.setXAndY(new Point(x,y)); //problem has been created from the concept map, therefore we have a position
 
-		patIllScript.getNursingAims().add(rel);
+		patIllScript.getAims().add(rel);
 		//rel.setManagement(new DBList().selectListItemById(id));
-		rel.setNursingAim(li);
+		rel.setAim(li);
 		save(rel);
 		updateGraph(rel);
 		notifyLog(rel);
 		triggerScoringAction(rel, isJoker);	
-		if(!patIllScript.isExpScript()) updateXAPIStatement(rel);
+		if(!patIllScript.isExpScript()) updateXAPIStatement(rel);*/
 
 	}
 	
@@ -105,24 +109,24 @@ public class AddNursingAimAction implements AddAction, Scoreable{
 	 * TODO: we could check whether the position is already taken,or others are vacant due to deleting of others
 	 * @return
 	 */
-	private Point calculateNewItemPosInCanvas(){
+	/*private Point calculateNewItemPosInCanvas(){
 		int y = AddAction.MIN_Y;
 		if(patIllScript.getNursingAims()!=null || !patIllScript.getNursingAims().isEmpty()){
 			y = patIllScript.getNursingAims().size() * 26; //CAVE max y! 
 		}
 		if(patIllScript.isExpScript()){
-			return new Point(RelationNursingAim.DEFAULT_X+100,y);
+			return new Point(RelationAim.DEFAULT_X+100,y);
 		}
-		return new Point(RelationNursingAim.DEFAULT_X,y);
-	}
+		return new Point(RelationAim.DEFAULT_X,y);
+	}*/
 
 	/* (non-Javadoc)
 	 * @see actions.scoringActions.Scoreable#triggerScoringAction(java.beans.Beans)
 	 */
-	public void triggerScoringAction(Beans rel, boolean isJoker) {
-		new ScoringAddAction().scoreAction(((RelationNursingAim) rel).getListItemId(), this.patIllScript, isJoker, Relation.TYPE_NURSAIM);
+	/*public void triggerScoringAction(Beans rel, boolean isJoker) {
+		new ScoringAddAction().scoreAction(((RelationAim) rel).getListItemId(), this.patIllScript, isJoker, Relation.TYPE_NURSAIM);
 		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_NAIM_LIST, Relation.TYPE_NURSAIM);
-	}
+	}*/
 	
 	public void createErrorMessage(String summary, String details, Severity sev) {
 		new ErrorMessageContainer().addErrorMessage("naimsform", summary, details, sev);		
@@ -131,9 +135,9 @@ public class AddNursingAimAction implements AddAction, Scoreable{
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel) {
+	public void updateGraph(Relation rel, int box) {
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
-		graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED);
+		graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED, box);
 	
 		// add implicit edges:
 		/*if( patIllScript.getDiagnoses()!=null && patIllScript.getDiagnoses().size()>0){

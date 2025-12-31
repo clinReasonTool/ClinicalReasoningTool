@@ -4,7 +4,8 @@ import java.awt.Point;
 import java.io.Serializable;
 import java.util.*;
 
-import actions.beanActions.AddProblemAction;
+//import actions.beanActions.AddProblemAction;
+import actions.beanActions.AddRelationAction;
 import controller.GraphController;
 import net.casus.util.Utility;
 import util.CRTLogger;
@@ -23,22 +24,17 @@ public class RelationProblem extends Relation implements Serializable{
 	public static final int QUALIFIER_RARE = 0; 
 	public static final int QUALIFIER_MEDIUM = 1;
 	public static final int QUALIFIER_OFTEN = 2;
+	/** @deprecated **/
 	public static final int DEFAULT_X = 15; //80; //default x position of problems in canvas
 	public static final int FIND_PROTOTYPICAL = 1;
 	public static final int FIND_NONPROTOTYPICAL = 2;
 	
-	/**
-	 * problems: key-finding, other,... (?)
-	 */
-	//private int value; //key finding,...
-	
+
 	/**
 	 * how often is a problem prevalent in a diagnosis (rare, medium, often)
 	 */
 	private int qualifier;
-	
-	//private Timestamp creationDate;
-	
+		
 	private ListItem problem;
 	
 	/**
@@ -57,13 +53,14 @@ public class RelationProblem extends Relation implements Serializable{
 		if(synId>0) setSynId(synId);
 	}
 	
-	public int getDiscriminator() {return Relation.TYPE_PROBLEM;}
-	public void setDiscriminator(int i){}
+	//public int getDiscriminator() {return Relation.TYPE_PROBLEM;}
+	//public void setDiscriminator(int i){}
 	public ListItem getProblem() {return problem;}
+	public void setListItem(ListItem li) {problem = li;}
 	public ListItem getListItem() {return getProblem();}
 	public void setProblem(ListItem problem) {this.problem = problem;}		
 	
-	public String getIdWithPrefix(){return GraphController.PREFIX_PROB+this.getId();}
+	//public String getIdWithPrefix(){return GraphController.PREFIX_PROB+this.getId();}
 	
 	
 	/* (non-Javadoc)
@@ -103,7 +100,7 @@ public class RelationProblem extends Relation implements Serializable{
 	
 
 	public void calculatePoints(int pos, boolean isExp) {
-		Point p = new AddProblemAction().calculateNewItemPosInCanvas(pos, isExp);
+		Point p = new AddRelationAction().calculateNewItemPosInCanvas(pos, isExp);
 		this.setXAndY(p);
 	}
 }

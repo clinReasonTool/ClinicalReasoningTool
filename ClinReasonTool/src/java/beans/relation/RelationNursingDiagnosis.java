@@ -15,44 +15,22 @@ import net.casus.util.Utility;
 import properties.IntlConfiguration;
 import util.CRTLogger;
 
+/**
+ * @author ingahege
+ * @deprecated
+ */
 public class RelationNursingDiagnosis extends Relation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	//public static final int REL_TYPE_FINAL = 1; //final diagnosis (for PIS only)
 	public static final int REL_TYPE_NDDX = 7; //differential diagnosis 
-	//public static final int REL_TYPE_COMPL = 3; //complication of IS diagnosis 
-	//public static final int REL_TYPE_RELATED = 4; //otherwise related diagnosis 
 	public static final int DEFAULT_X = 5; //165; //default x position of problems in canvas
 	public static final String COLOR_DEFAULT = "#ffffff";
-	//public static final String COLOR_RED = "#990000";
+;
 	public static final int TIER_NONE = 0; //I do not now
-	//public static final int TIER_NOTLIKELY = 3; //Clinically low likelihood
-	//public static final int TIER_LIKELY = 2; //Clinically moderate likelihood
-	//public static final int TIER_MOSTLIKELY = 1; //Clinically high likelihood
-	//public static final int TIER_FINAL = 4; //Final diagnosis
-	//public static final int TIER_RULEDOUT = 5;
-	//public static final int TIER_WORKINGDDX = 6;
-	//private static final String COLOR_MNM = "#FF0000";
-	//private static final String COLOR_RULEDOUT =  "1";//"#cccccc";
-	//private static final String COLOR_DEFAULT = "2";//"#ffffff";
-	//private static final String COLOR_WORKINGDDX = "3";//"#cce6ff";
-	//private static final String COLOR_FINAL = "4";//"#80bfff";
-	//private static final String COLOR_BGDEFAULT = "5";
-	//public static final int PREVALENCE_RARE = 1; //disease is relatively rare
-	//public static final int PREVALENCE_COMMON = 2; //we could add a more detailed scale here... 
+
 	
 	public int getDiscriminator() {return REL_TYPE_NDDX;}
 	public void setDiscriminator(int i){}
-	/**
-	 * has this diagnosis been submitted as final the learner? If yes for certain components no more changes 
-	 * can be made (?).
-	 */
-	//private int submittedStage;
-		
-	/**
-	 * -1 = not stated, todo: define levels here (slider with Percentage?)
-	 */
-	//private int confidence = -1; //we need levels here (only for PIS)
 
 	/**
 	 * how likely is this diagnosis, from unlikely to final diagnosis
@@ -107,7 +85,8 @@ public class RelationNursingDiagnosis extends Relation implements Serializable {
 	
 	//public void setTier(int tier) {this.tier = tier;}
 	public ListItem getDiagnosis() {return diagnosis;}
-	public void setDiagnosis(ListItem diagnosis) {this.diagnosis = diagnosis;}	
+	public void setDiagnosis(ListItem diagnosis) {this.diagnosis = diagnosis;}
+	public void setListItem(ListItem li) {diagnosis = li;}
 	public String getShortLabelOrSynShortLabel(){return StringUtils.abbreviate(getLabelOrSynLabel(), ListItem.MAXLENGTH_NAME-2);}
 	
 //	public int getPrevalence() {return prevalence;}
@@ -162,7 +141,7 @@ public class RelationNursingDiagnosis extends Relation implements Serializable {
 		else setWorkingDDXAtCurrStage();
 	}*/
 	
-	public String getIdWithPrefix(){ return GraphController.PREFIX_NDDX+this.getId();}
+	public String getIdWithPrefix(){ return ""; /*GraphController.PREFIX_NDDX+this.getId();*/}
 	/*public int getMnm() {
 		return mnm;}
 	public void setMnm(int mnm) {this.mnm = mnm;}
@@ -201,7 +180,7 @@ public class RelationNursingDiagnosis extends Relation implements Serializable {
 		PatientIllnessScript learnerscript = NavigationController.getInstance().getMyFacesContext().getPatillscript();
 		if(learnerscript.isExpScript()) return -1;
 		Graph g = NavigationController.getInstance().getCRTFacesContext().getGraph();
-		MultiVertex mv = g.getVertexByIdAndType(this.getListItemId(), Relation.TYPE_NDDX);
+		MultiVertex mv = g.getVertexByIdAndType(this.getListItemId(), Relation.SUBTYPE_NDDX);
 		if(mv==null || mv.getExpertVertex()==null) return -1;
 		RelationNursingDiagnosis expRel = (RelationNursingDiagnosis) mv.getExpertVertex();
 		//if(isFinalDiagnosis() && learnerscript.getSubmittedStage()<=learnerscript.getStage()) return COLOR_FINAL;
@@ -235,7 +214,7 @@ public class RelationNursingDiagnosis extends Relation implements Serializable {
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getRelationType()
 	 */
-	public int getRelationType() {return TYPE_NDDX;}	
+	public int getRelationType() {return SUBTYPE_NDDX;}	
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getLabel()
 	 */
@@ -281,7 +260,7 @@ public class RelationNursingDiagnosis extends Relation implements Serializable {
 	 */
 	public String getExp(){ 
 		Graph g = NavigationController.getInstance().getMyFacesContext().getGraph();
-		MultiVertex mvertex = g.getVertexByIdAndType(this.getListItemId(), Relation.TYPE_NDDX);
+		MultiVertex mvertex = g.getVertexByIdAndType(this.getListItemId(), Relation.SUBTYPE_NDDX);
 		if(mvertex==null || mvertex.getLearnerVertex()==null) return ""; //should not happen
 		//only return something if learner has chosen it as a final ddx:
 		/*boolean isLearnerFinal = ((RelationNursingDiagnosis)mvertex.getLearnerVertex()).getTier() == RelationNursingDiagnosis.TIER_FINAL;

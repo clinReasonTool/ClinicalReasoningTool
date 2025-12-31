@@ -5,8 +5,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-	 xmlns:v="urn:schemas-microsoft-com:vml"     
-	  >
+      xmlns:my="http://java.sun.com/jsf/composite/my" 
+	 xmlns:v="urn:schemas-microsoft-com:vml">  
+	  
  <f:view locale="#{adminContext.locale}">     
 
 <head>
@@ -79,24 +80,19 @@ var pass_arr = new Array();
 var isExp = true;
 var isView = false;
 //which boxes are displayed in active mode (0), hidden (1) or displayed in view mode (2)
-var probBoxMode = "0"; 
-var ddxBoxMode = "0";
-var testBoxMode = "0";
-var mngBoxMode = "0";
-var pathoBoxMode = "0";
-var nmngBoxMode = "0"; 
-var naimBoxMode = "0";
-var infoBoxMode = "0";
-var nddxBoxMode = "0";
-var mmngBoxMode = "0"; 
-var mfdgBoxMode = "0";
-var mrecBoxMode = "0";
-var mhypBoxMode = "0";
+var box1Mode = "0";
+var box2Mode = "0";
+var box3Mode = "0";
+var box4Mode = "0";
 
-var box1Type = #{adminContext.patillscript.box1Type}; 
+var box1Type = #{adminContext.patillscript.box1Type}; //1=fdg, 2=ddx, 3=tests, 4 = mngs, 6 = patho, 8 = aims, 10 = infos
 var box2Type = #{adminContext.patillscript.box2Type};
 var box3Type = #{adminContext.patillscript.box3Type};
 var box4Type = #{adminContext.patillscript.box4Type};
+var box1TitleNum = #{adminContext.patillscript.box1TitleNum}; 
+var box2TitleNum = #{adminContext.patillscript.box2TitleNum}; 
+var box3TitleNum = #{adminContext.patillscript.box3TitleNum}; 
+var box4TitleNum = #{adminContext.patillscript.box4TitleNum}; 
 
 var isEmptyScript = "#{adminContext.patillscript.isEmptyScript}";
 var userId = "#{adminContext.userIdExt}"; //hack for showing language change only for certain userIds
@@ -107,17 +103,14 @@ $(function() {
 	$(".listdialog").hide();
 	//$("#jdialogError").hide();
 	$("#connContext").hide();
-	$("#boxesSel").hide();
+	//$("#boxesSel").hide();
 	$("#summStText").on('change',function(){
 		saveSummSt('#{adminContext.patillscript.summStId}');
 	 });
-	$(".chgstage").on('change',function(){
-		chgStageItem(this);
-	 });
-	
-	$(".chgfinal").on('change',function(){
+
+	/*$(".chgfinal").on('change',function(){
 		chgStageFinal(this);
-	 });
+	 });*/
 	
 	$(".chgstage2").on('change',function(){
 		chgStageEdge(this);
@@ -150,12 +143,20 @@ $(function() {
 		width: "auto",
 		height: "auto"
 	});
-	$("#boxesSel").dialog({
+	
+	$("#jdialogToolbox").dialog({
 		autoOpen: false,
 		modal: true,
 		width: "auto",
 		height: "auto"
 	});
+	
+	/*$("#boxesSel").dialog({
+		autoOpen: false,
+		modal: true,
+		width: "auto",
+		height: "auto"
+	});*/
 	
 	
 	$( this ).tooltip({
@@ -166,12 +167,17 @@ $(function() {
 		return $( this ).attr( "mytooltip" );
 		}
     });
-	if(isViaAPI=="true"){ //then we hide some elements:
+	/*if(isViaAPI=="true"){ //then we hide some elements:
 		$(".nonapi").hide();
-	}
+	}*/
 	
 	$("#langchgsel").hide();
-	if(userId=="7900") $("#langchgsel").show(); //extremly ugly hack to display the changing of map language only for one super-user. 
+	//$("#cmupload").hide();
+	if(userId=="7900"){
+		$("#langchgsel").show(); //extremly ugly hack to display the changing of map language only for one super-user. 
+		$("#cmupload").show();
+	}
+
 });
 
 
@@ -205,30 +211,14 @@ jsPlumb.ready(function () {
         		openConnContextExp(component.id);
         });
 
-       /* instance.draggable(jsPlumb.getSelector(".drag-drop .itembox"));        
-    	//item was moved -> trigger ajax call to update position
-        $( ".drag-drop .itembox" ).draggable({
-        	  stop: function( event, ui ) {
-        		  handleRectDrop(ui);
-        	  },
-  	        	start: function(event, ui) {             
-	            // $(ui.helper).find('.tooltip').hide(); 
-	             $('.ui-tooltip').remove();
-	             clearErrorMsgs();
-	         }, 
-        });*/
 		initDraggables();
         parseConns();
         initGroups(instance);
        
     });
-    // collapse/expand group button
-    /*instance.on(canvas, "click", ".node-collapse", function() {
-    	toggleContainerCollapse(this.parentNode);
-    });*/
     
     
-    // this does not work, we have to use jsplaumb binds, see below!!!
+    // this does not work, we have to use jsplumb binds, see below!!!
     $(".itembox").contextmenu(function(event) {
     	 console.log( ".itembox each tap " +  _this.id );
     	 //showDropDown("dd"+this.id);
@@ -261,15 +251,18 @@ jsPlumb.ready(function () {
     		addConnection(info);
     });
     $(".expbox").addClass("expboxstatus");
-	//$(".jsplumb-exp-connector").addClass("jsplumb-exp-connector-show");
-	//$(".jsplumb-exp-connector").removeClass("jsplumb-exp-connector-hide");
 
     jsPlumb.fire("jsPlumbDemoLoaded", instance);
     $("#scriptloc").val(scriptlang);
-    initBoxesSel();
+    //initBoxesSel();
     if($("#sumsttxt").is(':empty')) $("#chgSums").hide();
     else $("#chgSums").show();
 
+    //select box titles: 
+    $("#box_sel_1").val(box1Type+"."+box1TitleNum);
+    $("#box_sel_2").val(box2Type+"."+box2TitleNum);
+    $("#box_sel_3").val(box3Type+"."+box3TitleNum);
+    $("#box_sel_4").val(box4Type+"."+box4TitleNum);
 	
 });
 
@@ -279,16 +272,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 </script>
 </head>
 <body style="font-family:arial;" data-demo-id="draggableConnectors" data-library="dom">
-<div>
 
-
-<span class="nonapi">ScriptId:  #{adminContext.patillscript.id}
-<br/>VPId: #{adminContext.patillscript.vpId} (Casus)<br/>
-VP Name:  #{adminContext.patillscript.VPName} <br/>
-Stage: <span id="stageSpan">#{adminContext.patillscript.stage}(#{adminContext.patillscript.currentStage}) </span>
-<a href="javascript:chgStage(-1,'exp_boxes.xhtml');">previous stage</a> <a href="javascript:chgStage(1,'exp_boxes.xhtml');">next stage</a>
-</span>
-</div>
 
 <div class="options">
 <div  style="position:absolute;left:15px;top:5px;" ><i id="cnxtogglei" class="fa fa-conn" style="cursor:pointer;" mytooltip="#{prop['cnx.show']}"></i>  </div>
@@ -302,139 +286,146 @@ Stage: <span id="stageSpan">#{adminContext.patillscript.stage}(#{adminContext.pa
         <option value="en">en</option><option value="de">de</option><option value="es">es</option><option value="pl">pl</option><option value="pt">pt</option><option value="fr">fr</option><option value="uk">uk</option></select>
        	 <i class="fa fa-info-circle" mytooltip="Language of lists to display"></i>
         </div>
-        <div style="position:absolute;left:210px;top:5px;" class="showadaptBox_#{adminContext.adaptableBoxesEnabled}"> <a href="javascript:openSelBoxes('#{prop['authoring.slctboxes']}');">#{prop['authoring.slctboxes']}</a>
-        <span style="width:30px;visibility:hidden;">hal</span><a href="javascript:toggleDisplayMode();">
+        <div style="position:absolute;left:210px;top:5px;" class="showadaptBox_#{adminContext.adaptableBoxesEnabled}"> 
+        	<!-- <a href="javascript:openSelBoxes('#{prop['authoring.slctboxes']}');">#{prop['authoring.slctboxes']}</a>-->
+        
+        <span style="width:30px;visibility:hidden;"></span><a href="javascript:toggleDisplayMode();">
         <script language="JavaScript">
         if(sessionStorage.displayMode==1) document.write ("Show full map"); else document.write("Show map at current stage")</script></a></div>
 
 </div><br/>
 
-<a href="import/cm_upload.xhtml" target="new">Upload CM</a>
+<span id="cmupload"><a href="import/cm_upload.xhtml" target="new">Upload CM</a></span>
 
 <div class="boxes_container">
 	<div id="canvas" class="canvas jtk-surface drag-drop jtk-surface-nopan" >
-		 		  <!-- pathos -->
 		 		  
-		  <div id="pat_box" class="container pos_#{adminContext.patillscript.patBoxNo}"  group="pat_group">
-		  		<div id="pat_title" mytooltip="#{prop['patho.search']}" class="title">#{prop['patho']}<!--  <select id="chgbox#{adminContext.patillscript.patBoxNo}" name="boxtype#{adminContext.patillscript.patBoxNo}" onChange="javascript:chgBox(#{adminContext.patillscript.patBoxNo});"><option value="1">#{prop['findings']}</option><option value="2">#{prop['ddx']}</option>
-		  		   		<option value="3">#{prop['tests']}</option><option value="4">#{prop['mng']}</option><option value="6">#{prop['patho']}</option></select> --> <i class="fa fa-info-circle"></i></div>
-		  		<div class="search  boxchild">
-		  			<i class="fa fa-search ininput pathosearch"></i>
-		  			<input class="f_text pathosearch" onkeyup="javascript:storeHistory('patho');" onFocus="javascript:hideTooltips();"  placeholder="#{prop['patho.add']} ..." id="patho" mytooltip="#{prop['patho.search']}"></input>
-		  		</div>
-		  			<h:form id="pathoform">
-		  			<h:panelGroup>
-					
-						<ui:repeat value="#{adminContext.patillscript.patho}" var="patho" varStatus="status">
-							<ui:include src="pathobox.xhtml" />
-     					</ui:repeat>	
- 	
-    				</h:panelGroup>
-    				     <h:commandButton id="hiddenPathoButton" value="RenderSomething" style="visibility:hidden">
-    						<f:ajax render="@form" onevent="updatePathoCallback"></f:ajax>
-						</h:commandButton>
-					</h:form>
-					<span class="errormsg" id="msg_pathoform" onClick="javascript:clearErrorMsgs();"></span>
-		</div>
-		 
-		  <!-- problems -->
+	 <div id="box1" class="container expcontainer pos_1" group="box1_group">
+		  	<div id="box1_title" class="title"  mytooltip="#{prop['findings.search']}">
+  		   		<ui:include src="boxlist.xhtml">
+  		   			<ui:param name="boxId" value="box_sel_1"/>
+  		   			<ui:param name="boxNumber" value="1" />
+  		   		</ui:include>
+		   		<i class="fa fa-info-circle"></i>
+	   		</div>
 		  
-		  <div id="fdg_box" class="container expcontainer pos_#{adminContext.patillscript.fdgBoxNo}" group="fdg_group">
-		  		   		<div id="fdg_title" class="title"  mytooltip="#{prop['findings.search']}">#{prop['findings']}
-		  		   		<!-- <select id="chgbox#{adminContext.patillscript.fdgBoxNo}" name="boxtype#{adminContext.patillscript.fdgBoxNo}" onChange="javascript:chgBox(#{adminContext.patillscript.fdgBoxNo});"><option value="1">#{prop['findings']}</option><option value="2">#{prop['ddx']}</option>
-		  		   		<option value="3">#{prop['tests']}</option><option value="4">#{prop['mng']}</option><option value="6">#{prop['patho']}</option></select> -->
+		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
+		  			<input type="text" id="box1_prefix" style="display:none;" />
+		  			
+		  			<input class="f_text" style="width:155px;" id="box1list" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+						<h:form id="box1form">
+						<h:panelGroup>
+					  <ui:repeat id="repeatbox" value="#{adminContext.patillscript.box1RelationsStage}" var="itembox" varStatus="status">
+						   		<ui:include src="boxitem.xhtml">
+						   			<ui:param name="boxNumber" value="1" />
+						   			<ui:param name="rowNumber" value="1" />
+						   			<ui:param name="boxCategory" value="#{adminContext.patillscript.box1.boxCategory}" />
+						   		</ui:include>
+	    			  </ui:repeat>	
+	    			</h:panelGroup>
+    				     <h:commandButton id="hiddenBox1Button" value="RenderSomething" style="visibility:hidden">
+    						<f:ajax render="@form" onevent="updateBox1Callback"></f:ajax>
+						</h:commandButton>
+						
+						</h:form>
+						<span class="errormsg" id="msg_box1form" onClick="javascript:clearErrorMsgs();"></span>
+		  </div>
+		  
+		  <div id="box2" class="container expcontainer pos_2" group="box2_group">
+		  		   		<div id="box2_title" class="title"  mytooltip="#{prop['findings.search']}">
+		  		   		<ui:include src="boxlist.xhtml">
+		  		   			<ui:param name="boxId" value="box_sel_2"/>
+		  		   			<ui:param name="boxNumber" value="2" />
+		  		   		</ui:include>
 		   		<i class="fa fa-info-circle"></i></div>
 		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
-		  			<input type="text" id="fdg_prefix" style="display:none;" />
+		  			<input type="text" id="box2_prefix" style="display:none;" />
 		  			
-		  			<!-- <select class="f_select" style="width:40px;" id="fdg_prefix"><option value="0">-</option><option value="1">No</option></select>-->
-		  			<input class="f_text" style="width:155px;" id="problems" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
-						<h:form id="probform">
+		  			<input class="f_text" style="width:155px;" id="box2list" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+						<h:form id="box2form">
 						<h:panelGroup>
-						   <ui:repeat id="repeatprob" value="#{adminContext.patillscript.problemsStage}" var="prob" varStatus="status">
-						   		<ui:include src="probbox.xhtml" />
-	    					</ui:repeat>	    						    					
+							<ui:repeat id="repeatbox2" value="#{adminContext.patillscript.box2RelationsStage}" var="itembox" varStatus="status">
+					   			<ui:include src="boxitem.xhtml">
+						   			<ui:param name="boxNumber" value="2" />
+						   			<ui:param name="rowNumber" value="1" />
+						   			<ui:param name="boxCategory" value="#{adminContext.patillscript.box2.boxCategory}" />
+						   		</ui:include>
+    						</ui:repeat>				
 	    				</h:panelGroup>
-    				     <h:commandButton id="hiddenProbButton" value="RenderSomething" style="visibility:hidden">
-    						<f:ajax render="@form" onevent="updateProbCallback"></f:ajax>
+    				     <h:commandButton id="hiddenBox2Button" value="RenderSomething" style="visibility:hidden">
+    						<f:ajax render="@form" onevent="updateBox2Callback"></f:ajax>
 						</h:commandButton>
 						
-						<!-- <h:messages errorClass="errorMessage" infoClass="infoMessage" showDetail="true" showSummary="true"/>-->						
 						</h:form>
-						<span class="errormsg" id="msg_probform" onClick="javascript:clearErrorMsgs();"></span>
-		  </div>
-		  <!--  diagnoses -->
+						<span class="errormsg" id="msg_box2form" onClick="javascript:clearErrorMsgs();"></span>
+		  </div>		  
+
+		  <div id="box3" class="container expcontainer pos_3" group="box3_group">
+		  		   		<div id="box3_title" class="title"  mytooltip="#{prop['findings.search']}">
+		  		   		<ui:include src="boxlist.xhtml">
+		  		   			<ui:param name="boxId" value="box_sel_3"/>
+		  		   			<ui:param name="boxNumber" value="3" />
+		  		   		</ui:include>
+		   		<i class="fa fa-info-circle"></i></div>
 		  
-		  <div id="ddx_box" class="container expcontainer pos_#{adminContext.patillscript.ddxBoxNo}" group="ddx_group">	
-		  		  		<div id="ddx_title"  mytooltip="#{prop['ddx.search']}" class="title">#{prop['ddx']} <!--  <select id="chgbox#{adminContext.patillscript.ddxBoxNo}" name="boxtype#{adminContext.patillscript.ddxBoxNo}" onChange="javascript:chgBox(#{adminContext.patillscript.ddxBoxNo});"><option value="1">#{prop['findings']}</option><option value="2">#{prop['ddx']}</option>
-		  		   		<option value="3">#{prop['tests']}</option><option value="4">#{prop['mng']}</option><option value="6">#{prop['patho']}</option></select>--> <i class="fa fa-info-circle"></i></div>
-		  
-		  		<!--  <div class="title">#{prop['ddx']}
-		  		</div>	
-		  		<div class="node-collapse"></div>-->			  		  		
-		  			<div class="search boxchild"><input class="f_text" id="ddx"  placeholder="#{prop['ddx.add']} ..." mytooltip="#{prop['ddx.search']}"></input></div>
-			  			<h:form id="ddxform">
-						<h:panelGroup >
-							<ui:repeat value="#{adminContext.patillscript.diagnosesStage}" var="ddx" varStatus="status">
-								<ui:include src="ddxbox.xhtml" />
-	     					</ui:repeat>					
+		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
+		  			<input type="text" id="box3_prefix" style="display:none;" />
+		  			
+		  			<input class="f_text" style="width:155px;" id="box3list" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+						<h:form id="box3form">
+						<h:panelGroup>
+						   <ui:repeat id="repeatbox3" value="#{adminContext.patillscript.box3RelationsStage}" var="itembox" varStatus="status">
+						   		<ui:include src="boxitem.xhtml">
+						   			<ui:param name="boxNumber" value="3" />
+						   			<ui:param name="rowNumber" value="2" />
+						   			<ui:param name="boxCategory" value="#{adminContext.patillscript.box3.boxCategory}" />
+						   		</ui:include>
+	    					</ui:repeat>	    						    					
 	    				</h:panelGroup>
-	    				     <h:commandButton id="hiddenDDXButton" value="RenderSomething" style="visibility:hidden">
-	    						<f:ajax render="@form" onevent="updateDDXCallback"></f:ajax>
-							</h:commandButton></h:form>
-					<span class="errormsg" id="msg_ddxform" onClick="javascript:clearErrorMsgs();"></span>							
-		  </div>
-		  <!-- tests -->
-	
-		  <div id="tst_box" class="container expcontainer pos_#{adminContext.patillscript.tstBoxNo}" group="tst_group">
-		  		<div id="tst_title" mytooltip="#{prop['tests.search']}" class="title">#{prop['tests']} <!--  <select id="chgbox#{adminContext.patillscript.tstBoxNo}" name="boxtype#{adminContext.patillscript.tstBoxNo}" onChange="javascript:chgBox(#{adminContext.patillscript.tstBoxNo});"><option value="1">#{prop['findings']}</option><option value="2">#{prop['ddx']}</option>
-		  		   		<option value="3">#{prop['tests']}</option><option value="4">#{prop['mng']}</option><option value="6">#{prop['patho']}</option></select>--><i class="fa fa-info-circle"></i>
-		  		</div>
-		 	 	<!--  <div class="node-collapse"></div>-->
-		  		<div class="search boxchild"><input class="f_text" id="tests" placeholder="#{prop['tests.add']} ..." mytooltip="#{prop['tests.search']}"></input></div>
-		  			<h:form id="testform">
-		  			<h:panelGroup>
-					
-						<ui:repeat value="#{adminContext.patillscript.testsStage}" var="test" varStatus="status">
-							<ui:include src="testbox.xhtml" />
-     					</ui:repeat>				
-    				</h:panelGroup>
-    				     <h:commandButton id="hiddenTestButton" value="RenderSomething" style="visibility:hidden">
-    						<f:ajax render="@form" onevent="updateTestCallback"></f:ajax>
+    				     <h:commandButton id="hiddenBox3Button" value="RenderSomething" style="visibility:hidden">
+    						<f:ajax render="@form" onevent="updateBox3Callback"></f:ajax>
 						</h:commandButton>
-					</h:form>
-					<span class="errormsg" id="msg_testform" onClick="javascript:clearErrorMsgs();"></span>
-		</div>
-		  <!-- managements -->
+						
+						</h:form>
+						<span class="errormsg" id="msg_box3form" onClick="javascript:clearErrorMsgs();"></span>
+		  </div>	
 		  
-		  <div id="mng_box" class="container expcontainer pos_#{adminContext.patillscript.mngBoxNo}" group="mng_group">
-		  	<div id="mng_title"  mytooltip="#{prop['mng.search']}" class="title">#{prop['mng']} <!-- <select id="chgbox#{adminContext.patillscript.mngBoxNo}" name="boxtype#{adminContext.patillscript.mngBoxNo}" onChange="javascript:chgBox(#{adminContext.patillscript.mngBoxNo});"><option value="1">#{prop['findings']}</option><option value="2">#{prop['ddx']}</option>
-		  		   		<option value="3">#{prop['tests']}</option><option value="4">#{prop['mng']}</option><option value="6">#{prop['patho']}</option></select>--><i class="fa fa-info-circle"></i>
-		  	</div>
-		 	 <!-- <div class="node-collapse"></div>-->
-		  	<div class="search boxchild"><input class="f_text" id="mng" placeholder="#{prop['mng.add']} ..." mytooltip="#{prop['mng.search']}"></input></div>
-	  			<h:form id="mngform">
-	  			<h:panelGroup>
-	
-					<ui:repeat value="#{adminContext.patillscript.mngsStage}" var="mng" varStatus="status">
-						<ui:include src="mngbox.xhtml" />
-	   				</ui:repeat>				
-	  				</h:panelGroup>
-	  				     <h:commandButton id="hiddenMngButton" value="RenderSomething" style="visibility:hidden">
-	  						<f:ajax render="@form" onevent="updatMngCallback"></f:ajax>
-					</h:commandButton>
-				</h:form>
-				<span class="errormsg" id="msg_mngform" onClick="javascript:clearErrorMsgs();"></span>
-				
-	  		</div>
-		<ui:include src="nursing_boxes.xhtml" />
-		<ui:include src="midwife_boxes.xhtml" />
+		  		  <div id="box4" class="container expcontainer pos_4" group="box4_group">
+		  		   		<div id="box4_title" class="title"  mytooltip="#{prop['findings.search']}">
+		  		   		<ui:include src="boxlist.xhtml">
+		  		   			<ui:param name="boxId" value="box_sel_4"/>
+		  		   			<ui:param name="boxNumber" value="4" />
+		  		   		</ui:include>
+		   		<i class="fa fa-info-circle"></i></div>
+		  
+		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
+		  			<input type="text" id="box4_prefix" style="display:none;" />
+		  			
+		  			<input class="f_text" style="width:155px;" id="box4list" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+						<h:form id="box4form">
+						<h:panelGroup>
+						   <ui:repeat id="repeatbox4" value="#{adminContext.patillscript.box4RelationsStage}" var="itembox" varStatus="status">
+						   		<ui:include src="boxitem.xhtml">
+						   			<ui:param name="boxNumber" value="4" />
+						   			<ui:param name="rowNumber" value="2" />
+						   			<ui:param name="boxCategory" value="#{adminContext.patillscript.box4.boxCategory}" />
+						   		</ui:include>
+	    					</ui:repeat>	    						    					
+	    				</h:panelGroup>
+    				     <h:commandButton id="hiddenBox4Button" value="RenderSomething" style="visibility:hidden">
+    						<f:ajax render="@form" onevent="updateBox4Callback"></f:ajax>
+						</h:commandButton>
+						
+						</h:form>
+						<span class="errormsg" id="msg_box4form" onClick="javascript:clearErrorMsgs();"></span>
+		  </div>			  
+
 	  		<div id="sum_box" class="container sum_container" group="sum_group">
 	  		<div id="chgSums">Show summary statement from card <input type="text" id="chgsummstCrd" size="2" value="#{adminContext.patillscript.summSt.stage}"></input></div>
 		 	<div class="title" id="sumsttxt">#{prop['summst']}
 		 	</div>
-		 	<!--  <div class="node-collapse"></div>-->
+
 		 	 <textarea style="display:none;" id="summStTextHidden" cols="65" rows="3">#{adminContext.patillscript.summSt.text}</textarea>
 				<textarea class="f_textarea" name="summSt" id="summStText" cols="65" rows="3">#{adminContext.patillscript.summStStage.text}</textarea><br/>
 			 	<span class="errormsg" id="msg_sumstform"></span>
@@ -444,7 +435,7 @@ Stage: <span id="stageSpan">#{adminContext.patillscript.stage}(#{adminContext.pa
 <div id="jsonConns" style="display:none;">#{adminContext.graph.jsonConns}</div> 
 
 <div id="connContext"><ui:include src="expcnxchange.xhtml" /></div>
-<div id="boxesSel"><ui:include src="selboxes.xhtml" /></div>
+<!--  <div id="boxesSel"><ui:include src="selboxes.xhtml" /></div>-->
 <br clear="all"/>
 
 <div id="allitems">
@@ -452,6 +443,7 @@ Stage: <span id="stageSpan">#{adminContext.patillscript.stage}(#{adminContext.pa
 		<ui:include src="edges_exp.xhtml" />
 	</ui:repeat>	</span>
 </div>
+<div id="jdialogToolbox"></div>
 </body>
 </f:view>
 </html>

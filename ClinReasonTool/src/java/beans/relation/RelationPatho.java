@@ -14,7 +14,7 @@ public class RelationPatho extends Relation implements Serializable {
 	
 	private ListItem patho;
 	private static final long serialVersionUID = 1L;
-	public static final int DEFAULT_X = 15; //165; //245; //default x position of problems in canvas
+	//public static final int DEFAULT_X = 15; //165; //245; //default x position of problems in canvas
 
 	
 	public RelationPatho(){}
@@ -26,6 +26,7 @@ public class RelationPatho extends Relation implements Serializable {
 	public ListItem getPatho() {return patho;}
 	public ListItem getListItem() {return getPatho();}
 	public void setPatho(ListItem patho) {this.patho = patho;}		
+	public void setListItem(ListItem li) {patho = li;}
 		
 	
 	/* (non-Javadoc)
@@ -57,9 +58,7 @@ public class RelationPatho extends Relation implements Serializable {
 		return patho.getSynonyma();
 	}
 	@Override
-	public String getIdWithPrefix() {
-		return GraphController.PREFIX_PATHO+this.getId();
-	}
+	//public String getIdWithPrefix() {return GraphController.PREFIX_PATHO+this.getId();}
 	
 	public void calculatePoints(int pos, boolean isExp) {
 		//TODO

@@ -5,8 +5,7 @@ import java.util.*;
 import actions.scoringActions.ScoringListAction;
 import beans.LogEntry;
 import beans.scripts.*;
-import beans.graph.Graph;
-import beans.graph.MultiVertex;
+import beans.graph.*;
 import beans.relation.*;
 import beans.scoring.ScoreBean;
 import controller.NavigationController;
@@ -14,23 +13,21 @@ import controller.XAPIController;
 import database.DBClinReason;
 import util.CRTLogger;
 
-/**
- * @author ingahege
- * @deprecated
- */
-public class DelProblemAction /*implements DelAction*/{
+public class DelRelationAction implements DelAction{
 	private PatientIllnessScript patIllScript;
+	private Box box;
 	
-	public DelProblemAction(PatientIllnessScript patIllScript){
+	public DelRelationAction(PatientIllnessScript patIllScript, Box box){
 		this.patIllScript = patIllScript;
+		this.box = box;
 	}
 	
 	/* (non-Javadoc)
 	 * @see beanActions.DelAction#save(beans.relation.Relation)
 	 */
-	public void save(Object rel) {
+	public void save(Object rel, List rels) {
 		new DBClinReason().deleteAndCommit(rel);
-		//new DBClinReason().saveAndCommit(patIllScript.getProblems()); //orderNrs have changed, so we have to save all
+		new DBClinReason().saveAndCommit(rels); //orderNrs have changed, so we have to save all
 	}
 
 	/* (non-Javadoc)
@@ -45,33 +42,38 @@ public class DelProblemAction /*implements DelAction*/{
 	 * @see beanActions.DelAction#delete(java.lang.String)
 	 */
 	public void delete(String id) {
-	/*	if(id==null || id.trim().equals("") || patIllScript==null || patIllScript.getProblems()==null || patIllScript.getProblems().isEmpty()){
-			//todo error msg
-			return;		
+		List rels = this.patIllScript.getListByType(box.getBoxType(),box.getSubType());
+		
+		if(rels==null || rels.isEmpty()) return;
+		Relation rel = null;
+		for (int i=0;i<rels.size(); i++) {
+			if(((Relation)rels.get(i)).getId() == Long.parseLong(id)) {
+				rel = (Relation) rels.get(i);
+				break;
+			}
 		}
-		RelationProblem rel = patIllScript.getProblemById(Long.parseLong(id));
-		patIllScript.getProblems().remove(rel);
-		new ActionHelper().reOrderItems(patIllScript.getProblems());		
+		if(rel!=null) this.patIllScript.removeRelationFromList(rel, box.getBoxType());
+		//new ActionHelper().reOrderItems(this.patIllScript.getListByType(box.getBoxType(),box.getSubType()));		
 		notifyLog(rel);
-		updateGraph(rel);
+		updateGraph(rel, rels);
 		new DelConnectionAction(patIllScript).deleteConns(rel.getId());
 		if(!patIllScript.isExpScript()) XAPIController.getInstance().removeXAPIAddActionStatement(rel);
-		save(rel);
-		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_PROBLEM_LIST, Relation.TYPE_PROBLEM);*/
+		save(rel, rels);
+		if(!this.patIllScript.isExpScript()) new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_PROBLEM_LIST, box.getBoxType());
 
 	}
 	
-	/*public void updateGraph(Relation rel){
+	public void updateGraph(Relation rel, List rels){
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
-		MultiVertex vertex = graph.getVertexByIdAndType(rel.getListItemId(), Relation.TYPE_PROBLEM);
+		MultiVertex vertex = graph.getVertexByIdAndType(rel.getListItemId(), box.getBoxType());
 		if(vertex==null) return; //Should not happen
 		vertex.setLearnerVertex(null);
 		//remove complete edge param for all these edges:
-		if( patIllScript.getProblems()!=null){
-			for(int i=0; i < patIllScript.getProblems().size(); i++){
-				graph.removeEdgeWeight(rel.getListItemId(), patIllScript.getProblems().get(i).getListItemId());
+		if( rels!=null){
+			for(int i=0; i < rels.size(); i++){
+				graph.removeEdgeWeight(rel.getListItemId(), ((Relation)rels.get(i)).getListItemId());
 			}
 		}
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
-	}*/
+	}
 }

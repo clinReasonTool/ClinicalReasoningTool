@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 
 import beans.error.MyError;
+import beans.graph.Box;
 import beans.relation.Connection;
 import beans.relation.Relation;
 import beans.relation.RelationDiagnosis;
@@ -149,59 +150,76 @@ public class ExportController {
 	}
 	 
 	 /**
-	  * Add findings, ddx, tests, and mngs to the sheet (each in a separate row)
+	  * Add elements of the 4 boxes to the sheet (each in a separate row)
 	 * @param p
 	 * @param sheetItems
 	 */
 	private void createItemsTableRowsAndCells(PatientIllnessScript p, XSSFSheet sheetItems) {
 		 int rowIdx = 1;
 
-		 	if(p.getProblems()!=null) {
-				for(int i=0;i<p.getProblems().size();i++) {
+		 	if(p.getBox1Relations()!=null) {
+		 	//if(p.getProblems()!=null) {
+				for(int i=0;i<p.getBox1Relations().size();i++) {
 					 XSSFRow row = sheetItems.createRow(rowIdx);
-					 Relation rel = p.getProblems().get(i);
-					 createCommonCells(rel, "findings", p.getId(), row);
+					 Relation rel = (Relation) p.getBox1Relations().get(i);
+					 createCommonCells(rel, p.getBox1().getTitle(null), p.getId(), row);
 					 row.createCell(5).setCellValue(rel.getPrefix());
-					 
+					 if(p.getBox1().getBoxType()==Box.BOXTYPE_DDX)
+						 addDDXCells(row, rel);
+					 rowIdx++;
+				}
+		 	}
+			if(p.getBox2Relations()!=null) {
+		 	//if(p.getDiagnoses()!=null) {
+				for(int i=0;i<p.getBox2Relations().size();i++) {
+					 XSSFRow row = sheetItems.createRow(rowIdx);
+					 Relation rel = (Relation) p.getBox2Relations().get(i);
+					 createCommonCells(rel, p.getBox2().getTitle(null), p.getId(), row);
+					 if(p.getBox2().getBoxType()==Box.BOXTYPE_DDX)
+						 addDDXCells(row, rel);
 					 rowIdx++;
 				}
 		 	}
 		 	
-		 	if(p.getDiagnoses()!=null) {
-				for(int i=0;i<p.getDiagnoses().size();i++) {
+			if(p.getBox3Relations()!=null){
+				for(int i=0;i<p.getBox2Relations().size();i++) {
 					 XSSFRow row = sheetItems.createRow(rowIdx);
-					 RelationDiagnosis rel = (RelationDiagnosis) p.getDiagnoses().get(i);
-					 createCommonCells(rel, "ddx", p.getId(), row);
-					 row.createCell(6).setCellValue(rel.getMnm());
-					 row.createCell(7).setCellValue(rel.getRuledOut());
-					 row.createCell(8).setCellValue(rel.getWorkingDDX());
-					if(rel.getFinalDiagnosis()>0) {
-						row.createCell(9).setCellValue(1);//marker for final
-						row.createCell(10).setCellValue(rel.getFinalDiagnosis()); // stage for setting it final
-					}
-					else row.createCell(9).setCellValue(0);
+					 Relation rel = (Relation) p.getBox3Relations().get(i);
+					 createCommonCells(rel, p.getBox3().getTitle(null), p.getId(), row);
+					 if(p.getBox3().getBoxType()==Box.BOXTYPE_DDX)
+						 addDDXCells(row, rel);
 					 rowIdx++;
 				}
 		 	}
 		 	
-		 	if(p.getTests()!=null) {
-				for(int i=0;i<p.getTests().size();i++) {
+			if(p.getBox4Relations()!=null){
+				for(int i=0;i<p.getBox2Relations().size();i++) {
 					 XSSFRow row = sheetItems.createRow(rowIdx);
-					 Relation rel = p.getTests().get(i);
-					 createCommonCells(rel, "tests", p.getId(), row);
-					 rowIdx++;
-				}
-		 	}
-		 	
-		 	if(p.getMngs()!=null) {
-				for(int i=0;i<p.getMngs().size();i++) {
-					 XSSFRow row = sheetItems.createRow(rowIdx);
-					 Relation rel = p.getMngs().get(i);
-					 createCommonCells(rel, "mng", p.getId(), row);
+					 Relation rel = (Relation) p.getBox3Relations().get(i);
+					 createCommonCells(rel, p.getBox4().getTitle(null), p.getId(), row);
+					 if(p.getBox4().getBoxType()==Box.BOXTYPE_DDX)
+						 addDDXCells(row, rel);
 					 rowIdx++;
 				}
 		 	}
 	 }
+	
+	/**
+	 * if the relation ios a diagnosis of any kind, we add the specific parameters as well.
+	 * @param row
+	 * @param rel
+	 */
+	private void addDDXCells(Row row, Relation rel) {
+		RelationDiagnosis ddx = (RelationDiagnosis) rel;
+		 row.createCell(6).setCellValue(ddx.getMnm());
+		 row.createCell(7).setCellValue(ddx.getRuledOut());
+		 row.createCell(8).setCellValue(ddx.getWorkingDDX());
+		if(ddx.getFinalDiagnosis()>0) {
+			row.createCell(9).setCellValue(1);//marker for final
+			row.createCell(10).setCellValue(ddx.getFinalDiagnosis()); // stage for setting it final
+		}
+		else row.createCell(9).setCellValue(0);
+	}
 	 
 	 /**
 	  * create the cells that all elements have in common
@@ -211,20 +229,19 @@ public class ExportController {
 	 * @param row
 	 */
 	private void  createCommonCells(Relation rel, String type, long patIllscriptId,  XSSFRow row) { 		
-			LearningAnalyticsBean  analyticsBean = new NavigationController().getCRTFacesContext().getLearningAnalytics();
-			//if(analyticsBean==null) analyticsBean = new LearningAnalyticsBean(); //avoid a NullPointerException!
-		
-				row.createCell(0).setCellValue(rel.getLabelOrSynLabel());
-				 row.createCell(1).setCellValue(rel.getId()); //itemId
-				 row.createCell(2).setCellValue(patIllscriptId); //patientIllnessScript id 
-				 row.createCell(3).setCellValue(IntlConfiguration.getValue(type));
-				 row.createCell(4).setCellValue(rel.getStage());
-				 if(analyticsBean!=null && analyticsBean.getScoreContainer()!=null && analyticsBean.getScoreContainer().getScoreBeanByTypeAndItemId(rel.getRelationType(), rel.getListItemId())!=null) {
-					 ScoreBean sb = analyticsBean.getScoreContainer().getScoreBeanByTypeAndItemId(rel.getRelationType(), rel.getListItemId());
-					 row.createCell(11).setCellValue(sb.getOrgScoreBasedOnExp());
-					 row.createCell(12).setCellValue(sb.getScoreBasedOnExp());
-				 }
-
+		LearningAnalyticsBean  analyticsBean = new NavigationController().getCRTFacesContext().getLearningAnalytics();
+		//if(analyticsBean==null) analyticsBean = new LearningAnalyticsBean(); //avoid a NullPointerException!
+	
+		row.createCell(0).setCellValue(rel.getLabelOrSynLabel());
+		 row.createCell(1).setCellValue(rel.getId()); //itemId
+		 row.createCell(2).setCellValue(patIllscriptId); //patientIllnessScript id 
+		 row.createCell(3).setCellValue(IntlConfiguration.getValue(type));
+		 row.createCell(4).setCellValue(rel.getStage());
+		 if(analyticsBean!=null && analyticsBean.getScoreContainer()!=null && analyticsBean.getScoreContainer().getScoreBeanByTypeAndItemId(rel.getRelationType(), rel.getListItemId())!=null) {
+			 ScoreBean sb = analyticsBean.getScoreContainer().getScoreBeanByTypeAndItemId(rel.getRelationType(), rel.getListItemId());
+			 row.createCell(11).setCellValue(sb.getOrgScoreBasedOnExp());
+			 row.createCell(12).setCellValue(sb.getScoreBasedOnExp());
+		 }
 	 }
 	 
 	 /**
@@ -256,13 +273,13 @@ public class ExportController {
 	    	 row.createCell(7).setCellValue(analyticsBean.getDDXScore());
 	    	 row.createCell(8).setCellValue(analyticsBean.getTestScore());
 	    	 row.createCell(9).setCellValue(analyticsBean.getMngScore());
-			if(p.getProblems()!=null) row.createCell(10).setCellValue(p.getProblems().size());
+			if(p.getBox1Relations()!=null) row.createCell(10).setCellValue(p.getBox1Relations().size());
 			else  row.createCell(10).setCellValue(0);
-			if(p.getDiagnoses()!=null)  row.createCell(11).setCellValue(p.getDiagnoses().size());
+			if(p.getBox2Relations()!=null)  row.createCell(11).setCellValue(p.getBox2Relations().size());
 			else  row.createCell(11).setCellValue(0);
-			if(p.getTests()!=null)  row.createCell(12).setCellValue(p.getTests().size());
+			if(p.getBox3Relations()!=null)  row.createCell(12).setCellValue(p.getBox3Relations().size());
 			else  row.createCell(12).setCellValue(0);
-			if(p.getMngs()!=null)  row.createCell(13).setCellValue(p.getMngs().size());
+			if(p.getBox4Relations()!=null)  row.createCell(13).setCellValue(p.getBox4Relations().size());
 			else  row.createCell(13).setCellValue(0);			
 			if(p.getConns()!=null)  row.createCell(14).setCellValue(p.getConns().size());
 			else  row.createCell(14).setCellValue(0);			

@@ -27,7 +27,11 @@ import beans.list.ListItem;
 import properties.IntlConfiguration;
 import util.CRTLogger;
 
-public class AddNursingDiagnosisAction implements AddAction, Scoreable{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class AddNursingDiagnosisAction /*implements AddAction, Scoreable*/{
 	
 	private PatientIllnessScript patIllScript;
 	
@@ -47,18 +51,18 @@ public class AddNursingDiagnosisAction implements AddAction, Scoreable{
 	 */
 	public void notifyLog(Relation rel) {
 		new LogEntry(LogEntry.ADDNDDX_ACTION, patIllScript.getId(), rel.getListItemId()).save();
-		if(!patIllScript.isExpScript()) new TypeAheadBean(rel.getListItemId(), Relation.TYPE_NDDX).save();
+		if(!patIllScript.isExpScript()) new TypeAheadBean(rel.getListItemId(), Relation.SUBTYPE_NDDX).save();
 
 	}
 
 	/* (non-Javadoc)
 	 * @see beanActions.AddAction#add(java.lang.String)
 	 */
-	public void add(String idStr, String name){ 
+	/*public void add(String idStr, String name){ 
 		//addProblem(idStr, name);
 		//long id = Long.valueOf(idStr.trim());
 		add(idStr, name, "-1", "-1");
-	}
+	}*/
 	
 	/**
 	 * @param idStr either an id or syn_id (for a synonym)
@@ -66,14 +70,14 @@ public class AddNursingDiagnosisAction implements AddAction, Scoreable{
 	 * @param xStr (e.g. "199.989894") -> we have to convert it into int
 	 * @param yStr
 	 */
-	public void add(String idStr, String name, String xStr, String yStr){ 
+	/*public void add(String idStr, String name, String xStr, String yStr){ 
 		new RelationController().initAdd(idStr, name, xStr, yStr, this, patIllScript.getLocale() );
 	}
 	
-	public void addRelation(/*long id, String prefix*/ListItem li, int x, int y, long synId){		
-		addRelation(/*id, prefix*/li, x, y, synId, false);
+	public void addRelation(/ListItem li, int x, int y, long synId){		
+		addRelation(li, x, y, synId, false);
 	}
-	public void addRelation(/*long id, String name*/ ListItem li, int x, int y, long synId, boolean isJoker){
+	public void addRelation( ListItem li, int x, int y, long synId, boolean isJoker){
 		if(patIllScript.getNursingDiagnoses()==null) patIllScript.setNursingDiagnoses(new ArrayList<RelationNursingDiagnosis>());
 		RelationNursingDiagnosis rel = new RelationNursingDiagnosis(li.getItem_id(), patIllScript.getId(), synId);		
 		if(patIllScript.getNursingDiagnoses().contains(rel)){
@@ -97,7 +101,7 @@ public class AddNursingDiagnosisAction implements AddAction, Scoreable{
 		triggerScoringAction(rel, isJoker);	
 		if(!patIllScript.isExpScript()) updateXAPIStatement(rel);
 
-	}
+	}*/
 	
 
 	/**
@@ -105,7 +109,7 @@ public class AddNursingDiagnosisAction implements AddAction, Scoreable{
 	 * TODO: we could check whether the position is already taken,or others are vacant due to deleting of others
 	 * @return
 	 */
-	private Point calculateNewItemPosInCanvas(){
+	/*private Point calculateNewItemPosInCanvas(){
 		int y = AddAction.MIN_Y;
 		if(patIllScript.getNursingDiagnoses()!=null || !patIllScript.getNursingDiagnoses().isEmpty()){
 			y = patIllScript.getNursingDiagnoses().size() * 26; //CAVE max y! 
@@ -114,14 +118,14 @@ public class AddNursingDiagnosisAction implements AddAction, Scoreable{
 			return new Point(RelationNursingDiagnosis.DEFAULT_X+100,y);
 		}
 		return new Point(RelationNursingDiagnosis.DEFAULT_X,y);
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see actions.scoringActions.Scoreable#triggerScoringAction(java.beans.Beans)
 	 */
 	public void triggerScoringAction(Beans rel, boolean isJoker) {
-		new ScoringAddAction().scoreAction(((RelationNursingDiagnosis) rel).getListItemId(), this.patIllScript, isJoker, Relation.TYPE_NDDX);
-		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_NDDX_LIST, Relation.TYPE_NDDX);
+		new ScoringAddAction().scoreAction(((RelationNursingDiagnosis) rel).getListItemId(), this.patIllScript, isJoker, Relation.SUBTYPE_NDDX);
+		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_NDDX_LIST, Relation.SUBTYPE_NDDX);
 	}
 	
 	public void createErrorMessage(String summary, String details, Severity sev) {
@@ -131,20 +135,14 @@ public class AddNursingDiagnosisAction implements AddAction, Scoreable{
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel) {
+	/*public void updateGraph(Relation rel) {
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED);
 	
-		// add implicit edges:
-		/*if( patIllScript.getDiagnoses()!=null && patIllScript.getDiagnoses().size()>0){
-			for(int i=0; i < patIllScript.getDiagnoses().size(); i++){
-				graph.addImplicitEdge(patIllScript.getDiagnoses().get(i).getListItemId(), rel.getListItemId(), IllnessScriptInterface.TYPE_LEARNER_CREATED);
-			}
-		*/
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
 	}
 	
 	public void updateXAPIStatement(Relation rel){
 		XAPIController.getInstance().addOrUpdateAddStatement(rel);
-	}
+	}*/
 }

@@ -69,15 +69,15 @@ public class ExpViewPatientIllnessScript {
 	 */
 	public List<Relation> getMngs() {return getList(Relation.TYPE_MNG);}
 	
-	public List<Relation> getNursingDiagnoses() {return getList(Relation.TYPE_NDDX);}
-	public List<Relation> getNursingAims() {return getList(Relation.TYPE_NURSAIM);}
-	public List<Relation> getNursingManagement() {return getList(Relation.TYPE_NMNG);}
+	public List<Relation> getNursingDiagnoses() {return getList(Relation.SUBTYPE_NDDX);}
+	public List<Relation> getNursingAims() {return getList(Relation.TYPE_AIM);}
+	public List<Relation> getNursingManagement() {return getList(Relation.SUBTYPE_NMNG);}
 	public List<Relation> getInfos() {return getList(Relation.TYPE_INFO);}
 	
-	public List<Relation> getMidwifeManagement() {return getList(Relation.TYPE_MMNG);}
-	public List<Relation> getMidwifeRecommendations() {return getList(Relation.TYPE_MREC);}
-	public List<Relation> getMidwifeHypotheses() {return getList(Relation.TYPE_MHYP);}
-	public List<Relation> getMidwifeFindings() {return getList(Relation.TYPE_MFDG);}
+	public List<Relation> getMidwifeManagement() {return getList(Relation.SUBTYPE_MMNG);}
+	public List<Relation> getMidwifeRecommendations() {return getList(Relation.SUBTYPE_MREC);}
+	public List<Relation> getMidwifeHypotheses() {return getList(Relation.SUBTYPE_MHYP);}
+	public List<Relation> getMidwifeFindings() {return getList(Relation.SUBTYPE_MFDG);}
 	
 	/**
 	 * get all items of given type that have not been selected by the learner, but the expert

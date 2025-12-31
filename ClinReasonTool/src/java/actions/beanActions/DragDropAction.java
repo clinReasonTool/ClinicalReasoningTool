@@ -4,6 +4,7 @@ package actions.beanActions;
 import java.awt.Point;
 
 import beans.LogEntry;
+import beans.graph.Box;
 import beans.scripts.*;
 import beans.relation.Rectangle;
 import beans.relation.Relation;
@@ -19,18 +20,21 @@ import util.CRTLogger;
  */
 public class DragDropAction {
 	private PatientIllnessScript patIllScript;
+	private Box box;
 	
-	public DragDropAction(PatientIllnessScript patIllScript){
+	public DragDropAction(PatientIllnessScript patIllScript, Box box){
 		this.patIllScript = patIllScript;
+		this.box = box;
 	}
 	
 	public void move(String idStr, String xStr, String yStr){
 		try {
 		if(idStr==null) return;
-		String cutStr = idStr.substring(0,idStr.indexOf("_")+1);
-		int type = GraphController.getTypeByPrefix(cutStr);
+		//String cutStr = idStr.substring(0,idStr.indexOf("_")+1);
+		int type= box.getBoxType();
+		/*int type = GraphController.getTypeByPrefix(cutStr);
 		if(type==0)	//old mechanism, not flexible enough if prefix is longer (just kept here for safety reasons)
-			type = GraphController.getTypeByPrefix(idStr.substring(0,4)); //6 for tabs & map
+			type = GraphController.getTypeByPrefix(idStr.substring(0,4)); //6 for tabs & map*/
 		//String idStr2 = idStr.substring(idStr.indexOf("_")+1);
 		long id = Long.parseLong(idStr.substring(idStr.indexOf("_")+1));
 		Relation rel = patIllScript.getRelationByIdAndType(id, type);

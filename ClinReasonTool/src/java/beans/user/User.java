@@ -10,7 +10,7 @@ import util.StringUtilities;
 /**
  * A user object. We create it when a user comes from a VP system or when an admin logs in to edit an expert script.
  * @author ingahege
- *
+ * @deprecated
  */
 @SessionScoped
 public class User {

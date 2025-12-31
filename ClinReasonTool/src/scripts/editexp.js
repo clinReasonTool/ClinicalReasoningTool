@@ -51,31 +51,6 @@ function chgMapLang(){
 }
 
 
-
-/*function chgBox2(){
-	var newType = $("#chgbox2").val();
-	sendAjax(newType, callBackReload, "changeBoxType2", "");
-	//location.reload();
-}
-
-function chgBox3(){
-	var newType = $("#chgbox3").val();
-	sendAjax(newType, callBackReload, "changeBoxType3", "");
-	//location.reload();
-}
-
-function chgBox4(){
-	var newType = $("#chgbox4").val();
-	sendAjax(newType, callBackReload, "changeBoxType4", "");
-	//location.reload();
-}
-
-function chgBox6(){
-	var newType = $("#chgbox6").val();
-	sendAjax(newType, callBackReload, "changeBoxType6", "");
-	//location.reload();
-}*/
-
 function toggleDisplayMode(){
 	if(sessionStorage.displayMode==1) sessionStorage.displayMode = 0;
 	else sessionStorage.displayMode = 1; 
@@ -106,40 +81,34 @@ function toggleShowAll(){
 /*
  * expert has chosen a diagnosis to be a final one...
  */
-function expFinalDiagnosis(id){
-	sendAjax(id, expFinalDiagnosisCallback, "expSetFinalDiagnosis", "");
+function expFinalDiagnosis(id, box){
+	sendAjax(id, boxCallBack, "expSetFinalDiagnosis", "", "", box);
 }
 
 /*
  * expert has chosen a diagnosis to be a final one...
  */
-function expNoFinalDiagnosis(id){
-	sendAjax(id, expFinalDiagnosisCallback, "expSetNoFinalDiagnosis", "");
+function expNoFinalDiagnosis(id, box){
+	sendAjax(id, boxCallBack, "expSetNoFinalDiagnosis", "", "", box);
 }
 
-function expFinalDiagnosisCallback(){
-	diagnosisCallBack();
-}
 
-/* expert changes the stage for a problem or ddx or ...*/
-function chgStageItem(obj){
-	var id = obj.id;
-	var realId = id.substring(9);
-	var newStage = $("#"+id).val();
+function chgStageItem(id, obj){
+	var newStage = $(obj).val();
 	if(newStage<=0 || newStage>maxStage){ //check that the new card idx is within the case length!
 		alert("Invalid card number");
 		return;
 	} 
 	else
-		sendAjax(realId, chgStageCallback, "chgStateOfItem", newStage);
+		sendAjax(id, chgStageCallback, "chgStateOfItem", newStage);
 }
-
 /* changes the stage when the final diagnosis is made */
-function chgStageFinal(obj){
-	var id = obj.id;
-	var realId = id.substring(14);
-	var newStage = $("#"+id).val();
-	sendAjax(realId, chgStageCallback, "chgFinalState", newStage);
+function chgStageFinal(id, obj){
+	//var id = obj.id;
+	//var realId = id.substring(14);
+	//var newStage = $("#"+id).val();
+	var newStage = $(obj).val();
+	sendAjax(id, chgStageCallback, "chgFinalState", newStage);
 }
 
 /** 
@@ -151,6 +120,7 @@ function chgStageEdge(obj){
 	var newStage = $("#conn_stage").val();
 	sendAjax(cnxId, chgStageCallback, "chgStateOfEdge", newStage);
 }
+
 function chgSummStCrd(obj){
 	var id = obj.id;
 	var newStage = $("#"+id).val();
@@ -164,20 +134,25 @@ function chgStageCallback(){
 	location.reload();
 }
 
-
-/**
- * open the jdialog to display the editor to create a new script 
- **/
-function createNewScript(){
-	$("#jdialog").dialog( "option", "width", ['350'] );
-	$("#jdialog").dialog( "option", "height", ['250'] );	
-	$("#jdialog").dialog( "option", "title", "Create new script" );
-	$("#jdialog").dialog( "option", "buttons", [ ] );
-	$("#jdialog").dialog( "open" );	
-	$("#jdialog").dialog( "option", "position", [0,0] );
-	$("#jdialog").html();
-	$("#jdialog").show();
+function chgBoxType(id, box){
+	var newType = $("#"+id).val();
+	var newCat = newType.substring(0,1);
+	if(newCat==box1Type || newCat==box2Type || newCat==box3Type || newCat==box4Type){
+		alert("Box type already assigned. You cannot have two boxes of the same type.");
+		return;	
+	}
+	//alert(newType);
+	sendAjax(id, boxCallBack, "chgBoxType", newType, "", box);
 }
+
+/*function chgBoxTypeCallback(id, name, box){
+	$("[id='box1form:hiddenBox1Button']").click();	
+	$("[id='box2form:hiddenBox2Button']").click();	
+	$("[id='box3form:hiddenBox3Button']").click();	
+	$("[id='box4form:hiddenBox4Button']").click();		
+	$("[id='cnxsform:hiddenCnxButton']").click();
+}*/
+
 
 function toggleStageDisplay(){
     $(".stagedisplay").hide();
@@ -190,7 +165,7 @@ function toggleStageDisplay(){
     }
 }
 
-function openSelBoxes(title){
+/*function openSelBoxes(title){
 	$("#boxesSel").dialog( "option", "width", ['300'] );
 	$("#boxesSel").dialog( "option", "height", 'auto' );
 	$("#boxesSel").dialog( "option", "maxHeight", '400' );
@@ -198,12 +173,12 @@ function openSelBoxes(title){
 	$("#boxesSel").dialog( "option", "buttons", [ ] );
 	$("#boxesSel" ).dialog( "open" );
 	$("#boxesSel").show();
-}
+}*/
 
 /**
 * we check whether the author has checked 4 or less boxes, if more we alert a warning. 
  */
-function checkBoxNum(){
+/*function checkBoxNum(){
 	var boxesNum = ($('.boxeschk :checked').size());
 	if(boxesNum>4) alert("Please only select 4 Boxes.");
 }
@@ -226,16 +201,16 @@ function saveBoxesSel(){
 	//alert(vals);	
 		sendAjax(vals, callBackReload, "changeBoxType", "");
 	}
-}
+}*/
 
-function initBoxesSel(){
+/*function initBoxesSel(){
 	   for(var i=1; i<=20;i++){
 		//var val = box1type;
 		if(box1Type==i || box2Type==i || box3Type==i || box4Type==i)
 			$("#boxtypes"+i).prop("checked", true);
 	}
 
-}
+}*/
 
 /**  uploaded CM is submitted with selected items and then window can be closed*/
 function submitUploadedCM(){
@@ -245,3 +220,4 @@ function submitUploadedCM(){
 function callBackUpload(){
 	alert("back");
 }
+

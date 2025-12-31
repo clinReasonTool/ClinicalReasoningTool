@@ -28,6 +28,7 @@ public class LogEntry extends Beans implements Serializable{
 	public static final int ADDEPI_ACTION = 29;
 	public static final int ADDCONNECTION_ACTION = 8; 
 	public static final int ADDPATHO_ACTION = 46;
+	public static final int ADDAIM_ACTION = 70;
 
 	public static final int DELPROBLEM_ACTION = 2;
 	public static final int DELDIAGNOSIS_ACTION = 6;

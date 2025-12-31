@@ -144,5 +144,16 @@
 	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/osxkeychain.jar"/>
 	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/owasp-java-html-sanitizer.jar"/>
 	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/pdfbox-app.jar"/>
+	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/assertj-core.jar"/>
+	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/commons-jexl3.jar"/>
+	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/easy-rules-core.jar"/>
+	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/easy-rules-mvel.jar"/>
+	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/easy-rules-support.jar"/>
+	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/jackson-dataformat-yaml.jar"/>
+	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/mockito-core.jar"/>
+	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/mvel2.jar" sourcepath="/EsayRules/lib/mvel2-2.5.2.Final-sources.jar"/>
+	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/snakeyaml.jar"/>
+	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/spring-expression.jar"/>
+	<classpathentry kind="lib" path="/Users/ingahege/Downloads/commons-fileupload-1.5.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

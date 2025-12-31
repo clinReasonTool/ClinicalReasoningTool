@@ -27,7 +27,11 @@ import beans.list.ListItem;
 import properties.IntlConfiguration;
 import util.CRTLogger;
 
-public class AddInfoAction implements AddAction, Scoreable{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class AddInfoAction /*implements AddAction, Scoreable*/{
 	
 	private PatientIllnessScript patIllScript;
 	
@@ -54,7 +58,7 @@ public class AddInfoAction implements AddAction, Scoreable{
 	/* (non-Javadoc)
 	 * @see beanActions.AddAction#add(java.lang.String)
 	 */
-	public void add(String idStr, String name){ add(idStr, name, "-1", "-1");}
+	//public void add(String idStr, String name){ add(idStr, name, "-1", "-1");}
 	
 	/**
 	 * @param idStr either an id or syn_id (for a synonym)
@@ -62,7 +66,7 @@ public class AddInfoAction implements AddAction, Scoreable{
 	 * @param xStr (e.g. "199.989894") -> we have to convert it into int
 	 * @param yStr
 	 */
-	public void add(String idStr, String name, String xStr, String yStr){ new RelationController().initAdd(idStr, name, xStr, yStr, this, patIllScript.getLocale() );}
+	/*public void add(String idStr, String name, String xStr, String yStr){ new RelationController().initAdd(idStr, name, xStr, yStr, this, patIllScript.getLocale() );}
 	
 	public void addRelation(ListItem li, int x, int y, long synId){		
 		addRelation(li, x, y, synId, false);
@@ -90,7 +94,7 @@ public class AddInfoAction implements AddAction, Scoreable{
 		triggerScoringAction(rel, isJoker);	
 		if(!patIllScript.isExpScript()) updateXAPIStatement(rel);
 
-	}
+	}*/
 	
 
 	/**
@@ -98,7 +102,7 @@ public class AddInfoAction implements AddAction, Scoreable{
 	 * TODO: we could check whether the position is already taken,or others are vacant due to deleting of others
 	 * @return
 	 */
-	private Point calculateNewItemPosInCanvas(){
+	/*private Point calculateNewItemPosInCanvas(){
 		int y = AddAction.MIN_Y;
 		if(patIllScript.getInfos()!=null || !patIllScript.getInfos().isEmpty()){
 			y = patIllScript.getInfos().size() * 26; //CAVE max y! 
@@ -107,7 +111,7 @@ public class AddInfoAction implements AddAction, Scoreable{
 			return new Point(RelationInformation.DEFAULT_X+100,y);
 		}
 		return new Point(RelationInformation.DEFAULT_X,y);
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see actions.scoringActions.Scoreable#triggerScoringAction(java.beans.Beans)
@@ -124,9 +128,9 @@ public class AddInfoAction implements AddAction, Scoreable{
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel) {
+	public void updateGraph(Relation rel, int box) {
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
-		graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED);
+		graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED, box);
 
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
 	}

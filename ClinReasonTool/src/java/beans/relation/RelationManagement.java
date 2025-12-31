@@ -4,15 +4,16 @@ import java.awt.Point;
 import java.io.Serializable;
 import java.util.*;
 
-import actions.beanActions.AddDiagnosisAction;
-import actions.beanActions.AddMngAction;
+//import actions.beanActions.AddDiagnosisAction;
+//import actions.beanActions.AddMngAction;
+import actions.beanActions.AddRelationAction;
 import controller.GraphController;
 import net.casus.util.Utility;
 import util.CRTLogger;
 import beans.list.*;
 
 public class RelationManagement extends Relation implements Serializable{
-	
+	/** @deprecated **/
 	public static final int DEFAULT_X = 5; //245; //325; //default x position of problems in canvas
 
 	private static final long serialVersionUID = 1L;
@@ -26,12 +27,13 @@ public class RelationManagement extends Relation implements Serializable{
 		if(synId>0) setSynId(synId);
 	}
 	
-	public int getDiscriminator() {return TYPE_MNG;}
-	public void setDiscriminator(int i){}
+	//public int getDiscriminator() {return TYPE_MNG;}
+	//public void setDiscriminator(int i){}
 	
 	public ListItem getManagement() {return management;}
 	public void setManagement(ListItem management) {this.management = management;}
-	public String getIdWithPrefix(){ return GraphController.PREFIX_MNG+this.getId();}
+	public void setListItem(ListItem li) {management = li;}
+	//public String getIdWithPrefix(){ return GraphController.PREFIX_MNG+this.getId();}
 
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getRelationType()
@@ -67,7 +69,7 @@ public class RelationManagement extends Relation implements Serializable{
 	}
 	
 	public void calculatePoints(int pos, boolean isExp) {
-		Point p = new AddMngAction().calculateNewItemPosInCanvas(pos, isExp);
+		Point p = new AddRelationAction().calculateNewItemPosInCanvas(pos, isExp);
 		this.setXAndY(p);
 	}
 }

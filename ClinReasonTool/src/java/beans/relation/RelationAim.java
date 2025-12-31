@@ -9,32 +9,35 @@ import controller.GraphController;
 import net.casus.util.Utility;
 import util.CRTLogger;
 
-public class RelationNursingAim extends Relation implements Serializable {
+public class RelationAim extends Relation implements Serializable {
 
-	private ListItem nursingAim;
+	private ListItem aim;
 	private static final long serialVersionUID = 1L;
 	public static final int DEFAULT_X = 15; //165; //245; //default x position of problems in canvas
 
 	
-	public RelationNursingAim(){}
-	public RelationNursingAim(long listItemId, long destId, long synId){
+	public RelationAim(){}
+	public RelationAim(long listItemId, long destId, long synId){
 		this.setListItemId(listItemId);
 		this.setDestId(destId);
 		if(synId>0) setSynId(synId);
 	}
-	public ListItem getNursingAim() {return nursingAim;}
-	public ListItem getListItem() {return getNursingAim();}
-	public void setNursingAim(ListItem nursingAim) {this.nursingAim = nursingAim;}		
+	public ListItem getAim() {return aim;}
+	public ListItem getListItem() {return getAim();}
+	public void setAim(ListItem aim) {this.aim = aim;}	
+	public void setListItem(ListItem li) {aim = li;}
+	//public int getDiscriminator() {return REL_TYPE_NDDX;}
+	//public void setDiscriminator(int i){}
 		
 	
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getRelationType()
 	 */
-	public int getRelationType() {return TYPE_NURSAIM;}	
+	public int getRelationType() {return TYPE_AIM;}	
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getLabel()
 	 */
-	public String getLabel(){return nursingAim.getName();}
+	public String getLabel(){return aim.getName();}
 	
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getLabelOrSynLabel()
@@ -43,7 +46,7 @@ public class RelationNursingAim extends Relation implements Serializable {
 		try {
 			String postStr = "";
 			
-			if(getSynId()<=0) return nursingAim.getName() + postStr;
+			if(getSynId()<=0) return aim.getName() + postStr;
 			else return getSynonym().getName() + postStr;
 		}
 		catch(Exception e) {
@@ -53,14 +56,18 @@ public class RelationNursingAim extends Relation implements Serializable {
 	}
 
 	public Set<Synonym> getSynonyma() {
-		return nursingAim.getSynonyma();
+		return aim.getSynonyma();
 	}
 	@Override
-	public String getIdWithPrefix() {
+	/*public String getIdWithPrefix() {
 		return GraphController.PREFIX_NURSINGAIM+this.getId();
-	}
+	}*/
 	
 	public void calculatePoints(int pos, boolean isExp) {
 		//TODO
+	}
+	public int getDiscriminator() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

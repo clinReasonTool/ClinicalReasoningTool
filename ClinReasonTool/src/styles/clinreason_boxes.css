@@ -617,7 +617,11 @@ span.icons{
     z-index: 100;
 }
 
-.ddxs_score, .fdgs_score, .mngs_score, .tests_score, .patho_score, .info_score, .nddx_score, .nmng_score, .naim_score, .mmng_score, .mrec_score, .mfdg_score, .mhyp_score{
+/*.ddxs_score, .fdgs_score, .mngs_score, .tests_score, .patho_score, .info_score, .nddx_score, .nmng_score, .naim_score, .mmng_score, .mrec_score, .mfdg_score, .mhyp_score{
+	display:none;
+}*/
+
+.box1_score, .box2_score, .box3_score, .box4_score{
 	display:none;
 }
 
@@ -945,7 +949,7 @@ ul#errors{
 .list_score, .peer_score, .ddxsubmit_score{
 	display:none;
 }
-.peer_score_fdg, .peer_score_ddx, .peer_score_test, .peer_score_mng, .peer_score_patho, .peer_score_nddx, .peer_score_nmng, .peer_score_info, .peer_score_naim, .peer_score_mmng, .peer_score_mfdg, .peer_score_mrec, .peer_score_mhyp {
+.peer_score_box1, .peer_score_box2, .peer_score_box3, .peer_score_box4 {
 	white-space: nowrap; 
 	display:none;
 }

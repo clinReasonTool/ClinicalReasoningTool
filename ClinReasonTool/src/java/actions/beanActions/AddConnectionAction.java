@@ -14,6 +14,7 @@ import actions.scoringActions.ScoringAddCnxAction;
 import actions.scoringActions.ScoringCnxsAction;
 import application.ErrorMessageContainer;
 import beans.scripts.*;
+import beans.graph.Box;
 import beans.graph.Graph;
 import beans.graph.MultiEdge;
 import beans.graph.MultiVertex;
@@ -31,10 +32,21 @@ import util.StringUtilities;
 public class AddConnectionAction implements Scoreable{
 
 	private PatientIllnessScript patIllScript;
+	private Box sourceBox;
+	private Box targetBox;
 	
-	public AddConnectionAction(PatientIllnessScript patIllScript){
+	public AddConnectionAction(PatientIllnessScript patIllScript/*, Box sourceBox, Box targetBox*/){
 		this.patIllScript = patIllScript;
+		//this.sourceBox = sourceBox;
+		//this.targetBox = targetBox;
 	}
+	
+	/*public AddConnectionAction(PatientIllnessScript patIllScript){
+		this.patIllScript = patIllScript;
+		this.sourceBox = sourceBox;
+		this.targetBox = targetBox;
+
+	}*/
 	
 	/* (non-Javadoc)
 	 * @see beanActions.AddAction#save(java.beans.Beans)
@@ -65,10 +77,11 @@ public class AddConnectionAction implements Scoreable{
 	 * @see beanActions.AddAction#add(java.lang.String, java.lang.String)
 	 */
 	private void add(String sourceIdStr, String targetIdStr, String startEpIdxStr, String targetEpXStr, String targetEpYStr, String targetEpIdxStr) {
-		String startType = sourceIdStr.substring(0, sourceIdStr.indexOf("_")+1);
-		String targetType = targetIdStr.substring(0, targetIdStr.indexOf("_")+1);
-		sourceIdStr = sourceIdStr.substring(sourceIdStr.indexOf("_")+1);
+		setSourceAndTargetBoxes(sourceIdStr, targetIdStr);
+		//String startType = sourceIdStr.substring(0, sourceIdStr.indexOf("_")+1);
+		//String targetType = targetIdStr.substring(0, targetIdStr.indexOf("_")+sourceIdStr = sourceIdStr.substring(sourceIdStr.indexOf("_")+1);
 		targetIdStr = targetIdStr.substring(targetIdStr.indexOf("_")+1);
+		sourceIdStr = sourceIdStr.substring(sourceIdStr.indexOf("_")+1);
 		long sourceId = Long.valueOf(sourceIdStr);
 		long targetId = Long.valueOf(targetIdStr);
 		int startEpIdx = 0; 
@@ -78,7 +91,7 @@ public class AddConnectionAction implements Scoreable{
 			startEpIdx = Integer.parseInt(startEpIdxStr);
 			if(targetEpXStr!=null && targetEpXStr!=null){
 				targetEP = new Point((int )Float.parseFloat(targetEpXStr),(int)Float.parseFloat(targetEpYStr));
-				calculateEnpointPos(targetEP,targetId, GraphController.getTypeByPrefix(targetType));
+				calculateEnpointPos(targetEP,targetId, targetBox.getBoxType()/*GraphController.getTypeByPrefix(targetType)*/);
 			}
 			else if(targetEpIdxStr!=null) targetEpIdx = Integer.parseInt(targetEpIdxStr);
 		}
@@ -86,7 +99,7 @@ public class AddConnectionAction implements Scoreable{
 			CRTLogger.out("AddConnectionAction.add(), Exception: " + StringUtilities.stackTraceToString(e), CRTLogger.LEVEL_ERROR);
 		}
 		
-		addConnection(sourceId, targetId, GraphController.getTypeByPrefix(startType), GraphController.getTypeByPrefix(targetType), MultiEdge.WEIGHT_EXPLICIT, startEpIdx, targetEP, targetEpIdx);
+		addConnection(sourceId, targetId, sourceBox.getBoxType()/*GraphController.getTypeByPrefix(startType)*/, targetBox.getBoxType()/*GraphController.getTypeByPrefix(targetType)*/, MultiEdge.WEIGHT_EXPLICIT, startEpIdx, targetEP, targetEpIdx);
 	}
 	
 	/**
@@ -167,5 +180,12 @@ public class AddConnectionAction implements Scoreable{
 		if(mv==null || mv.getLearnerVertex()==null) return null; //should not happen!
 		Relation rel = mv.getLearnerVertex();
 		return ep;
+	}
+	private void setSourceAndTargetBoxes(String src, String target) { 
+		String s = src.substring(3,4);
+		int sourceBoxIdx = Integer.parseInt(src.substring(3,4));
+		int targetBoxIdx = Integer.parseInt(target.substring(3,4));
+		sourceBox = this.patIllScript.getBoxByNo(sourceBoxIdx);
+		targetBox = this.patIllScript.getBoxByNo(targetBoxIdx);
 	}
 }

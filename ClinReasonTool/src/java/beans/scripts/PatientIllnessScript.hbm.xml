@@ -34,14 +34,28 @@
 	     <property name="deleteFlag" column="delete_flag" type="boolean"/>
 	     <property name="finalDDXType" column="final_ddx_type" type="int"/>
 	     <property name="sessionId" column="session_id" type="long"/>
-	     <property name="box1Type" column="box1_type" type="int"/>
-	     <property name="box2Type" column="box2_type" type="int"/>
-	     <property name="box3Type" column="box3_type" type="int"/>
-	     <property name="box4Type" column="box4_type" type="int"/>
-  
+	    
+	     <!-- we keep the types for the moment to turn them into real boxes upon opening of a VP-->
+	  	 <property name="box1Type" column="box1_type" type="int" update="false"/>
+	     <property name="box2Type" column="box2_type" type="int" update="false"/>
+	     <property name="box3Type" column="box3_type" type="int" update="false"/>
+	     <property name="box4Type" column="box4_type" type="int" update="false"/>
+	     <!-- end backwards compatibility -->
+	     
+	     <!-- new boxes mechanism -->
+	     <property name="box1Id" column="box1_id" type="long"/>
+	     <property name="box2Id" column="box2_id" type="long"/>
+	     <property name="box3Id" column="box3_id" type="long"/>
+	     <property name="box4Id" column="box4_id" type="long"/>
+		
+		<many-to-one name="box1" class="beans.graph.Box" column="box1_id"  lazy="false" insert="false" update="false" not-found= "ignore"/>
+		<many-to-one name="box2" class="beans.graph.Box" column="box2_id"  lazy="false" insert="false" update="false" not-found= "ignore"/>
+		<many-to-one name="box3" class="beans.graph.Box" column="box3_id"  lazy="false" insert="false" update="false" not-found= "ignore"/>
+		<many-to-one name="box4" class="beans.graph.Box" column="box4_id"  lazy="false" insert="false" update="false" not-found= "ignore"/>
 
-	    <list name="errors" table="crt.error" lazy="false"> <!-- table="crt.relation_problem"-->
-    		<key column="dest_id"/> <!-- dest_id = patientIllnessScript id -->
+
+	    <list name="errors" table="crt.error" lazy="false"> 
+    		<key column="dest_id"/> 
     		<list-index column="idx" base="0"/>
     		<one-to-many class="beans.error.MyError"/>   		
 		</list>			

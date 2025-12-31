@@ -83,7 +83,7 @@ public class ErrorController {
 							long id = finals.get(k).getDiagnosis().getItem_id();
 							for(int l=0; l< currFinalDiagn.size(); l++){
 								if(currFinalDiagn.get(l).getListItem().getItem_id()==id){
-									AvailabilityBias ab = new AvailabilityBias(patIllScript.getId(), patIllScript.getCurrentStage(), patIllScript.getConfidence(), patIllScript.getDiagnoses());
+									AvailabilityBias ab = new AvailabilityBias(patIllScript.getId(), patIllScript.getCurrentStage(), patIllScript.getConfidence(), patIllScript.getListByType(Box.BOXTYPE_DDX, -1));
 									
 									if(patIllScript.addError(ab)) //we save only if this is a new error that has not previously occured at this stage
 										new DBClinReason().saveAndCommit(ab);	
@@ -124,7 +124,7 @@ public class ErrorController {
 							while (it.hasNext()){
 								MultiEdge me = it.next();
 								if(me.isExplicitExpertEdge() && me.getExpertWeight()==Connection.WEIGHT_SPEAKS_AGAINST && me.getLearnerWeight()!=Connection.WEIGHT_SPEAKS_AGAINST){
-									ConfirmationBias cb = new ConfirmationBias(patIllScript.getId(), patIllScript.getCurrentStage(), patIllScript.getConfidence(), patIllScript.getDiagnoses());
+									ConfirmationBias cb = new ConfirmationBias(patIllScript.getId(), patIllScript.getCurrentStage(), patIllScript.getConfidence(), patIllScript.getListByType(Box.BOXTYPE_DDX,-1));
 									if(patIllScript.addError(cb)) //we save only if this is a new error that has not previously occured at this stage
 										new DBClinReason().saveAndCommit(cb);	
 									notifyLog(cb, patIllScript.getId());
@@ -156,7 +156,7 @@ public class ErrorController {
 				RelationDiagnosis rd = finalDiagnoses.get(i);
 				RelationDiagnosis expRel = (RelationDiagnosis) expIllScript.getRelationByListItemIdAndType(rd.getListItemId(), Relation.TYPE_DDX);
 				if(expRel!=null && !expRel.isFinalDDX() && expRel.getPrevalence()==RelationDiagnosis.PREVALENCE_RARE){
-					BaseRateNeglect brn = new BaseRateNeglect(patIllScript.getId(), patIllScript.getCurrentStage(), patIllScript.getConfidence(), patIllScript.getDiagnoses());
+					BaseRateNeglect brn = new BaseRateNeglect(patIllScript.getId(), patIllScript.getCurrentStage(), patIllScript.getConfidence(), patIllScript.getListByType(Box.BOXTYPE_DDX,-1));
 					if(patIllScript.addError(brn)) //we save only if this is a new error that has not previously occured at this stage
 						new DBClinReason().saveAndCommit(brn);	
 					notifyLog(brn, patIllScript.getId());
@@ -197,7 +197,7 @@ public class ErrorController {
 								if(finding!=null && finding.getExpertVertex()!=null){
 									RelationProblem expFind= (RelationProblem) finding.getExpertVertex();
 									if(expFind!=null && expFind.getPrototypical()==RelationProblem.FIND_NONPROTOTYPICAL){
-										Representativeness rep = new Representativeness(patIllScript.getId(), patIllScript.getCurrentStage(), patIllScript.getConfidence(), patIllScript.getDiagnoses());
+										Representativeness rep = new Representativeness(patIllScript.getId(), patIllScript.getCurrentStage(), patIllScript.getConfidence(), patIllScript.getListByType(Box.BOXTYPE_DDX,-1));
 										if(patIllScript.addError(rep)) //we save only if this is a new error that has not previously occured at this stage
 											new DBClinReason().saveAndCommit(rep);	
 										notifyLog(rep, patIllScript.getId());

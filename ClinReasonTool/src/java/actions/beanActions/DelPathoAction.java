@@ -13,7 +13,11 @@ import controller.NavigationController;
 import database.DBClinReason;
 import util.CRTLogger;
 
-public class DelPathoAction implements DelAction{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class DelPathoAction /*implements DelAction*/{
 	private PatientIllnessScript patIllScript;
 	
 	public DelPathoAction(PatientIllnessScript patIllScript){
@@ -25,7 +29,7 @@ public class DelPathoAction implements DelAction{
 	 */
 	public void save(Object o) {
 		new DBClinReason().deleteAndCommit((Relation)o);
-		new DBClinReason().saveAndCommit(patIllScript.getPatho());
+		//new DBClinReason().saveAndCommit(patIllScript.getPatho());
 	}
 
 	/* (non-Javadoc)
@@ -39,7 +43,7 @@ public class DelPathoAction implements DelAction{
 	/* (non-Javadoc)
 	 * @see beanActions.DelAction#delete(java.lang.String)
 	 */
-	public void delete(String id) {
+	/*public void delete(String id) {
 		if(id==null || id.trim().equals("") || patIllScript==null || patIllScript.getPatho()==null || patIllScript.getPatho().isEmpty()){
 			//todo error msg
 			return;		
@@ -53,22 +57,17 @@ public class DelPathoAction implements DelAction{
 		save(rel);
 		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_PATHO_LIST, Relation.TYPE_PATHO);
 
-	}
+	}*/
 	
 	/* (non-Javadoc)
 	 * @see actions.beanActions.DelAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel){
+/*	public void updateGraph(Relation rel){
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		MultiVertex vertex = graph.getVertexByIdAndType(rel.getListItemId(), Relation.TYPE_PATHO);
 		if(vertex==null) return; //Should not happen
 		vertex.setLearnerVertex(null);
-		//remove complete edge param for all these edges:
-		/*if( patIllScript.getPatho()!=null){
-			for(int i=0; i < patIllScript.getPatho().size(); i++){
-				graph.removeEdgeWeight(patIllScript.getPatho().get(i).getListItemId(), rel.getListItemId());
-			}
-		}*/
+
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
-	}
+	}*/
 }

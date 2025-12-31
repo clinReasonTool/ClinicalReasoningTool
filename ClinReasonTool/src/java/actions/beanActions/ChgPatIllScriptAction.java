@@ -64,7 +64,6 @@ public class ChgPatIllScriptAction {
 				}
 			}
 		}
-		//patIllScript.save();	
 	}
 	/**
 	 * Learner changes the courseOfTime (acute, subactue, chronic)

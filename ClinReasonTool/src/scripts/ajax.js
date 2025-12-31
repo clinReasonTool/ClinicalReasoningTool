@@ -38,12 +38,21 @@ function clearErrorMsgs(){
  * type = method name to call server-side to handle the call.
  * name = name of problem, diagnosis,...
  */
-function sendAjax(id, callback, type, name){
+/*function sendAjax(id, callback, name, box){
 	clearErrorMsgs();
-	sendAjaxUrl(id, callback, type, name, "", ajaxUrl);
+	sendAjaxUrl(id, callback, "", name, "", ajaxUrl, box);
 }
 
-function sendAjax(id, callback, type, name, typedinName){
+function sendAjax(id, callback, type, name, box){
+	clearErrorMsgs();
+	sendAjaxUrl(id, callback, type, name, "", ajaxUrl, box);
+}*/
+
+/**
+** id of item, callback: js callback function, methodName: java method to be called, name: typed in (in applicable)
+** typedInName: history of typed, box; box number
+ */
+function sendAjax(id, callback, methodName, name, typedinName, box){
 	clearErrorMsgs();
 	var confirmed = true;
 	if(id=="IGNORE") return;
@@ -53,7 +62,15 @@ function sendAjax(id, callback, type, name, typedinName){
 	}
 	if(confirmed){
 		//if(id=="-99") displayOwnEntryWarn = "false";
-		sendAjaxUrl(id, callback, type, name, typedinName, ajaxUrl);
+		//sendAjaxUrl(id, callback, type, name, typedinName, ajaxUrl, box);
+		$.ajax({
+		  method: "POST",
+		  url: ajaxUrl,
+		  data: { type: methodName, id: id, name: name, orgname: typedinName, script_id: scriptId, stage:currentStage, typehistory:inputhistory }
+		})
+	  .done(function( response ) {
+		  handleResponse(response, callback, methodName, box);		
+	  });	
 	}
 }
 
@@ -76,19 +93,19 @@ function sendAjaxCharts(id, callback, type, name){
  * type = method name to call server-side to handle the call.
  * name = name of problem, diagnosis,...
  */
-function sendAjaxContext(id, callback, type, name){
+function sendAjaxContext(id, callback, type, name, box){
 	clearErrorMsgs();
-	sendAjaxUrl(id, callback, type, name, "", "/crt/src/html/tabs_ajax2.xhtml");
+	sendAjaxUrl(id, callback, type, name, "", "/crt/src/html/tabs_ajax2.xhtml", box);
 }
 
-function sendAjaxAdmin(id, callback, type, name){
+function sendAjaxAdmin(id, callback, type, name, box){
 	$.ajax({
 		  method: "POST",
 		  url: "/crt/src/html/admin/tabs_ajax_admin.xhtml",
 		  data: { type: type, id: id, name: name }
 		})
 	  .done(function( response ) {
-		  handleResponse(response, callback, name);		
+		  handleResponse(response, callback, name, box);		
 	  });	
 
 	//sendAjaxUrl(id, callback, type, name, "/crt/src/html/admin/tabs_ajax_admin.xhtml");
@@ -107,14 +124,15 @@ function sendAjaxReports(id, callback, type, scriptId){
 	//sendAjaxUrl(id, callback, type, name, "/crt/src/html/admin/tabs_ajax_admin.xhtml");
 }
 
-function sendAjaxUrl(id, callback, type, name, orgname, url){
+
+function sendAjaxUrl(id, callback, type, name, orgname, url, box){
 	$.ajax({
 		  method: "POST",
 		  url: url,
 		  data: { type: type, id: id, name: name, orgname: orgname, script_id: scriptId, stage:currentStage, typehistory:inputhistory }
 		})
 	  .done(function( response ) {
-		  handleResponse(response, callback, name);		
+		  handleResponse(response, callback, name, box);		
 	  });	
 }
 /** new function for new items in which we separate the action (e.g. del) and the type (e.g. ddx) 
@@ -123,7 +141,7 @@ name of callback function
 type of items (ddx, mngs, patho, etc)
 action: to be performed (e.g. delete, add,...)
 */
-function sendAjaxItemUrl(id, callback, type, name, typedInName, action){
+function sendAjaxItemUrl(id, callback, type, name, typedInName, action, box){
 	clearErrorMsgs();
 	var confirmed = true;
 	if(id=="IGNORE") return;
@@ -138,7 +156,7 @@ function sendAjaxItemUrl(id, callback, type, name, typedInName, action){
 			  data: { type: type, id: id, name: name, orgname: typedInName, script_id: scriptId, stage:currentStage, typehistory:inputhistory, action: action }
 			})
 		  .done(function( response ) {
-			  handleResponse(response, callback, name);		
+			  handleResponse(response, callback, name, box);		
 		  });
 	}	
 }
@@ -150,25 +168,25 @@ function sendAjaxItemUrl(id, callback, type, name, typedInName, action){
  * @param name
  * @param url
  */
-function sendAjaxUrlHtml(id, callback, type, name, url){
+function sendAjaxUrlHtml(id, callback, type, name, url, box){
 	$.ajax({
 		  method: "POST",
 		  url: url,
 		  data: { type: type, id: id, name: name, script_id: scriptId, stage:currentStage }
 		})
 	  .done(function( response ) {
-		  handleResponseHtml(response, callback, name);		
+		  handleResponseHtml(response, callback, name,box);		
 	  });
 }
 
-function sendAjaxCM(id, callback, type, name, x, y){
+function sendAjaxCM(id, callback, type, name, x, y, box){
 	$.ajax({
 		  method: "POST",
 		  url: ajaxUrl,
 		  data: { type: type, id: id, name: name, x: x, y: y, script_id: scriptId, stage:currentStage }
 		})
 	  .done(function( response ) {	
-		  handleResponse(response, callback, name);
+		  handleResponse(response, callback, name, box);
 	  });	
 }
 
@@ -196,7 +214,7 @@ function sendAjaxCnx(id, callback, type, name, startEpId, targetEpX, targetEpY){
  *  display msg and call callback function
  *  we have an id and id2...
  **/
-function handleResponse(response, callback, name){
+function handleResponse(response, callback, name, box){
 	 displayErrorMsg(response);
 	 var id =  $(response).find('id').text();
 	 var id2 =  $(response).find('id2').text();
@@ -206,19 +224,19 @@ function handleResponse(response, callback, name){
 	 //TODO we might need shortnam here (for tooltip in map)s
 	 if(isOk=="1"){
 		 if(id2!="" && id2!=null)
-			 callback(id, id2, name); //addConnectionCallback(sourceId, cnxId, targetId){
-		 else if (action!="" && type!="")
-				callback(id, action, type); //new mechanism for items
-		 else callback(id, name);
+			 callback(id, id2, name, box); //addConnectionCallback(sourceId, cnxId, targetId){
+		 else if (action!="" && action!="null" && type!="")
+				callback(id, action, type, box); //new mechanism for items
+		 else callback(id, name, box);
 	 }
 	
 }
 
 /* display msg and call callback function*/
-function handleResponseHtml(response, callback, name){
+function handleResponseHtml(response, callback, name, box){
 	if(response.contentType=="text/xml")
 		handleResponse(response, callback, name)
-	else callback(response);	
+	else callback(response, box);	
 }
 
 /**
@@ -226,7 +244,7 @@ function handleResponseHtml(response, callback, name){
  * E.g. id of form is "probform" and span id is "msg_probform"
  * @param response
  */
-function displayErrorMsg(response){
+function displayErrorMsg(response, box){
 	 var msg =  $(response).find('msg').text();
 	 var formId =  $(response).find('formId').text();
 	 $("#msg_"+formId).html(msg);

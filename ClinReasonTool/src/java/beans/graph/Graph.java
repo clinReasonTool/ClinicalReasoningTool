@@ -146,11 +146,11 @@ public class Graph extends DirectedWeightedMultigraph<MultiVertex, MultiEdge> {
 	 * @param rel ALWAYS the Relation containing the ListItem (optional with the synonymId)
 	 * @param illnessScriptType
 	 */
-	public MultiVertex addVertex(Relation rel, int illScriptType){
+	public MultiVertex addVertex(Relation rel, int illScriptType, int boxNo){
 		if(rel==null) return null;
 		MultiVertex multiVertex = getVertexByIdAndType(rel.getListItemId(), rel.getRelationType());
 		if(multiVertex==null){ //create a new one:
-			multiVertex = new MultiVertex(rel, illScriptType); 
+			multiVertex = new MultiVertex(rel, illScriptType, boxNo); 
 			super.addVertex(multiVertex);
 		}
 		else{ //we only have to update the relation in the MultiVertex
@@ -158,7 +158,7 @@ public class Graph extends DirectedWeightedMultigraph<MultiVertex, MultiEdge> {
 			multiVertex.addRelation(rel, illScriptType); //relation not yet added			
 		}
 		if(illScriptType==IllnessScriptInterface.TYPE_EXPERT_CREATED)
-			addParentAndChildVertices(multiVertex);
+			addParentAndChildVertices(multiVertex, boxNo);
 		
 		return multiVertex;
 	}
@@ -168,12 +168,12 @@ public class Graph extends DirectedWeightedMultigraph<MultiVertex, MultiEdge> {
 	 * parent: higher in hierarchy (more general)
 	 * child: lower in hierarchy (more specific)
 	 */
-	private void addParentAndChildVertices(MultiVertex vertex){
+	private void addParentAndChildVertices(MultiVertex vertex, int boxNo){
 		if(vertex==null || vertex.getExpertVertex()==null) return;
 		List<ListItem> items = new DBList().selectParentAndChildListItems(vertex.getExpertVertex().getListItem());
 		if(items==null || items.isEmpty()) return;
 		for(int i=0; i< items.size(); i++){
-			MultiVertex relatedVertex = addVertex(items.get(i), vertex.getExpertVertex().getRelationType());
+			MultiVertex relatedVertex = addVertex(items.get(i), vertex.getExpertVertex().getRelationType(), boxNo);
 			if(vertex.getExpertVertex().getListItem().getFirstCode().length()<items.get(i).getFirstCode().length())
 				addHierarchyEdge(vertex, relatedVertex); //vertex is a parent
 			else //vertex is the child
@@ -196,10 +196,10 @@ public class Graph extends DirectedWeightedMultigraph<MultiVertex, MultiEdge> {
 		else e.addParam(IllnessScriptInterface.TYPE_EXPERT_CREATED, MultiEdge.WEIGHT_PARENT);
 	}
 	
-	private MultiVertex addVertex(ListItem li, int type){
+	private MultiVertex addVertex(ListItem li, int type, int boxNo){
 		MultiVertex multiVertex = getVertexByIdAndType(li.getItem_id(), type);
 		if(multiVertex==null){ //create a new one:
-			multiVertex = new MultiVertex(li, IllnessScriptInterface.TYPE_EXPERT_CREATED, type); 
+			multiVertex = new MultiVertex(li, IllnessScriptInterface.TYPE_EXPERT_CREATED, type, boxNo); 
 			super.addVertex(multiVertex);
 		}
 		return multiVertex;
@@ -219,7 +219,9 @@ public class Graph extends DirectedWeightedMultigraph<MultiVertex, MultiEdge> {
 		//int weight = MultiEdge.WEIGHT_EXPLICIT;
 		if(cnx.getWeight()>MultiEdge.WEIGHT_EXPLICIT) weight = cnx.getWeight();
 		if(source!=null && target!=null){
-			MultiEdge edge = addOrUpdateEdge(getVertexByIdAndType(source.getListItemId(), source.getRelationType()), getVertexByIdAndType(target.getListItemId(), target.getRelationType()), type, weight, cnx, patIllScript.getType());
+			MultiVertex s = getVertexByIdAndType(source.getListItemId(), source.getRelationType());
+			MultiVertex t = getVertexByIdAndType(target.getListItemId(), target.getRelationType());
+			MultiEdge edge = addOrUpdateEdge(s, t, type, weight, cnx, patIllScript.getType());
 			
 		}
 		else if(source==null || target==null) {
@@ -545,7 +547,7 @@ public class Graph extends DirectedWeightedMultigraph<MultiVertex, MultiEdge> {
 				//if we have a vertex selected by learner (and expert) we always use the source/target-id of the learner vertex. 
 				//only if a vertex has been selected only by the expert we use the expert id...
 				if(sourceVertex.getLearnerVertex()!=null) {
-					startIdWithPrefix = GraphController.getPrefixByType(sourceVertex.getType())+sourceVertex.getLearnerVertex().getId(); 	
+					startIdWithPrefix = GraphController.getPrefixByType(sourceVertex.getBox())+sourceVertex.getLearnerVertex().getId(); //GraphController.getPrefixByType(sourceVertex.getType())+sourceVertex.getLearnerVertex().getId(); 	
 				}
 				else if(sourceVertex.getExpertVertex()!=null){
 					startIdWithPrefix = GraphController.getPrefixByType(sourceVertex.getType())+sourceVertex.getExpertVertex().getId(); 	

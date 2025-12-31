@@ -3,7 +3,7 @@
 	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="beans.relation">
 
-	<class name="RelationNursingAim" table="crt.relation_aims">
+	<class name="RelationAim" table="crt.relation_aims">
 		<cache usage="nonstrict-read-write" />
 		<comment>Aims Relation</comment>	
 		<id name="id" type="long" column="id">
@@ -21,7 +21,7 @@
 		<property name="prefix" column="prefix" type="string"/>
 		<property name="comment" column="ccomment" type="string"/>
 				
-		<many-to-one name="nursingAim" class="beans.list.ListItem" column="source_id"  lazy="false" insert="false" update="false" fetch="join" />
+		<many-to-one name="aim" class="beans.list.ListItem" column="source_id"  lazy="false" insert="false" update="false" fetch="join" />
 	
 </class>
 </hibernate-mapping>

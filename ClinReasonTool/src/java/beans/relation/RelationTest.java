@@ -4,8 +4,9 @@ import java.awt.Point;
 import java.io.Serializable;
 import java.util.*;
 
-import actions.beanActions.AddDiagnosisAction;
-import actions.beanActions.AddTestAction;
+import actions.beanActions.AddRelationAction;
+//import actions.beanActions.AddDiagnosisAction;
+//import actions.beanActions.AddTestAction;
 import controller.GraphController;
 import net.casus.util.Utility;
 import util.CRTLogger;
@@ -24,8 +25,6 @@ public class RelationTest extends Relation implements Serializable{
 	public static final int QUALIFIER_RARE = 0; 
 	public static final int QUALIFIER_MEDIUM = 1;
 	public static final int QUALIFIER_OFTEN = 2;
-	public static final int DEFAULT_X = 15; //165; //245; //default x position of problems in canvas
-	
 	
 	/**
 	 * problems: key-finding, other,... (?)
@@ -47,7 +46,8 @@ public class RelationTest extends Relation implements Serializable{
 	}	
 	public ListItem getTest() {return test;}
 	public void setTest(ListItem test) {this.test = test;}		
-	public String getIdWithPrefix(){ return GraphController.PREFIX_TEST+this.getId();}
+	public void setListItem(ListItem li) {test = li;}
+	//public String getIdWithPrefix(){ return GraphController.PREFIX_TEST+this.getId();}
 	
 
 	/* (non-Javadoc)
@@ -83,7 +83,7 @@ public class RelationTest extends Relation implements Serializable{
 	}
 	
 	public void calculatePoints(int pos, boolean isExp) {
-		Point p = new AddTestAction().calculateNewItemPosInCanvas(pos, isExp);
+		Point p = new AddRelationAction().calculateNewItemPosInCanvas(pos, isExp);
 		this.setXAndY(p);
 	}
 }

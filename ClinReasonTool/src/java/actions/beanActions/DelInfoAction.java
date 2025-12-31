@@ -14,7 +14,11 @@ import controller.NavigationController;
 import database.DBClinReason;
 import util.CRTLogger;
 
-public class DelInfoAction implements DelAction{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class DelInfoAction /*implements DelAction*/{
 	private PatientIllnessScript patIllScript;
 	
 	public DelInfoAction(PatientIllnessScript patIllScript){
@@ -26,7 +30,7 @@ public class DelInfoAction implements DelAction{
 	 */
 	public void save(Object o) {
 		new DBClinReason().deleteAndCommit((Relation)o);
-		new DBClinReason().saveAndCommit(patIllScript.getInfos());
+	//	new DBClinReason().saveAndCommit(patIllScript.getInfos());
 	}
 
 	/* (non-Javadoc)
@@ -40,7 +44,7 @@ public class DelInfoAction implements DelAction{
 	/* (non-Javadoc)
 	 * @see beanActions.DelAction#delete(java.lang.String)
 	 */
-	public void delete(String id) {
+	/*public void delete(String id) {
 		if(id==null || id.trim().equals("") || patIllScript==null || patIllScript.getInfos()==null || patIllScript.getInfos().isEmpty()){
 			//todo error msg
 			return;		
@@ -54,12 +58,12 @@ public class DelInfoAction implements DelAction{
 		save(rel);
 		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_INFO_LIST, Relation.TYPE_INFO);
 
-	}
+	}*/
 	
 	/* (non-Javadoc)
 	 * @see actions.beanActions.DelAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel){
+	/*public void updateGraph(Relation rel){
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		MultiVertex vertex = graph.getVertexByIdAndType(rel.getListItemId(), Relation.TYPE_INFO);
 		if(vertex==null) return; //Should not happen
@@ -67,5 +71,5 @@ public class DelInfoAction implements DelAction{
 		//remove complete edge param for all these edges:
 		
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
-	}
+	}*/
 }

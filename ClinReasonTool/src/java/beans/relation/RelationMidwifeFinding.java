@@ -13,6 +13,8 @@ import beans.list.*;
  * almost proving a diagnosis or rarely occurs with a diagnosis.
  * We might need more qualifiers,...
  * @author ingahege
+ * 
+ * @deprecated
  *
  */
 public class RelationMidwifeFinding extends Relation implements Serializable{
@@ -37,20 +39,21 @@ public class RelationMidwifeFinding extends Relation implements Serializable{
 		this.setDestId(destId);
 		if(synId>0) setSynId(synId);
 	}
-	public int getDiscriminator() {return Relation.TYPE_MFDG;}
-	public void setDiscriminator(int i){}
+	//public int getDiscriminator() {return Relation.SUBTYPE_MFDG;}
+	//public void setDiscriminator(int i){}
 	
 	public ListItem getProblem() {return problem;}
 	public ListItem getListItem() {return getProblem();}
-	public void setProblem(ListItem problem) {this.problem = problem;}		
+	public void setProblem(ListItem problem) {this.problem = problem;}	
+	public void setListItem(ListItem li) {problem = li;}
 	
-	public String getIdWithPrefix(){return GraphController.PREFIX_MFDG+this.getId();}
+	public String getIdWithPrefix(){return ""; /*GraphController.PREFIX_MFDG+this.getId();*/}
 	
 	
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getRelationType()
 	 */
-	public int getRelationType() {return TYPE_MFDG;}	
+	//public int getRelationType() {return TYPE_MFDG;}	
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getLabel()
 	 */
@@ -84,6 +87,11 @@ public class RelationMidwifeFinding extends Relation implements Serializable{
 	
 	public void calculatePoints(int pos, boolean isExp) {
 		//TODO
+	}
+	@Override
+	public int getRelationType() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

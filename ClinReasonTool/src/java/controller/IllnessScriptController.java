@@ -63,14 +63,14 @@ public class IllnessScriptController implements Serializable{
 	 * @param extUId (encyrpted)
 	 * @return
 	 */
-	public PatientIllnessScript createAndSaveNewPatientIllnessScript(long userId, String vpId, int systemId, String extUId){
+	public PatientIllnessScript createAndSaveNewPatientIllnessScript(long userId, String vpId/*, int systemId*/, String extUId){
 		if(vpId==null || userId<=0) return null;
 
-		checkAndSetDeleteFlagOfOldSCriptsAndScore(userId, vpId, systemId);
+		checkAndSetDeleteFlagOfOldSCriptsAndScore(userId, vpId);
 		//better would be to get the language from the expert script in case the case language has been changed for any reason -> 
 		//so we reset the locale when we have loaded the expert script!
 		Locale loc = LocaleController.getInstance().getScriptLocale();
-		PatientIllnessScript patillscript = new PatientIllnessScript( userId, vpId, loc, systemId);
+		PatientIllnessScript patillscript = new PatientIllnessScript( userId, vpId, loc/*, systemId*/);
 		patillscript.setExtUId(extUId);
 		patillscript.setSessionId(extUId);
 		patillscript.save();
@@ -88,9 +88,9 @@ public class IllnessScriptController implements Serializable{
 	 * @param userId
 	 * @param vpId
 	 */
-	private void checkAndSetDeleteFlagOfOldSCriptsAndScore(long userId, String vpId, int systemId){
+	private void checkAndSetDeleteFlagOfOldSCriptsAndScore(long userId, String vpId/*, int systemId*/){
 		DBClinReason dcr = new DBClinReason(); 
-		List<PatientIllnessScript> scripts = dcr.selectPatIllScriptsByUserIdAndVpId(userId, vpId+"_"+systemId);
+		List<PatientIllnessScript> scripts = dcr.selectPatIllScriptsByUserIdAndVpId(userId, vpId+"_"+2);
 		if(scripts==null || scripts.isEmpty()) return;
 		ArrayList<Long> scriptIds = new ArrayList();
 		for(int i=0; i<scripts.size();i++){

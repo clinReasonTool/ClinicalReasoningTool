@@ -33,7 +33,7 @@ public interface AddAction{
 	void add(String idStr, String name, String xStr, String yStr);
 	//void initScoreCalc(Relation rel);
 	void createErrorMessage(String summary, String details, Severity sev);
-	void updateGraph(Relation rel);
+	void updateGraph(Relation rel, int box);
 	//void add(long id, String name, int x, int y);
 	void addRelation(/*long id, String name*/ListItem li, int x, int y, long synId);
 }

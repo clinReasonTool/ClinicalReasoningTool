@@ -8,6 +8,10 @@ import net.casus.util.Utility;
 import util.CRTLogger;
 import beans.list.*;
 
+/**
+ * @author ingahege
+ * @deprecated
+ */
 public class RelationNursingManagement extends Relation implements Serializable{
 	
 	public static final int DEFAULT_X = 5; //245; //325; //default x position of problems in canvas
@@ -22,18 +26,17 @@ public class RelationNursingManagement extends Relation implements Serializable{
 		this.setDestId(destId);
 		if(synId>0) setSynId(synId);
 	}
-	public int getDiscriminator() {return TYPE_NMNG;}
-	public void setDiscriminator(int i){}
 	
 	//do not change name (needed for mapping)	
 	public ListItem getManagement() {return nursmanagement;}
 	public void setManagement(ListItem nursmanagement) {this.nursmanagement = nursmanagement;}
-	public String getIdWithPrefix(){ return GraphController.PREFIX_NMNG+this.getId();}
+	public void setListItem(ListItem li) {nursmanagement = li;}
+	public String getIdWithPrefix(){ return ""; /*GraphController.PREFIX_NMNG+this.getId();*/}
 
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getRelationType()
 	 */
-	public int getRelationType() {return TYPE_NMNG;}	
+	public int getRelationType() {return SUBTYPE_NMNG;}	
 
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getLabel()

@@ -12,6 +12,7 @@ import actions.scoringActions.ScoringListAction;
 import application.ErrorMessageContainer;
 import beans.*;
 import beans.scripts.*;
+import beans.graph.Box;
 import beans.graph.Graph;
 import beans.graph.MultiVertex;
 import beans.helper.TypeAheadBean;
@@ -40,27 +41,32 @@ public class AddNoDiagnosisAction{
 	 * @param xStr (e.g. "199.989894") -> we have to convert it into int
 	 * @param yStr
 	 */
-	public void add(){ 
-		if(patIllScript.getDiagnoses()==null) patIllScript.setDiagnoses(new ArrayList<RelationDiagnosis>());
+	public void add(List l, int box){ 
+		
+		if(l==null) l = new ArrayList();
+		
+		//if(patIllScript.getDiagnoses()==null) patIllScript.setDiagnoses(new ArrayList<RelationDiagnosis>());
 		RelationDiagnosis ddx = new RelationDiagnosis(0,patIllScript.getId(), -1);
-		if(patIllScript.getDiagnoses().contains(ddx)){
+		if(l.contains(ddx)) {
+		//if(patIllScript.getDiagnoses().contains(ddx)){
 			createErrorMessage(IntlConfiguration.getValue("ddx.duplicate"),"optional details", FacesMessage.SEVERITY_WARN);
 			return;
 		}
 		ddx.setFinalDiagnosis(patIllScript.getCurrentStage());
 		ddx.setStage(patIllScript.getCurrentStage());
 		if(patIllScript.isExpScript()) ddx.setStage(patIllScript.getStage());
-		ddx.setOrder(patIllScript.getDiagnoses().size());
+		//ddx.setOrder(patIllScript.getDiagnoses().size());
+		ddx.setOrder(l.size());
 		ListItem li = new DBList().selectListItemById(0);
 		ddx.setDiagnosis(li);
 		
-		ddx.setXAndY(calculateNewItemPosInCanvas());		
+		ddx.setXAndY(calculateNewItemPosInCanvas(l));		
 		save(ddx);
-		patIllScript.getDiagnoses().add(ddx);		
+		patIllScript.getListByType(Box.BOXTYPE_DDX, -1).add(ddx);		
 		
 
 		notifyLog(ddx);
-		updateGraph(ddx);
+		updateGraph(ddx, box);
 		//if(!patIllScript.isExpScript()) updateXAPIStatement(rel);
 	}
 	
@@ -78,10 +84,10 @@ public class AddNoDiagnosisAction{
 	 * TODO: we could check whether the position is already taken,.....
 	 * @return
 	 */
-	private Point calculateNewItemPosInCanvas(){
+	private Point calculateNewItemPosInCanvas(List rels){
 		int y = AddAction.MIN_Y;
-		if(patIllScript.getDiagnoses()!=null || !patIllScript.getDiagnoses().isEmpty()){
-			y = patIllScript.getDiagnoses().size() * 26;//CAVE max y!
+		if(rels!=null || !rels.isEmpty()){
+			y = rels.size() * 26;//CAVE max y!
 		}
 		if(patIllScript.isExpScript()){
 			return new Point(RelationDiagnosis.DEFAULT_X+100,y);
@@ -118,15 +124,15 @@ public class AddNoDiagnosisAction{
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel) {
+	public void updateGraph(Relation rel, int box) {
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		//MultiVertex mv = g.addVertex(ddx, patIllScript.getType());	
 
-		MultiVertex mv = graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED);
+		MultiVertex mv = graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED, box);
 		mv.setExpertVertex(rel);
 		
 		// add implicit edges:
-		if(patIllScript.getTests()!=null){
+	/*	if(patIllScript.getTests()!=null){
 			for(int i=0; i < patIllScript.getTests().size(); i++){
 				graph.addImplicitEdge(rel.getListItemId(), patIllScript.getTests().get(i).getListItemId(), IllnessScriptInterface.TYPE_LEARNER_CREATED);
 			}
@@ -140,7 +146,7 @@ public class AddNoDiagnosisAction{
 			for(int i=0; i < patIllScript.getProblems().size(); i++){
 				graph.addImplicitEdge(patIllScript.getProblems().get(i).getListItemId(), rel.getListItemId(), IllnessScriptInterface.TYPE_LEARNER_CREATED);
 			}
-		}
+		}*/
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
 	}
 

@@ -14,7 +14,11 @@ import controller.NavigationController;
 import database.DBClinReason;
 import util.CRTLogger;
 
-public class DelMidwifeHypAction implements DelAction{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class DelMidwifeHypAction /*implements DelAction*/{
 	private PatientIllnessScript patIllScript;
 	
 	public DelMidwifeHypAction(PatientIllnessScript patIllScript){
@@ -24,10 +28,10 @@ public class DelMidwifeHypAction implements DelAction{
 	/* (non-Javadoc)
 	 * @see beanActions.DelAction#save(beans.relation.Relation)
 	 */
-	public void save(Object o) {
+	/*public void save(Object o) {
 		new DBClinReason().deleteAndCommit((Relation)o);
 		new DBClinReason().saveAndCommit(patIllScript.getMidwifeHypotheses());
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see beanActions.DelAction#notifyLog(beans.relation.Relation)
@@ -40,7 +44,7 @@ public class DelMidwifeHypAction implements DelAction{
 	/* (non-Javadoc)
 	 * @see beanActions.DelAction#delete(java.lang.String)
 	 */
-	public void delete(String id) {
+	/*public void delete(String id) {
 		if(id==null || id.trim().equals("") || patIllScript==null || patIllScript.getMidwifeHypotheses()==null || patIllScript.getMidwifeHypotheses().isEmpty()){
 			//todo error msg
 			return;		
@@ -54,12 +58,12 @@ public class DelMidwifeHypAction implements DelAction{
 		save(rel);
 		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_MHYP_LIST, Relation.TYPE_MHYP);
 
-	}
+	}*/
 	
 	/* (non-Javadoc)
 	 * @see actions.beanActions.DelAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel){
+	/*public void updateGraph(Relation rel){
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		MultiVertex vertex = graph.getVertexByIdAndType(rel.getListItemId(), Relation.TYPE_MHYP);
 		if(vertex==null) return; //Should not happen
@@ -67,5 +71,5 @@ public class DelMidwifeHypAction implements DelAction{
 		//remove complete edge param for all these edges:
 		
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
-	}
+	}*/
 }

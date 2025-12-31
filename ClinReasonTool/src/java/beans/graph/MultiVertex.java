@@ -35,6 +35,8 @@ public class MultiVertex /*extends SynonymVertex*/ implements VertexInterface, S
 	 */
 	private int type; 
 	
+	private int box;
+	
 	/**
 	 * see definition above, we need this here so that we do not display hierarchy vertices unless chosen by the learner. 
 	 */
@@ -42,20 +44,25 @@ public class MultiVertex /*extends SynonymVertex*/ implements VertexInterface, S
 	
 	public MultiVertex(){}
 	
-	public MultiVertex(Relation rel, int illnessScriptType){
+	public MultiVertex(Relation rel, int illnessScriptType, int box){
 		setType(rel.getRelationType());
 		setLabel(rel.getLabel());
 		this.vertexId = rel.getListItemId();
 		this.addRelation(rel, illnessScriptType);
+		this.box = box;
 	}
 	
-	public MultiVertex(ListItem li, int illnessScriptType, int type){
+	public MultiVertex(ListItem li, int illnessScriptType, int type, int box){
 		this.type = type;
 		this.label = li.getName();
 		this.vertexId = li.getItem_id();
 		vertexType = VERTEX_TYPE_HIERARCHY;
+		this.box = box;
 	}
-	
+		
+	public int getBox() {return box;}
+	public void setBox(int box) {this.box = box;}
+
 	/**
 	 * We add the Relation object depending on the illScriptType. 
 	 * If an expert or illscript Relation has already by added, we do NOT update. the learner Relation is always updated. 
@@ -184,7 +191,7 @@ public class MultiVertex /*extends SynonymVertex*/ implements VertexInterface, S
 		StringBuffer sb = new StringBuffer();
 		sb.append("{\"label\":\""+learnerVertex.getLabelOrSynLabel()+"\",");
 		sb.append("\"shortlabel\":\""+learnerVertex.getShortLabelOrSynShortLabel()+"\",");
-		sb.append("\"id\":\""+learnerVertex.getIdWithPrefix()+"\",");
+		sb.append("\"id\":\"box"+box+"_"+learnerVertex.getId()+"\",");
 		sb.append("\"x\":\""+((Rectangle)learnerVertex).getX()+"\",");
 		sb.append("\"y\":\""+((Rectangle)learnerVertex).getY()+"\",");	
 		sb.append("\"type\":\""+learnerVertex.getRelationType()+"\",");
@@ -196,6 +203,7 @@ public class MultiVertex /*extends SynonymVertex*/ implements VertexInterface, S
 		if(learnerVertex.getRelationType()==Relation.TYPE_DDX ){
 			sb.append(", \"mnm\":\""+((RelationDiagnosis) learnerVertex).getMnm() +"\"");				
 		}
+	
 		sb.append("},");
 		return sb.toString();
 	}
@@ -210,7 +218,7 @@ public class MultiVertex /*extends SynonymVertex*/ implements VertexInterface, S
 		StringBuffer sb = new StringBuffer();
 		sb.append("{\"label\":\""+expertVertex.getLabelOrSynLabel()+"\",");
 		sb.append("\"shortlabel\":\""+expertVertex.getShortLabelOrSynShortLabel()+"\",");
-		sb.append("\"id\":\""+expertVertex.getIdWithPrefix()+"\",");
+		sb.append("\"id\":\"box"+this.box+"_"+expertVertex.getId()+"\",");
 		sb.append("\"x\":\""+((Rectangle)expertVertex).getX()+"\",");
 		sb.append("\"y\":\""+((Rectangle)expertVertex).getY()+"\",");	
 		sb.append("\"type\":\""+expertVertex.getRelationType()+"\",");
@@ -234,7 +242,7 @@ public class MultiVertex /*extends SynonymVertex*/ implements VertexInterface, S
 			//if learner has chosen the item, we alsways display the learners labels (could be a synonm)
 			sb.append("{\"label\":\""+learnerVertex.getLabelOrSynLabel()+"\",");
 			sb.append("\"shortlabel\":\""+learnerVertex.getShortLabelOrSynShortLabel()+"\",");
-			sb.append("\"id\":\""+learnerVertex.getIdWithPrefix()+"\",");
+			sb.append("\"id\":\"box"+box+"_"+learnerVertex.getId()+"\",");
 			sb.append("\"x\":\""+((Rectangle)learnerVertex).getX()+"\",");
 			sb.append("\"y\":\""+((Rectangle)learnerVertex).getY()+"\",");	
 			sb.append("\"type\":\""+learnerVertex.getRelationType()+"\",");
@@ -253,5 +261,6 @@ public class MultiVertex /*extends SynonymVertex*/ implements VertexInterface, S
 		if(learnerVertex!=null) return learnerVertex.getStage();
 		return -1;
 	}
+	
 	
 }

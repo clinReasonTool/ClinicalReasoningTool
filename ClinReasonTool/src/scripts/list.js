@@ -52,33 +52,6 @@ $(function() {
 	for (var key in inputUrls) {
 		loadListAndAssign(key,inputUrls[key]);
 	}
-	 
-	/*$.ajax({ //list for problems (list view)
-		url: listUrl, // url: listNursingUrl,
-		dataType: "json",
-		success: function( data ) {
-			genericCreateAutocomplete("problems", data);
-			genericCreateAutocomplete("ddx", data);
-			genericCreateAutocomplete("tests", data);
-			genericCreateAutocomplete("patho", data, 6, false);
-			genericCreateAutocomplete("mng", data);
-			genericCreateAutocomplete("nddx", data);
-			genericCreateAutocomplete("nmng", data);
-			genericCreateAutocomplete("info", data);
-			genericCreateAutocomplete("naim", data);
-			genericCreateAutocomplete("act_search");
-			genericCreateAutocomplete("ctxt_search");
-		}
-	});
-	
-	genericCreateAutocompleteWithoutList("problems", listUrl);
-	genericCreateAutocompleteWithoutList("patho", listUrl);
-	genericCreateAutocompleteWithoutList("ddx", listUrl);
-	genericCreateAutocompleteWithoutList("tests", listUrl);
-	genericCreateAutocompleteWithoutList("mng", listUrl);
-	genericCreateAutocompleteWithoutList("act_search",listUrl);
-	genericCreateAutocompleteWithoutList("ctxt_search", listUrl);
-	*/
 });
 
 var exact_item_label = "";
@@ -132,24 +105,10 @@ function genericAddItem(ui, id) {
  */
 function genericAddItemByValueAndLabel(item_value,item_label, id) {
 	// choose correct add??? function by id!
-	if (id=="problems") { 	addProblem(item_value, item_label, $("#" + id).val());}
-	else if (id=="ddx") { 	addDiagnosis(item_value,item_label, $("#" + id).val()); }
-	else if (id=="tests") { addTest(item_value, item_label, $("#" + id).val()); }
-	else if (id=="patho") { addPatho(item_value, item_label, $("#" + id).val()); }
-	else if (id=="mng") { 	addManagement(item_value, item_label, $("#" + id).val()); }
-	//nursing:
-	else if (id=="nddx") { 	addItem(item_value, item_label,  $("#" + id).val(), "Nddx"); }
-	else if (id=="nmng") { 	addItem(item_value, item_label,  $("#" + id).val(), "Nmng"); }
-	else if (id=="info") { 	addItem(item_value, item_label,  $("#" + id).val(), "Info"); }
-	else if (id=="naim") { 	addItem(item_value, item_label,  $("#" + id).val(), "Naim"); }
-	//midwife
-	else if (id=="mhyp") { 	addItem(item_value, item_label,  $("#" + id).val(), "Mhyp"); }
-	else if (id=="mmng") { 	addItem(item_value, item_label,  $("#" + id).val(), "Mmng"); }
-	else if (id=="mrec") { 	addItem(item_value, item_label,  $("#" + id).val(), "Mrec"); }
-	else if (id=="mfdg") { 	addItem(item_value, item_label,  $("#" + id).val(), "Mfdg"); }
-	//context:
-	else if (id=="act_search") { addActor(item_value, item_label,  $("#" + id).val()); }
-	else if (id=="ctxt_search") { addContext(item_value, item_label,  $("#" + id).val()); }
+	if (id=="box1list") { 	addBoxItem(item_value, item_label, $("#" + id).val(), 1);}
+	else if (id=="box2list") { 	addBoxItem(item_value,item_label, $("#" + id).val(), 2); }
+	else if (id=="box3list") { addBoxItem(item_value, item_label, $("#" + id).val(),3); }
+	else if (id=="box4list") { addBoxItem(item_value, item_label, $("#" + id).val(),4); }
 }
 
 /**
@@ -181,25 +140,16 @@ function genericCreateAutocomplete(in_id, in_data) {
 	// lookup parameters by id!
 	var in_num = 0;
 	var in_fdg_prefix_handling = false;
-	if (in_id=="problems") {
+	if (in_id=="box1list") {
 		in_num = 1;
 		in_fdg_prefix_handling = true;
 	}
-	else if (in_id=="ddx") 		{ in_num = 2; }
-	else if (in_id=="tests") 	{ in_num = 3; }
-	else if (in_id=="patho") 	{ in_num = 6; }
-	else if (in_id=="mng") 		{ in_num = 4; }
-	else if (in_id=="nddx") 	{ in_num = 7; }
-	else if (in_id=="nmng") 	{ in_num = 9; }
-	else if (in_id=="info") 	{ in_num = 10; }
-	else if (in_id=="naim") 	{ in_num = 8; }	
-	else if (in_id=="mhyp") 	{ in_num = 11; }	
-	else if (in_id=="mmng") 	{ in_num = 13; }
-	else if (in_id=="mrec") 	{ in_num = 12; }
-	else if (in_id=="mfdg") 	{ in_num = 14; }
+	else if (in_id=="box2list") 		{ in_num = 2; }
+	else if (in_id=="box3list") 	{ in_num = 3; }
+	else if (in_id=="box4list") 	{ in_num = 4; }
 	
-	else if (in_id=="act_search") { in_num = 4; }
-	else if (in_id=="ctxt_search") { in_num = 4; }
+	//else if (in_id=="act_search") { in_num = 4; }
+	//else if (in_id=="ctxt_search") { in_num = 4; }
 	
 	$( "#" + in_id).autocomplete({
        	/* source: data,*/

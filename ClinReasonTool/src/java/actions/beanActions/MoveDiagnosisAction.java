@@ -12,7 +12,7 @@ import database.DBClinReason;
  * @author ingahege
  * @deprecated
  */
-public class MoveDiagnosisAction implements MoveAction{
+/*public class MoveDiagnosisAction implements MoveAction{
 
 	private PatientIllnessScript patIllScript;
 	
@@ -20,24 +20,18 @@ public class MoveDiagnosisAction implements MoveAction{
 		this.patIllScript = patIllScript;
 	}
 	
-	/* (non-Javadoc)
-	 * @see beanActions.MoveAction#save()
-	 */
+
 	public void save(List l){
 		new DBClinReason().saveAndCommit(l);
 	}
 	
-	/* (non-Javadoc)
-	 * @see beanActions.MoveAction#notifyLog(beans.relation.Relation)
-	 */
+
 	public void notifyLog(Relation rel) {
 		LogEntry le = new LogEntry(LogEntry.MOVEDIAGNOSIS_ACTION, patIllScript.getId(), rel.getListItemId(), rel.getOrder());
 		le.save();			
 	}
 
-	/* (non-Javadoc)
-	 * @see beanActions.MoveAction#reorder(java.lang.String)
-	 */
+
 	public void reorder(String idStrMovedItem,  String newOrderStr) {		
 		String[] newOrderArr = newOrderStr.split("&");
 		List<RelationDiagnosis> newList  = new ArrayList<RelationDiagnosis>();
@@ -54,5 +48,5 @@ public class MoveDiagnosisAction implements MoveAction{
 		}
 		patIllScript.setDiagnoses(newList);
 		save(patIllScript.getDiagnoses());
-	}
-}
+	
+}}*/

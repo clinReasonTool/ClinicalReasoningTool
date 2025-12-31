@@ -350,7 +350,7 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 		else if(vpId!=null && !vpId.equals("") && systemId>0 && user!=null){ //look whether script created, if not create it...
 			this.patillscript = isc.loadIllnessScriptsByVpId(user.getUserId(), vpId+"_"+systemId, extUId);
 			if(this.patillscript==null){
-				this.patillscript = isc.createAndSaveNewPatientIllnessScript(user.getUserId(), vpId, systemId, extUId);
+				this.patillscript = isc.createAndSaveNewPatientIllnessScript(user.getUserId(), vpId, extUId);
 				//for debugging purposes we log the userAgent:
 				if(patillscript!=null){
 					String userAgent = FacesContext.getCurrentInstance().getExternalContext().getRequestHeaderMap().get("User-Agent");
@@ -453,16 +453,21 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 		if(setMaxStage && patillscript.getMaxSubmittedStage()<=0 && expScript!=null){
 			patillscript.setMaxSubmittedStage(expScript.getMaxSubmittedStage());
 			patillscript.save();
+			//backward compatibility - make sure that experst script has the boxes set: 
+			expScript.initOrLoadBoxes();
 			//we do this here now instead of getting it from the session url as this should not be different from the expert map:
-			patillscript.setBox1Type(expScript.getBox1Type());
+			patillscript.setBoxes(expScript.getBox1(), expScript.getBox2(),expScript.getBox3(), expScript.getBox4());
+			/*patillscript.setBox1Type(expScript.getBox1Type());
 			patillscript.setBox2Type(expScript.getBox2Type());
 			patillscript.setBox3Type(expScript.getBox3Type());
-			patillscript.setBox4Type(expScript.getBox4Type());
+			patillscript.setBox4Type(expScript.getBox4Type());*/
 			patillscript.setLocale(expScript.getLocale());
 		}
 	    
 		// app.addIllnessScriptForDiagnoses(patillscript.getDiagnoses(), patillscript.getVpId());
 	}
+	
+
 	
 	public AppBean getAppBean(){
 	    ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();

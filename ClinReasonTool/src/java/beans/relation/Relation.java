@@ -7,6 +7,7 @@ import java.util.*;
 import org.apache.commons.lang3.StringUtils;
 
 import actions.beanActions.AddAction;
+import actions.beanActions.AddDiagnosisAction;
 import beans.graph.Graph;
 import beans.graph.MultiEdge;
 import beans.graph.MultiVertex;
@@ -33,14 +34,19 @@ public abstract class Relation extends Beans implements Rectangle{
 	public static final int TYPE_MNG = 4;
 	public static final int TYPE_PATHO = 6; //new type for pathophysiology
 	public static final int TYPE_CNX = 5;
-	public static final int TYPE_NDDX = 7; //nursing diagnoses
-	public static final int TYPE_NURSAIM = 8; //nursing diagnoses
-	public static final int TYPE_NMNG = 9; // nursing managements
+	public static final int TYPE_AIM = 8; //nursing aims
 	public static final int TYPE_INFO = 10; // infos
-	public static final int TYPE_MHYP = 11; //midwife hypotheses
-	public static final int TYPE_MREC = 12; //midwife recommendations 
-	public static final int TYPE_MMNG = 13; // midwife managements
-	public static final int TYPE_MFDG = 14; // midwife findings	
+
+	public static final int SUBTYPE_NDDX = 7; //nursing diagnoses
+	public static final int SUBTYPE_NMNG = 9; // nursing managements
+	public static final int SUBTYPE_MHYP = 11; //midwife hypotheses
+	public static final int SUBTYPE_MREC = 12; //midwife recommendations 
+	public static final int SUBTYPE_MMNG = 13; // midwife managements
+	public static final int SUBTYPE_MFDG = 14; // midwife findings	
+	public static final int SUBTYPE_OUTC = 16; // outcomes
+	public static final int SUBTYPE_DRP = 15; // drug-related problems
+	public static final int SUBTYPE_REC= 18; // midwife findings	
+	public static final int SUBTYPE_INT = 17; //interventions	
 	
 	public static final int IS_SYNDROME = 1;
 	public static final int IS_SYNDROME_PART = 2;
@@ -89,9 +95,12 @@ public abstract class Relation extends Beans implements Rectangle{
 	 */
 	private String comment;
 	
+	private int discriminator;
+	
 
 	public long getListItemId() {return listItemId;}
 	public void setListItemId(long listItemId) {this.listItemId = listItemId;}
+	public abstract void setListItem(ListItem li);
 	public abstract ListItem getListItem(); 
 
 	public abstract String getLabel();
@@ -164,9 +173,15 @@ public abstract class Relation extends Beans implements Rectangle{
 	public String getComment() {return comment;}
 	public void setComment(String comment) {this.comment = comment;}
 	
-	
-	public abstract String getIdWithPrefix();
+	public int getDiscriminator() {return discriminator;}
+	public void setDiscriminator(int discriminator) {this.discriminator = discriminator;}
+	//public abstract String getIdWithPrefix();
 	public abstract String getLabelOrSynLabel();
+	/**
+	 * @param pos
+	 * @param isExp
+	 * @deprecated
+	 */
 	public abstract void calculatePoints(int pos, boolean isExp);
 	
 	public void setXAndY(Point p){
@@ -277,4 +292,16 @@ public abstract class Relation extends Beans implements Rectangle{
 		return getIsSyndromePart();
 		
 	}
+	
+	/*** we need these pseudo getters for using one subtemplate for all types of relations - only implemented by RelationDiagnosis ****/
+	public int getCssClass() {return RelationDiagnosis.TIER_NONE;}	
+	public int getExpCssClass() {return RelationDiagnosis.TIER_NONE;}
+	public int getMnm() {return 0;}
+	public boolean isRuledOutBool() {return false;}
+	public boolean isWorkingDDXBool() {return false;}
+	public boolean isFinalDDX() {return false;}
+	public int getFinalDiagnosis() {return RelationDiagnosis.TIER_NONE;}
+	
+	
+
 }
