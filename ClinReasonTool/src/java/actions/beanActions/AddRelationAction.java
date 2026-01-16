@@ -78,8 +78,8 @@ public class AddRelationAction implements AddAction, Scoreable{
 		List rels = this.patIllScript.getListByType(box.getBoxType(),box.getSubType());
 		if(rels==null) rels = new ArrayList();
 		Relation rel = createRelation(li, x, y, synId, rels.size());
-		addRelation(rel,rels, false);
-		this.patIllScript.addRelationToListByType(rel, box.getBoxType());
+		if(addRelation(rel,rels, false))
+			this.patIllScript.addRelationToListByType(rel, box.getBoxType());
 	}
 	
 	/**
@@ -114,14 +114,14 @@ public class AddRelationAction implements AddAction, Scoreable{
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#addRelation(long, java.lang.String, int, int, long)
 	 */
-	private void addRelation(Relation rel, List rels, boolean isJoker){
+	private boolean addRelation(Relation rel, List rels, boolean isJoker){
 		//List relations = patIllScript.getBox1Relations(); 
 		
 		//if(relations==null) patIllScript.setProblems(new ArrayList<RelationProblem>());
 		//Relation rel = new RelationProblem(li.getItem_id(), patIllScript.getId(), synId);		
 		if(rels.contains(rel)){
 			createErrorMessage(IntlConfiguration.getValue("findings.duplicate"),"optional details", FacesMessage.SEVERITY_WARN);
-			return;
+			return false;
 		}
 		rels.add(rel);
 		save(rel);
@@ -129,6 +129,7 @@ public class AddRelationAction implements AddAction, Scoreable{
 		updateGraph(rel, box.getIdx());
 		triggerScoringAction(rel, isJoker);
 		if(!patIllScript.isExpScript()) updateXAPIStatement(rel);
+		return true;
 	}
 	
 	/* (non-Javadoc)

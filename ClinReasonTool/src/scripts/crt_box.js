@@ -11,14 +11,15 @@ function addBoxItem(itemId, name, typedinName, box){
 	
 	if(name!=""){
 		checkBoxColorOnAdd("box"+box+"_title", "box"+box+"s");
-		sendAjax(itemId, boxCallBack, "addBox"+box+"Item", prefix, typedinName, box);
+		sendAjax(itemId, boxCallBack, "addBox"+box+"Item", name, prefix, typedinName, box);
 	}
 }
 
 //id, callback, type, methodName, typedinName, box
 function delBoxItem(id, box){
 	clearErrorMsgs();
-	sendAjax(id, delBoxItemCallBack, "delBox"+box+"Item", "", "", box);
+	//sendAjax(id, callback, methodName, name, prefix, typedinName, box)
+	sendAjax(id, delBoxItemCallBack, "delBox"+box+"Item", "", "", "",box);
 }
 
 

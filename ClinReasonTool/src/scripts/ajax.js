@@ -53,7 +53,8 @@ function sendAjax(id, callback, type, name, box){
 ** typedInName: history of typed, box; box number
  */
  
-function sendAjax(id, callback, methodName, name, typedinName, box){
+ //sendAjax(itemId, boxCallBack, "addBox"+box+"Item", name, prefix, typedinName, box);
+function sendAjax(id, callback, methodName, name, prefix, typedinName, box){
 	clearErrorMsgs();
 	var confirmed = true;
 	if(id=="IGNORE") return;
@@ -67,7 +68,7 @@ function sendAjax(id, callback, methodName, name, typedinName, box){
 		$.ajax({
 		  method: "POST",
 		  url: ajaxUrl,
-		  data: { type: methodName, id: id, name: name, orgname: typedinName, script_id: scriptId, stage:currentStage, typehistory:inputhistory }
+		  data: { type: methodName, id: id, name: name, orgname: typedinName, script_id: scriptId, stage:currentStage, typehistory:inputhistory, box:box, prefix:prefix }
 		})
 	  .done(function( response ) {
 		  handleResponse(response, callback, methodName, box);		
@@ -227,12 +228,13 @@ function sendAjaxCnx(id, callback, type, name, startEpId, targetEpX, targetEpY){
  *  we have an id and id2...
  **/
 function handleResponse(response, callback, name, box){
-	 displayErrorMsg(response);
+	 displayErrorMsg(response, box);
 	 var id =  $(response).find('id').text();
 	 var id2 =  $(response).find('id2').text();
 	 var action =  $(response).find('action').text();
 	 var type =  $(response).find('type').text();
 	 var isOk =  $(response).find('ok').text();
+	 var box =  $(response).find('box').text();
 	 //var box = $(response).find('box').text();
 	 //TODO we might need shortnam here (for tooltip in map)s
 	 if(isOk=="1"){
@@ -259,8 +261,9 @@ function handleResponseHtml(response, callback, name, box){
  */
 function displayErrorMsg(response, box){
 	 var msg =  $(response).find('msg').text();
-	 var formId =  $(response).find('formId').text();
-	 $("#msg_"+formId).html(msg);
+	// var formId =  $(response).find('formId').text();
+	var formId = "msg_box"+box+"form";
+	 $("#"+formId).html(msg);
 }
 
 /* callback function if there is nothing to do */

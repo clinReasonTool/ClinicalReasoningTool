@@ -490,11 +490,11 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	public void setSubmittedStage(int submittedStage) {this.submittedStage = submittedStage;}
 	
 	public void addBox1Item(String idStr, String prefix) {new AddRelationAction(this, box1).add(idStr, prefix);}
-	public void addBox1Item(String idStr) {new AddRelationAction(this, box1).add(idStr, "");}
+	//public void addBox1Item(String idStr) {new AddRelationAction(this, box1).add(idStr, "");}
 	public void addBox2Item(String idStr, String prefix) {new AddRelationAction(this, box2).add(idStr, prefix);}
 	public void addBox3Item(String idStr, String prefix) {new AddRelationAction(this, box3).add(idStr, prefix);}
 	public void addBox4Item(String idStr, String prefix) {new AddRelationAction(this, box4).add(idStr, prefix);}
-	public void addBox1Item(String idStr, String name, String x, String y){new AddRelationAction(this, box1).add(idStr, name, x,y);}
+	//public void addBox1Item(String idStr, String name, String x, String y){new AddRelationAction(this, box1).add(idStr, name, x,y);}
 	
 	public void delBox1Item(String idStr){ new DelRelationAction(this, box1).delete(idStr);}
 	public void delBox2Item(String idStr){ new DelRelationAction(this, box2).delete(idStr);}
@@ -552,13 +552,13 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	//public void reorderDiagnoses(String idStr, String newOrderStr){ new MoveDiagnosisAction(this).reorder(idStr, newOrderStr);}
 	//public void reorderTests(String idStr, String newOrderStr){ new MoveTestAction(this).reorder(idStr, newOrderStr);}
 	//public void reorderMngs(String idStr, String newOrderStr){ new MoveMngAction(this).reorder(idStr, newOrderStr);}
-	public void moveItemBox1(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box1).move(idStr, x, y);}
+	//public void moveItemBox1(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box1).move(idStr, x, y);}
 	public void moveItemBox1(String idStr, String x, String y){ new DragDropAction(this, box1).move(idStr, x, y);}
-	public void moveItemBox2(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box2).move(idStr, x, y);}
+	//public void moveItemBox2(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box2).move(idStr, x, y);}
 	public void moveItemBox2(String idStr, String x, String y){ new DragDropAction(this, box2).move(idStr, x, y);}
-	public void moveItemBox3(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box3).move(idStr, x, y);}
+	//public void moveItemBox3(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box3).move(idStr, x, y);}
 	public void moveItemBox3(String idStr, String x, String y){ new DragDropAction(this, box4).move(idStr, x, y);}
-	public void moveItemBox4(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box4).move(idStr, x, y);}
+	//public void moveItemBox4(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box4).move(idStr, x, y);}
 	public void moveItemBox4(String idStr, String x, String y){ new DragDropAction(this, box4).move(idStr, x, y);}
 
 	public void changeBox1Item(String idStr,String changeMode){new ChangeRelationAction(this, box1).changeRelation(idStr);}
@@ -913,60 +913,36 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	 * difference between problems entered by expert and student at current stage. If view mode is on we return 0.
 	 * @return
 	 */
-	public int getProblemsDiff(){
+	public int getBox1Diff(){
 		if(this.isExpScript()) return 0;
 		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
 		//if we have view mode only, we do not change color of box:
-		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxModeFdg()==2) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, getProblems(), Relation.TYPE_PROBLEM);
+		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode1()==2) return 0;
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox1Relations(), box1.getBoxCategory());
+	}
+	public int getBox2Diff(){
+		if(this.isExpScript()) return 0;
+		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
+		//if we have view mode only, we do not change color of box:
+		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode2()==2) return 0;
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox2Relations(), box2.getBoxCategory());
+	}
+	public int getBox3Diff(){
+		if(this.isExpScript()) return 0;
+		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
+		//if we have view mode only, we do not change color of box:
+		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode3()==2) return 0;
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox3Relations(), box3.getBoxCategory());
+	}
+	public int getBox4Diff(){
+		if(this.isExpScript()) return 0;
+		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
+		//if we have view mode only, we do not change color of box:
+		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode4()==2) return 0;
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox4Relations(), box4.getBoxCategory());
 	}
 
-	/**
-	 * difference between pathophysiology items entered by expert and student at current stage. If view mode is on we return 0.
-	 * @return
-	 */
-	public int getPathoDiff(){
-		if(this.isExpScript()) return 0;
-		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
-		//if we have view mode only, we do not change color of box:
-		if(crtContext.getSessSetting()!=null /*&& crtContext.getSessSetting().getBoxModePat()==2*/) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, patho, Relation.TYPE_PATHO);
-	}
-	/**
-	 * difference between differentials entered by expert and student at current stage. If view mode is on we return 0.
-	 * @return
-	 */
-	public int getDDXDiff(){
-		if(this.isExpScript()) return 0;
-		if(this.getSubmitted()) return 0; //if diagnosis has been made, we do not have to make the box red any longer...
-		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
-		//if we have view mode only, we do not change color of box:
-		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxModeDDX()==2) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, diagnoses, Relation.TYPE_DDX);
-	}
-	/**
-	 * difference between tests entered by expert and student at current stage. If view mode is on we return 0.
-	 * @return
-	 */
-	public int getTestsDiff(){
-		if(this.isExpScript()) return 0;
-		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
-		//if we have view mode only, we do not change color of box:
-		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxModeTst()==2) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, tests, Relation.TYPE_TEST);
-	}
-	/**
-	 * difference between management options entered by expert and student at current stage. If view mode is on we return 0.
-	 * @return
-	 */
-	public int getMngsDiff(){
-		if(this.isExpScript()) return 0;
-		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
-		//if we have view mode only, we do not change color of box:
-		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxModeMng()==2) return 0;
 
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, mngs, Relation.TYPE_MNG);
-	}
 	
 	public int getSumDiff(){
 		if(this.getSummStId()>0) return 0;

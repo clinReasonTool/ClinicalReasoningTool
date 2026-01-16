@@ -139,14 +139,14 @@ function genericCreateAutocompleteWithoutList(in_id, in_listUrl) {
 function genericCreateAutocomplete(in_id, in_data) {
 	// lookup parameters by id!
 	var in_num = 0;
-	var in_fdg_prefix_handling = false;
-	if (in_id=="box1list") {
+	var in_prefix_handling = true;
+	/*if (in_id=="box1list") {
 		in_num = 1;
-		in_fdg_prefix_handling = true;
+		in_prefix_handling = true;
 	}
 	else if (in_id=="box2list") 		{ in_num = 2; }
 	else if (in_id=="box3list") 	{ in_num = 3; }
-	else if (in_id=="box4list") 	{ in_num = 4; }
+	else if (in_id=="box4list") 	{ in_num = 4; }*/
 	
 	//else if (in_id=="act_search") { in_num = 4; }
 	//else if (in_id=="ctxt_search") { in_num = 4; }
@@ -164,8 +164,11 @@ function genericCreateAutocomplete(in_id, in_data) {
         },
       	close: function(ui) {
       		$("#" + in_id).val("");
-      		if (in_fdg_prefix_handling) {
-				$("#fdg_prefix").val("");
+      		if (in_prefix_handling) {
+				$("#box1_prefix").val("");
+				$("#box2_prefix").val("");
+				$("#box3_prefix").val("");
+				$("#box4_prefix").val("");
 			}
       		
       		handleClose(in_num);

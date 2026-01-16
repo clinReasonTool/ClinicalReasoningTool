@@ -441,7 +441,15 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		</div>
 	</div>
 </div>
-<div id="jsonConns" style="display:none;">#{adminContext.graph.jsonConns}</div> 
+	 <h:form id="cnxsform">
+		 <h:panelGroup>
+		 	<div id="jsonConns" style="display:none;">#{adminContext.graph.jsonConns}</div> </h:panelGroup>
+		   <h:commandButton id="hiddenCnxButton" value="RenderSomething" style="visibility:hidden">
+	  		<f:ajax render="@form" onevent="reInitCnxsCallback"></f:ajax>
+		</h:commandButton>		 
+	</h:form>
+	
+<!--  <div id="jsonConns" style="display:none;">#{adminContext.graph.jsonConns}</div> -->
 
 <div id="connContext"><ui:include src="expcnxchange.xhtml" /></div>
 <!--  <div id="boxesSel"><ui:include src="selboxes.xhtml" /></div>-->

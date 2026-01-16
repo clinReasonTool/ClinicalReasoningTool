@@ -82,14 +82,14 @@ function toggleShowAll(){
  * expert has chosen a diagnosis to be a final one...
  */
 function expFinalDiagnosis(id, box){
-	sendAjax(id, boxCallBack, "expSetFinalDiagnosis", "", "", box);
+	sendAjax(id, boxCallBack, "expSetFinalDiagnosis", "", "", "", box);
 }
 
 /*
  * expert has chosen a diagnosis to be a final one...
  */
 function expNoFinalDiagnosis(id, box){
-	sendAjax(id, boxCallBack, "expSetNoFinalDiagnosis", "", "", box);
+	sendAjax(id, boxCallBack, "expSetNoFinalDiagnosis", "", "", "", box);
 }
 
 

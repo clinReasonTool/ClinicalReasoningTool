@@ -62,11 +62,11 @@ public class SessionSetting {
 	 */
 	//private int[] boxesUsed = {1,1,1,1,1,0}; 
 	//we currently only support active / passive for the four standard boxes (can be configured in coursemanager)
-	private int boxModeFdg = 1; //box 1 used as active=1, passive=2 or hidden
-	private int boxModeDDX = 1; //box 2 used as active=1, passive=2 or hidden
-	private int boxModeTst = 1; //box 3 used as active=1, passive=2 or hidden
-	private int boxModeMng = 1; //box 4 used as active=1, passive=2 or hidden
-	private int boxModePat = 0; //pathophys used (active=1, passive=2)
+	private int boxMode1 = 1; //box 1 used as active=1, passive=2 or hidden
+	private int boxMode2 = 1; //box 2 used as active=1, passive=2 or hidden
+	private int boxMode3 = 1; //box 3 used as active=1, passive=2 or hidden
+	private int boxMode4 = 1; //box 4 used as active=1, passive=2 or hidden
+	//private int boxModePat = 0; //pathophys used (active=1, passive=2)
 	private int boxModeSum = 1; //summary statement used (active=1, passive=2)
 	//private int boxUsedNDDX = 0; 
 	//private int boxUsedNMng = 0; 
@@ -218,16 +218,23 @@ public class SessionSetting {
 		catch (Exception e){};
 	}*/
 	
-	public int getBoxModeFdg() {return boxModeFdg;}
-	public void setBoxModeFdg(int boxModeFdg) {	this.boxModeFdg = boxModeFdg;}
-	public int getBoxModeDDX() {return boxModeDDX;}
-	public void setBoxModeDDX(int boxModeDDX) {this.boxModeDDX = boxModeDDX;}
-	public int getBoxModeTst() {return boxModeTst;}
+	public int getBoxMode1() {return boxMode1;}
+	public void setBoxMode1(int boxMode1) {	this.boxMode1 = boxMode1;}
+	
+	public int getBoxMode2() {return boxMode2;}
+	public void setBoxMode2(int boxMode2) {this.boxMode2= boxMode2;}
+	
+	public int getBoxMode3() {return boxMode3;}
+	public void setBoxMode3(int boxMode3) {this.boxMode3= boxMode3;}
+	
+	public int getBoxMode4() {return boxMode4;}
+	public void setBoxMode4(int boxMode4) {this.boxMode4= boxMode4;}
+	/*public int getBoxModeTst() {return boxModeTst;}
 	public void setBoxModeTst(int boxUsedTst) {this.boxModeTst = boxUsedTst;}
 	public int getBoxModeMng() {return boxModeMng;}
 	public void setBoxModeMng(int boxModeMng) {this.boxModeMng = boxModeMng;}
 	public int getBoxModePat() {return boxModePat;}
-	public void setBoxModePat(int boxModePat) {this.boxModePat = boxModePat;}
+	public void setBoxModePat(int boxModePat) {this.boxModePat = boxModePat;}*/
 	public int getBoxModeSum() {return boxModeSum;}
 	public void setBoxModeSum(int boxModeSum) {this.boxModeSum = boxModeSum;}
 	/*public int getBoxUsedNDDX() {return boxUsedNDDX;}

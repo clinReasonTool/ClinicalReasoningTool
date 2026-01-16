@@ -98,31 +98,7 @@ var box1Type = #{crtContext.patillscript.box1Type}; //1=fdg, 2=ddx, 3=tests, 4 =
 var box2Type = #{crtContext.patillscript.box2Type};
 var box3Type = #{crtContext.patillscript.box3Type};
 var box4Type = #{crtContext.patillscript.box4Type};
-/*var box1TitleNum = #{crtContext.patillscript.box1TitleNum}; 
-var box2TitleNum = #{crtContext.patillscript.box2TitleNum}; 
-var box3TitleNum = #{crtContext.patillscript.box3TitleNum}; 
-var box4TitleNum = #{crtContext.patillscript.box4TitleNum}; */
 
-//which boxes are displayed in active mode (0), hidden (1) or displayed in view mode (2)
-/*var probBoxMode = "#{crtContext.sessSetting.boxModeFdg}"; 
-var ddxBoxMode = "#{crtContext.sessSetting.boxModeDDX}";
-var testBoxMode = "#{crtContext.sessSetting.boxModeTst}";
-var mngBoxMode = "#{crtContext.sessSetting.boxModeMng}"; 
-var pathoBoxMode = "0";
-var nddxBoxMode = "0";
-var naimBoxMode = "0";
-var nmngBoxMode = "0";
-var infoBoxMode = "0";
-var mmngBoxMode = "0"; 
-var mfdgBoxMode = "0";
-var mrecBoxMode = "0";
-var mhypBoxMode = "0";
-
-//indicates at which position with box (fdg, patho, ddx, tests, mnsg) is
-var box1Type = "#{crtContext.patillscript.box1Type}";
-var box2Type = "#{crtContext.patillscript.box2Type}";
-var box3Type = "#{crtContext.patillscript.box3Type}";
-var box4Type = "#{crtContext.patillscript.box4Type}";*/
 
 var displayMode = -1;
 
@@ -326,8 +302,8 @@ item_arr = new Array();
 	<div id="canvas" class="canvas jtk-surface drag-drop jtk-surface-nopan" >
 		
 		
-		 <div id="box1" class="container expcontainer pos_1" group="box1_group">
-		  	<div id="box1_title" class="title"  mytooltip="#{prop['findings.search']}">
+		 <div id="box1" class="container expcontainer pos_1 hide_#{crtContext.sessSetting.boxMode1}" group="box1_group">
+		  	<div id="box1_title" class="title contcol_#{crtContext.patillscript.box1Diff}"  mytooltip="#{prop['findings.search']}">
   		   		#{crtContext.patillscript.box1Title}
 		   		<i class="fa fa-info-circle"></i>
 	   		</div>
@@ -361,8 +337,8 @@ item_arr = new Array();
 						</h:form>
 						<span class="errormsg" id="msg_box1form" onClick="javascript:clearErrorMsgs();"></span>
 		  </div>
-		 <div id="box2" class="container expcontainer pos_2" group="box2_group">
-		  	<div id="box2_title" class="title"  mytooltip="#{prop['findings.search']}">
+		 <div id="box2" class="container expcontainer pos_2 hide_#{crtContext.sessSetting.boxMode2}" group="box2_group">
+		  	<div id="box2_title" class="title contcol_#{crtContext.patillscript.box2Diff}"  mytooltip="#{prop['findings.search']}">
   		   		#{crtContext.patillscript.box2Title}
 		   		<i class="fa fa-info-circle"></i>
 	   		</div>
@@ -395,8 +371,8 @@ item_arr = new Array();
 						</h:form>
 						<span class="errormsg" id="msg_box2form" onClick="javascript:clearErrorMsgs();"></span>
 		  </div>
-		 <div id="box3" class="container expcontainer pos_3" group="box3_group">
-		  	<div id="box3_title" class="title"  mytooltip="#{prop['findings.search']}">
+		 <div id="box3" class="container expcontainer pos_3 hide_#{crtContext.sessSetting.boxMode3}" group="box3_group">
+		  	<div id="box3_title" class="title contcol_#{crtContext.patillscript.box3Diff}"  mytooltip="#{prop['findings.search']}">
   		   		#{crtContext.patillscript.box3Title}
 		   		<i class="fa fa-info-circle"></i>
 	   		</div>
@@ -430,8 +406,8 @@ item_arr = new Array();
 						<span class="errormsg" id="msg_box3form" onClick="javascript:clearErrorMsgs();"></span>
 		  </div>		
 		  
-		 <div id="box4" class="container expcontainer pos_4" group="box4_group">
-		  	<div id="box4_title" class="title"  mytooltip="#{prop['findings.search']}">
+		 <div id="box4" class="container expcontainer pos_4 hide_#{crtContext.sessSetting.boxMode4}" group="box4_group">
+		  	<div id="box4_title" class="title contcol_#{crtContext.patillscript.box4Diff}"  mytooltip="#{prop['findings.search']}">
   		   		#{crtContext.patillscript.box4Title}
 		   		<i class="fa fa-info-circle"></i>
 	   		</div>
@@ -465,8 +441,8 @@ item_arr = new Array();
 						<span class="errormsg" id="msg_box4form" onClick="javascript:clearErrorMsgs();"></span>
 		  </div>  	  
 		 <!--  
-		  <div id="fdg_box" class="container fdg_cont pos_#{crtContext.patillscript.fdgBoxNo} hide_#{crtContext.sessSetting.boxModeFdg}" group="fdg_group">
-		   		<div id="fdg_title" class="title contcol_#{crtContext.patillscript.problemsDiff}"  mytooltip="#{prop['findings.search']}">#{prop['findings']} 
+		  <div id="fdg_box" class="container fdg_cont pos_#{crtContext.patillscript.fdgBoxNo}  group="fdg_group">
+		   		<div id="fdg_title" class="title"  mytooltip="#{prop['findings.search']}">#{prop['findings']} 
 		   		<i class="fa fa-info-circle"></i>
 
 		   		</div>
@@ -500,7 +476,7 @@ item_arr = new Array();
 					</div>
 				</div>
 		  </div>
-		  <div id="ddx_box" class="container ddx_cont pos_#{crtContext.patillscript.ddxBoxNo} hide_#{crtContext.sessSetting.boxModeDDX}" group="ddx_group">	
+		  <div id="ddx_box" class="container ddx_cont pos_#{crtContext.patillscript.ddxBoxNo} " group="ddx_group">	
 		  		<div id="ddx_title"  mytooltip="#{prop['ddx.search']}" class="title contcol_#{crtContext.patillscript.DDXDiff}">#{prop['ddx']} <i class="fa fa-info-circle"></i>-->
 		  			<!--  <span class="icons">
 		  				<a href="javascript:addJokerDDX();" title="#{prop['ddx.joker']}"><i mytooltip="#{prop['ddx.joker']}" class="fa fa-puzzle-piece"></i></a> 
@@ -549,8 +525,8 @@ item_arr = new Array();
 					</div>
 				</div>
 		  </div>
-		  <div id="tst_box" class="container tst_cont pos_#{crtContext.patillscript.tstBoxNo} hide_#{crtContext.sessSetting.boxModeTst}" group="tst_group">
-		  		<div id="tst_title" mytooltip="#{prop['tests.search']}" class="title  contcol_#{crtContext.patillscript.testsDiff}">#{prop['tests']} <i class="fa fa-info-circle"></i>
+		  <div id="tst_box" class="container tst_cont pos_#{crtContext.patillscript.tstBoxNo}" group="tst_group">
+		  		<div id="tst_title" mytooltip="#{prop['tests.search']}" class="title">#{prop['tests']} <i class="fa fa-info-circle"></i>
 
 		  		</div>
 		  		<div class="search boxchild">
@@ -582,8 +558,8 @@ item_arr = new Array();
 					</div>
 				</div>
 		</div>
-		  <div id="mng_box" class="container mng_cont pos_#{crtContext.patillscript.mngBoxNo} hide_#{crtContext.sessSetting.boxModeMng}" group="mng_group">
-		  	<div id="mng_title"  mytooltip="#{prop['mng.search']}" class="title contcol_#{crtContext.patillscript.mngsDiff}">#{prop['mng']} <i class="fa fa-info-circle"></i>
+		  <div id="mng_box" class="container mng_cont pos_#{crtContext.patillscript.mngBoxNo} " group="mng_group">
+		  	<div id="mng_title"  mytooltip="#{prop['mng.search']}" class="title ">#{prop['mng']} <i class="fa fa-info-circle"></i>
 		  		--><!-- <span class="icons">
 		  			<a href="javascript:addJokerMng();" title="#{prop['mng.joker']}"><i mytooltip="#{prop['mng.joker']}" class="fa fa-puzzle-piece"></i></a> 
 		   			<a href="javascript:togglePeersMng();" title="#{prop['mng.peers']}"><i mytooltip="#{prop['mng.peers']}" class="fa fa-users_off" id="peerFeedbackMng"></i></a> 
