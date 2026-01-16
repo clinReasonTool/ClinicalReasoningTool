@@ -92,6 +92,8 @@ public class AjaxController {
 	    	String x = reqParams.get("x"); //x-position of an item or startEpId
 	    	String y = reqParams.get("y"); //y-position of an item or targetEp
 	    	String x1 = reqParams.get("x1"); //x-position of targetEp -> needed for more flexible target enpoints
+	    	String box = reqParams.get("box");
+	    	String bool = reqParams.get("bool");
 	    	patillscript.updateStage(reqParams.get(REQPARAM_STAGE));
 	    	String action = reqParams.get("action"); //what is performed (deleted, add, change)
 	    	String type = reqParams.get("type"); //ddx, nddx, mng,...
@@ -104,7 +106,11 @@ public class AjaxController {
 	    	}
 	    	else if(x!=null && !x.trim().equals("")){
 	    		stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr,x,y});
-	    	}
+	    	}    	
+	    	
+	    	else if(nameStr!=null && !nameStr.trim().equals("") && box!=null && !box.trim().equals("") && bool!=null && !bool.trim().equals(""))
+	    		stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr, bool, box});
+	    		
 	    	else if(nameStr!=null && !nameStr.trim().equals("")) 
 	    		stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr});
 	    	else stmt = new Statement(patillscript, methodName, new Object[]{idStr});

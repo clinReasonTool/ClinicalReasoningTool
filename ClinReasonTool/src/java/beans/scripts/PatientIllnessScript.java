@@ -294,16 +294,12 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	public boolean isDeleteFlag() {return deleteFlag;}
 	public void setDeleteFlag(boolean deleteFlag) {this.deleteFlag = deleteFlag;}
 	
-	//********** all deprecated **********/
-	//public List<RelationDiagnosis> getDiagnoses() {return diagnoses;}
 	//public List<RelationDiagnosis> getDiagnosesStage() { return getRelationsByStage(diagnoses);}
 	public void setDiagnoses(List<RelationDiagnosis> diagnoses) {this.diagnoses = diagnoses;}
 	
-	//public List<RelationNursingDiagnosis> getNursingDiagnoses() {return nursingDiagnoses;}
 	//public List<RelationNursingDiagnosis> getNursingDiagnosesStage() { return getRelationsByStage(nursingDiagnoses);}
 	//public void setNursingDiagnoses(List<RelationNursingDiagnosis> nursingDiagnoses) {this.nursingDiagnoses = nursingDiagnoses;}
 
-	//public List<RelationNursingAim> getNursingAims() {return nursingAims;}
 	//public List<RelationNursingAim> getNursingAimsStage() { return getRelationsByStage(nursingAims);}
 	public void setAims(List<RelationAim> nursingAims) {this.aims = aims;}
 
@@ -315,36 +311,14 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	//public List<RelationInformation> getInformationStage() { return getRelationsByStage(infos);}
 	public void setInformation(List<RelationInformation> infos) {this.infos = infos;}
 	
-	//public List<RelationManagement> getMngs() {return mngs;}
 	//public List<RelationManagement> getMngsStage() { return getRelationsByStage(mngs);}
 	public void setMngs(List<RelationManagement> mngs) {this.mngs = mngs;}	
 	
 	//public List<RelationTest> getTests() {return tests;}
 	//public List<RelationTest> getTestsStage() { return getRelationsByStage(tests);}
 	public void setTests(List<RelationTest> tests) {this.tests = tests;}	
-
-	//public List<RelationPatho> getPatho() {return patho;}
-	//public List<RelationPatho> getPathoStage() { return getRelationsByStage(patho);}
 	public void setPatho(List<RelationPatho> patho) {this.patho = patho;}	
-	
-	//public List<RelationMidwifeManagement> getMidwifeManagement() {return midwifeManagement;}
-	//public List<RelationMidwifeManagement> getMidwifeManagementStage() { return getRelationsByStage(midwifeManagement);}
-	//public void setMidwifeManagement(List<RelationMidwifeManagement> mngs) {this.midwifeManagement = mngs;}	
-
-	//public List<RelationMidwifeRecommendation> getMidwifeRecommendations() {return midwifeRecommendations;}
-	//public List<RelationManagement> getMidwifeRecommendationsStage() { return getRelationsByStage(midwifeRecommendations);}
-	//public void setMidwifeRecommendations(List<RelationMidwifeRecommendation> midwifeRecommendations) {this.midwifeRecommendations = midwifeRecommendations;}	
-
-	//public List<RelationMidwifeHypothesis> getMidwifeHypotheses() {return midwifeHypotheses;}
-	//public List<RelationMidwifeHypothesis> getMidwifeHypothesesStage() { return getRelationsByStage(midwifeHypotheses);}
-	//public void setMidwifeHypotheses(List<RelationMidwifeHypothesis> mh) {this.midwifeHypotheses = mh;}	
-	
-	//public List<RelationMidwifeFinding> getMidwifeFindings() {return midwifeFindings;}
-	//public List<RelationMidwifeFinding> getMidwifeFindingsStage() { return getRelationsByStage(midwifeFindings);}
-	//public void setMidwifeFindings(List<RelationMidwifeFinding> mf) {this.midwifeFindings = mf;}	
-	
-	//************+ end deprecated **************// 
-	
+		
 	
 	public Map<Long,Connection> getConns() {return conns;}
 	public void setConns(Map<Long,Connection> conns) {this.conns = conns;}
@@ -693,21 +667,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		return false;
 	}
 
-	
-	//public RelationProblem getProblemById(long id){return (RelationProblem) getRelationById(problems, id);}	
 	public RelationDiagnosis getDiagnosisById(long id){return (RelationDiagnosis) getRelationById(diagnoses, id);}	
-	//public RelationTest getTestById(long id){return (RelationTest) getRelationById(tests, id);}		
-	//public RelationPatho getPathoById(long id){return (RelationPatho) getRelationById(patho, id);}		
-	//public RelationManagement getMngById(long id){return (RelationManagement) getRelationById(mngs, id);}	
-	//public RelationInformation getInfoById(long id){return (RelationInformation) getRelationById(infos, id);}	
-	//public RelationNursingDiagnosis getNursingDiagnosisById(long id){return (RelationNursingDiagnosis) getRelationById(nursingDiagnoses, id);}	
-	//public RelationAim getAimById(long id){return (RelationAim) getRelationById(aims, id);}	
-	//public RelationNursingManagement getNursingMngById(long id){return (RelationNursingManagement) getRelationById(nursingManagement, id);}	
-	//public RelationMidwifeManagement getMidwifeMngById(long id){return (RelationMidwifeManagement) getRelationById(midwifeManagement, id);}	
-	//public RelationMidwifeFinding getMidwifeFdgById(long id){return (RelationMidwifeFinding) getRelationById(midwifeFindings, id);}	
-	//public RelationMidwifeRecommendation getMidwifeRecById(long id){return (RelationMidwifeRecommendation) getRelationById(midwifeRecommendations, id);}	
-	//public RelationMidwifeHypothesis getMidwifeHypById(long id){return (RelationMidwifeHypothesis) getRelationById(midwifeHypotheses, id);}	
-
 
 	public Relation getRelationByListItemIdAndType(long id, int type){
 		if(type==Relation.TYPE_PROBLEM) return getRelationByListItemId(this.problems, id);
@@ -716,13 +676,8 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(type==Relation.TYPE_TEST) return getRelationByListItemId(this.tests, id);
 		if(type==Relation.TYPE_PATHO) return getRelationByListItemId(this.patho, id);	
 		if(type==Relation.TYPE_INFO) return getRelationByListItemId(this.infos, id);	
-		//if(type==Relation.TYPE_NDDX) return getRelationByListItemId(this.nursingDiagnoses, id);	
-		//if(type==Relation.TYPE_NMNG) return getRelationByListItemId(this.nursingManagement, id);	
 		if(type==Relation.TYPE_AIM) return getRelationByListItemId(this.aims, id);	
-		//if(type==Relation.TYPE_MMNG) return getRelationByListItemId(this.midwifeManagement, id);	
-		//if(type==Relation.TYPE_MFDG) return getRelationByListItemId(this.midwifeFindings, id);	
-		//if(type==Relation.TYPE_MREC) return getRelationByListItemId(this.midwifeRecommendations, id);	
-		//if(type==Relation.TYPE_MHYP) return getRelationByListItemId(this.midwifeHypotheses, id);	
+
 
 		return null;
 	}
@@ -809,14 +764,8 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(type==Relation.TYPE_MNG) return getRelationById(this.mngs, id);
 		if(type==Relation.TYPE_TEST) return getRelationById(this.tests, id);
 		if(type==Relation.TYPE_PATHO) return getRelationById(this.patho, id);
-		//if(type==Relation.TYPE_NDDX) return getRelationById(this.nursingDiagnoses, id);
-		//if(type==Relation.TYPE_NMNG) return getRelationById(this.nursingManagement, id);
 		if(type==Relation.TYPE_INFO) return getRelationById(this.infos, id);
 		if(type==Relation.TYPE_AIM) return getRelationById(this.aims, id);
-		//if(type==Relation.TYPE_MMNG) return getRelationById(this.midwifeManagement, id);
-		//if(type==Relation.TYPE_MFDG) return getRelationById(this.midwifeFindings, id);
-		//if(type==Relation.TYPE_MHYP) return getRelationById(this.midwifeHypotheses, id);
-		//if(type==Relation.TYPE_MREC) return getRelationById(this.midwifeRecommendations, id);
 	
 		return null;
 	}
@@ -1170,11 +1119,10 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 			case 3: return box3;
 			case 4: return box4;		
 		}
-		return null;
-		
+		return null;	
 	}
 	
-	//****** new methods **********// 
+	//****** new methods **********//
 	public List getBox1Relations(){return getListByType(box1.getBoxType(), box1.getSubType());}		
 	public List<Relation> getBox1RelationsStage(){return getRelationsByStage(getListByType(box1.getBoxType(), box1.getSubType()));}
 	public List getBox2Relations(){return getListByType(box2.getBoxType(), box2.getSubType());}		
@@ -1184,23 +1132,41 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	public List getBox4Relations(){return getListByType(box4.getBoxType(), box4.getSubType());}		
 	public List<Relation> getBox4RelationsStage(){return getRelationsByStage(getListByType(box4.getBoxType(), box4.getSubType()));}
 	
+	public String getBox1Title() {return box1.getTitle(this.getLocale());}
+	public String getBox2Title() {return box2.getTitle(this.getLocale());}
+	public String getBox3Title() {return box3.getTitle(this.getLocale());}
+	public String getBox4Title() {return box4.getTitle(this.getLocale());}
 	/**
 	 * Called when in authoring the type / subtype of a box is changed
 	 * @param id
 	 * @param newtypes
 	 */
-	public void chgBoxType(String id, String newtypes) {
+	public void chgBoxType(String id, String newtypes, String keepItemsStr, String box) {
 		try {
 			if(id==null || newtypes==null) return;
-			String subTypeStr = newtypes.substring(newtypes.indexOf(".")+1);
-			String typeStr = newtypes.substring(0, newtypes.indexOf("."));
-			int boxNo = Integer.parseInt(""+id.charAt(8));		
+			boolean keepItems = Boolean.parseBoolean(keepItemsStr); //then we keep the items in the box for the new substype!
+			int subType = Integer.parseInt(newtypes.substring(newtypes.indexOf(".")+1));
+			int boxType = Integer.parseInt(newtypes.substring(0, newtypes.indexOf(".")));
+			int boxNo = Integer.parseInt(box);		
 			Box b = getBoxByNo(boxNo);
-			if(b==null) return;
-			int boxType= Integer.parseInt(typeStr);
-			if(this.getBoxByType(boxType)!=null) return; //then user selected a type that is already in the map
+			if(b==null) return; // should not happen
+			//get items if they should be kept and if they are from the same type - atm we cannot change the type of relations as
+			//this would require moving them in the database as well.
+			if(keepItems && boxType==b.getBoxType()) {			
+				List rels = getListByType(b.getBoxType(), b.getSubType()); //get original list of Relation objects
+				if(rels!=null && !rels.isEmpty()) {
+					for(int i=0;i<rels.size();i++) {
+						Relation rel = (Relation) rels.get(i);
+						rel.setDiscriminator(subType);
+					}
+					new DBClinReason().saveAndCommit(rels);
+				}
+			}
+			
+			
+			if(this.getBoxByType(boxType)!=null && this.getBoxByType(boxType)!=b) return; //then user selected a type that is already in the map
 			b.setBoxType(boxType);
-			b.setTitleNum(Integer.parseInt(subTypeStr));
+			b.setTitleNum(subType);
 			new DBClinReason().saveAndCommit(b);
 		}
 		catch(Exception e) {
@@ -1249,7 +1215,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 			return l;
 		}
 		if(type==Box.BOXTYPE_INF) return infos; //10
-		return null;
+		return l;
 	}
 	
 	public void addRelationToListByType(Relation rel, int type) {

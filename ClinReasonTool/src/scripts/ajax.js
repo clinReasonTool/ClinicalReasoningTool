@@ -52,6 +52,7 @@ function sendAjax(id, callback, type, name, box){
 ** id of item, callback: js callback function, methodName: java method to be called, name: typed in (in applicable)
 ** typedInName: history of typed, box; box number
  */
+ 
 function sendAjax(id, callback, methodName, name, typedinName, box){
 	clearErrorMsgs();
 	var confirmed = true;
@@ -189,6 +190,17 @@ function sendAjaxCM(id, callback, type, name, x, y, box){
 		  handleResponse(response, callback, name, box);
 	  });	
 }
+//sendAjaxBox(id, boxCallBack, "chgBoxType", newType, keepItems, box);
+function sendAjaxBox(id, callback, type, name, bool, box){
+	$.ajax({
+		  method: "POST",
+		  url: ajaxUrl,
+		  data: { type: type, id: id, name: name, script_id: scriptId, stage:currentStage, box:box, bool:bool }
+		})
+	  .done(function( response ) {	
+		  handleResponse(response, callback, name, box);
+	  });	
+}
 
 /**
  * when a connection is made we include the ids of the start- and target endpoints to be stored for the connection.
@@ -221,6 +233,7 @@ function handleResponse(response, callback, name, box){
 	 var action =  $(response).find('action').text();
 	 var type =  $(response).find('type').text();
 	 var isOk =  $(response).find('ok').text();
+	 //var box = $(response).find('box').text();
 	 //TODO we might need shortnam here (for tooltip in map)s
 	 if(isOk=="1"){
 		 if(id2!="" && id2!=null)
@@ -541,7 +554,7 @@ function postEnforceFinalDDXSubmission(isSubmitted/*, currentStage, maxStageForS
 		message = "p1,s0";
 	}
 	//we are in view mode, so no need to scaffold or display message:
-	if(ddxBoxMode=="2") message = "p1,s0";
+	//if(ddxBoxMode=="2") message = "p1,s0";
 	
 	top.postMessage(message, "*");
 }

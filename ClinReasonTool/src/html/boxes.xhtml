@@ -89,8 +89,22 @@ var isExp = false;
 var noEntryFound = "#{prop['list.noentry']}";
 var didYouMean = "#{prop['list.didyoumean']}";
 var isView = false;
+var box1Mode = #{crtContext.patillscript.box1Mode};
+var box2Mode = #{crtContext.patillscript.box2Mode};
+var box3Mode = #{crtContext.patillscript.box3Mode};
+var box4Mode = #{crtContext.patillscript.box4Mode};
+
+var box1Type = #{crtContext.patillscript.box1Type}; //1=fdg, 2=ddx, 3=tests, 4 = mngs, 6 = patho, 8 = aims, 10 = infos
+var box2Type = #{crtContext.patillscript.box2Type};
+var box3Type = #{crtContext.patillscript.box3Type};
+var box4Type = #{crtContext.patillscript.box4Type};
+/*var box1TitleNum = #{crtContext.patillscript.box1TitleNum}; 
+var box2TitleNum = #{crtContext.patillscript.box2TitleNum}; 
+var box3TitleNum = #{crtContext.patillscript.box3TitleNum}; 
+var box4TitleNum = #{crtContext.patillscript.box4TitleNum}; */
+
 //which boxes are displayed in active mode (0), hidden (1) or displayed in view mode (2)
-var probBoxMode = "#{crtContext.sessSetting.boxModeFdg}"; 
+/*var probBoxMode = "#{crtContext.sessSetting.boxModeFdg}"; 
 var ddxBoxMode = "#{crtContext.sessSetting.boxModeDDX}";
 var testBoxMode = "#{crtContext.sessSetting.boxModeTst}";
 var mngBoxMode = "#{crtContext.sessSetting.boxModeMng}"; 
@@ -108,7 +122,7 @@ var mhypBoxMode = "0";
 var box1Type = "#{crtContext.patillscript.box1Type}";
 var box2Type = "#{crtContext.patillscript.box2Type}";
 var box3Type = "#{crtContext.patillscript.box3Type}";
-var box4Type = "#{crtContext.patillscript.box4Type}";
+var box4Type = "#{crtContext.patillscript.box4Type}";*/
 
 var displayMode = -1;
 
@@ -310,47 +324,152 @@ item_arr = new Array();
 
 <div class="boxes_container">
 	<div id="canvas" class="canvas jtk-surface drag-drop jtk-surface-nopan" >
+		
+		
+		 <div id="box1" class="container expcontainer pos_1" group="box1_group">
+		  	<div id="box1_title" class="title"  mytooltip="#{prop['findings.search']}">
+  		   		#{crtContext.patillscript.box1Title}
+		   		<i class="fa fa-info-circle"></i>
+	   		</div>
 		  
-		  <!-- pathos -->
-		  <div id="pat_box" class="container pat_cont pos_#{crtContext.patillscript.patBoxNo} hide_#{crtContext.sessSetting.boxModePat}" group="pat_group">
-		  		<div id="pat_title" mytooltip="#{prop['patho.search']}" class="title  contcol_#{crtContext.patillscript.pathoDiff}">#{prop['patho']} <i class="fa fa-info-circle"></i></div>
-		  		<div class="search  boxchild">
-		  			<i class="fa fa-search ininput pathosearch"></i>
-		  			<input class="f_text pathosearch" onkeyup="javascript:storeHistory('patho');" onFocus="javascript:hideTooltips();"  placeholder="#{prop['patho.add']} ..." id="patho" mytooltip="#{prop['patho.search']}" listUrl=""></input>
-		  		</div>
-		  			<h:form id="pathoform">
-		  			<h:panelGroup>
-					
-						<ui:repeat value="#{crtContext.patillscript.patho}" var="patho" varStatus="status">
-							<ui:include src="pathobox.xhtml" />
-     					</ui:repeat>	
-     					<ui:repeat value="#{crtContext.expPatIllScript.patho}" var="exppatho" varStatus="status">
-							<ui:include src="pathoexpbox.xhtml" />
-     					</ui:repeat>			
-    				</h:panelGroup>
-    				     <h:commandButton id="hiddenPathoButton" value="RenderSomething" style="visibility:hidden">
-    						<f:ajax render="@form" onevent="updatePathoCallback"></f:ajax>
+		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
+		  			<input type="text" id="box1_prefix" style="display:none;" />
+		  			
+		  			<input class="f_text" style="width:155px;" id="box1list" onkeyup="javascript:storeHistory('box1');" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+						<h:form id="box1form">
+						<h:panelGroup>
+					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box1RelationsStage}" var="itembox" varStatus="status">
+						   		<ui:include src="boxitem.xhtml">
+						   			<ui:param name="boxNumber" value="1" />
+						   			<ui:param name="rowNumber" value="1" />
+						   			<ui:param name="boxCategory" value="#{crtContext.patillscript.box1.boxCategory}" />
+						   		</ui:include>
+	    			  </ui:repeat>	
+	    			  <ui:repeat id="repeatexpbox" value="#{crtContext.expPatIllScript.box1Relations}" var="expbox" varStatus="status">
+				   		<ui:include src="boxitem_exp.xhtml">
+				   			<ui:param name="boxNumber" value="1" />
+				   			<ui:param name="rowNumber" value="1" />						   			
+				   			<ui:param name="boxCategory" value="#{crtContext.expPatIllScript.box1.boxCategory}" />
+	    				</ui:include>
+	    			</ui:repeat>	 
+
+	    			</h:panelGroup>
+    				     <h:commandButton id="hiddenBox1Button" value="RenderSomething" style="visibility:hidden">
+    						<f:ajax render="@form" onevent="updateBox1Callback"></f:ajax>
 						</h:commandButton>
-					</h:form>
-					<span class="errormsg" id="msg_pathoform" onClick="javascript:clearErrorMsgs();"></span>
-				<div class="patpassive passive" style="position:absolute;top:10%;left:0px;width:100%;z-index:9;">
-		  			<div style="text-align:left;margin:5px;">#{prop['patho.passive']}</div>
-					<div style="text-align:left;margin:10px;padding:0px;margin-top:20px;color:white; font-size:110px">
-						<i class="fa fa-lock"></i>
-					</div>
-				</div>
-		</div>
-		  <!-- problems -->
+						
+						</h:form>
+						<span class="errormsg" id="msg_box1form" onClick="javascript:clearErrorMsgs();"></span>
+		  </div>
+		 <div id="box2" class="container expcontainer pos_2" group="box2_group">
+		  	<div id="box2_title" class="title"  mytooltip="#{prop['findings.search']}">
+  		   		#{crtContext.patillscript.box2Title}
+		   		<i class="fa fa-info-circle"></i>
+	   		</div>
+		  
+		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
+		  			<input type="text" id="box2_prefix" style="display:none;" />
+		  			
+		  			<input class="f_text" style="width:155px;" id="box2list" onkeyup="javascript:storeHistory('box2');" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+						<h:form id="box2form">
+						<h:panelGroup>
+					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box2RelationsStage}" var="itembox" varStatus="status">
+						   		<ui:include src="boxitem.xhtml">
+						   			<ui:param name="boxNumber" value="2" />
+						   			<ui:param name="rowNumber" value="1" />
+						   			<ui:param name="boxCategory" value="#{crtContext.patillscript.box2.boxCategory}" />
+						   		</ui:include>
+	    			  </ui:repeat>	
+	    			   <ui:repeat id="repeatexpbox" value="#{crtContext.expPatIllScript.box2Relations}" var="expbox" varStatus="status">
+				   		<ui:include src="boxitem_exp.xhtml">
+				   			<ui:param name="boxNumber" value="2" />
+				   			<ui:param name="rowNumber" value="1" />						   			
+				   			<ui:param name="boxCategory" value="#{crtContext.expPatIllScript.box2.boxCategory}" />
+	    				</ui:include>
+	    			</ui:repeat>
+	    			</h:panelGroup>
+    				     <h:commandButton id="hiddenBox2Button" value="RenderSomething" style="visibility:hidden">
+    						<f:ajax render="@form" onevent="updateBox2Callback"></f:ajax>
+						</h:commandButton>
+						
+						</h:form>
+						<span class="errormsg" id="msg_box2form" onClick="javascript:clearErrorMsgs();"></span>
+		  </div>
+		 <div id="box3" class="container expcontainer pos_3" group="box3_group">
+		  	<div id="box3_title" class="title"  mytooltip="#{prop['findings.search']}">
+  		   		#{crtContext.patillscript.box3Title}
+		   		<i class="fa fa-info-circle"></i>
+	   		</div>
+		  
+		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
+		  			<input type="text" id="box2_prefix" style="display:none;" />
+		  			
+		  			<input class="f_text" style="width:155px;" id="box3list" onkeyup="javascript:storeHistory('box3');" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+						<h:form id="box3form">
+						<h:panelGroup>
+					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box3RelationsStage}" var="itembox" varStatus="status">
+						   		<ui:include src="boxitem.xhtml">
+						   			<ui:param name="boxNumber" value="3" />
+						   			<ui:param name="rowNumber" value="2" />
+						   			<ui:param name="boxCategory" value="#{crtContext.patillscript.box3.boxCategory}" />
+						   		</ui:include>
+	    			  </ui:repeat>	
+	    			   <ui:repeat id="repeatexpbox" value="#{crtContext.expPatIllScript.box3Relations}" var="expbox" varStatus="status">
+				   		<ui:include src="boxitem_exp.xhtml">
+				   			<ui:param name="boxNumber" value="3" />
+				   			<ui:param name="rowNumber" value="2" />						   			
+				   			<ui:param name="boxCategory" value="#{crtContext.expPatIllScript.box3.boxCategory}" />
+	    				</ui:include>
+	    			</ui:repeat>
+	    			</h:panelGroup>
+    				     <h:commandButton id="hiddenBox3Button" value="RenderSomething" style="visibility:hidden">
+    						<f:ajax render="@form" onevent="updateBox3Callback"></f:ajax>
+						</h:commandButton>
+						
+						</h:form>
+						<span class="errormsg" id="msg_box3form" onClick="javascript:clearErrorMsgs();"></span>
+		  </div>		
+		  
+		 <div id="box4" class="container expcontainer pos_4" group="box4_group">
+		  	<div id="box4_title" class="title"  mytooltip="#{prop['findings.search']}">
+  		   		#{crtContext.patillscript.box4Title}
+		   		<i class="fa fa-info-circle"></i>
+	   		</div>
+		  
+		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
+		  			<input type="text" id="box4_prefix" style="display:none;" />
+		  			
+		  			<input class="f_text" style="width:155px;" id="box4list" onkeyup="javascript:storeHistory('box4');" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+						<h:form id="box4form">
+						<h:panelGroup>
+					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box4RelationsStage}" var="itembox" varStatus="status">
+						   		<ui:include src="boxitem.xhtml">
+						   			<ui:param name="boxNumber" value="4" />
+						   			<ui:param name="rowNumber" value="2" />
+						   			<ui:param name="boxCategory" value="#{crtContext.patillscript.box4.boxCategory}" />
+						   		</ui:include>
+	    			  </ui:repeat>	
+	    			   <ui:repeat id="repeatexpbox" value="#{crtContext.expPatIllScript.box4Relations}" var="expbox" varStatus="status">
+				   		<ui:include src="boxitem_exp.xhtml">
+				   			<ui:param name="boxNumber" value="4" />
+				   			<ui:param name="rowNumber" value="2" />						   			
+				   			<ui:param name="boxCategory" value="#{crtContext.expPatIllScript.box4.boxCategory}" />
+	    				</ui:include>
+	    			</ui:repeat>
+	    			</h:panelGroup>
+    				     <h:commandButton id="hiddenBox4Button" value="RenderSomething" style="visibility:hidden">
+    						<f:ajax render="@form" onevent="updateBox4Callback"></f:ajax>
+						</h:commandButton>
+						
+						</h:form>
+						<span class="errormsg" id="msg_box4form" onClick="javascript:clearErrorMsgs();"></span>
+		  </div>  	  
+		 <!--  
 		  <div id="fdg_box" class="container fdg_cont pos_#{crtContext.patillscript.fdgBoxNo} hide_#{crtContext.sessSetting.boxModeFdg}" group="fdg_group">
 		   		<div id="fdg_title" class="title contcol_#{crtContext.patillscript.problemsDiff}"  mytooltip="#{prop['findings.search']}">#{prop['findings']} 
 		   		<i class="fa fa-info-circle"></i>
-		   			<!--  <span class="icons">
-		   				<a href="javascript:addJokerFdg();" title="#{prop['findings.joker']}"><i mytooltip="#{prop['findings.joker']}" class="fa fa-puzzle-piece"></i></a> 
-		   				<a href="javascript:togglePeersFdg();" title="#{prop['findings.peers']}"><i mytooltip="#{prop['findings.peers']}" class="fa fa-users_off" id="peerFeedbackFdg"></i></a> 
-		   				<a href="javascript:toggleFdgFeedback();" title="#{prop['findings.exp']}"><i mytooltip="#{prop['findings.exp']}" class="fa fa-user-md_off" id="expFeedbackFdg"></i></a>
-		   			</span>-->
+
 		   		</div>
-		   		<!-- <div  class="node-collapse"></div> put back in when collapsing is working-->
 		  			<div class="search boxchild ">
 		  				<input type="text" id="fdg_prefix" style="display:none;" />
 						<i class="fa fa-search ininput probsearch"></i>
@@ -372,7 +491,6 @@ item_arr = new Array();
     						<f:ajax render="@form" onevent="updateProbCallback"></f:ajax>
 						</h:commandButton>
 												
-						<!-- <h:messages errorClass="errorMessage" infoClass="infoMessage" showDetail="true" showSummary="true"/>-->						
 						 </h:form>
 						<span class="errormsg" id="msg_probform" onClick="javascript:clearErrorMsgs();"></span>
 		  		<div class="fdgpassive passive" style="position:absolute;top:10%;left:0px;width:100%;z-index:9;">
@@ -382,20 +500,18 @@ item_arr = new Array();
 					</div>
 				</div>
 		  </div>
-		  <!--  diagnoses -->
 		  <div id="ddx_box" class="container ddx_cont pos_#{crtContext.patillscript.ddxBoxNo} hide_#{crtContext.sessSetting.boxModeDDX}" group="ddx_group">	
-		  		<div id="ddx_title"  mytooltip="#{prop['ddx.search']}" class="title contcol_#{crtContext.patillscript.DDXDiff}">#{prop['ddx']} <i class="fa fa-info-circle"></i>
+		  		<div id="ddx_title"  mytooltip="#{prop['ddx.search']}" class="title contcol_#{crtContext.patillscript.DDXDiff}">#{prop['ddx']} <i class="fa fa-info-circle"></i>-->
 		  			<!--  <span class="icons">
 		  				<a href="javascript:addJokerDDX();" title="#{prop['ddx.joker']}"><i mytooltip="#{prop['ddx.joker']}" class="fa fa-puzzle-piece"></i></a> 
 		   				<a href="javascript:togglePeersDDX();" title="#{prop['ddx.peers']}"><i mytooltip="#{prop['ddx.peers']}" class="fa fa-users_off" id="peerFeedbackDDX"></i></a> 
 		   				<a href="javascript:toggleDDXFeedback();" title="#{prop['ddx.exp']}"><i mytooltip="#{prop['ddx.exp']}" class="fa fa-user-md_off" id="expFeedbackDDX"></i></a>
 		  			</span>-->
-		  		</div>	
+		  		<!--  </div>-->	
 		  		<!-- <div class="node-collapse"></div>	  -->		
-		  			<div class="search boxchild">
+		  	<!--  	<div class="search boxchild">
 		  				<i class="fa fa-search ininput ddxsearch"></i>
 		  				<input class="f_text ddxsearch" onkeyup="javascript:storeHistory('ddx');" onFocus="javascript:hideTooltips();"  placeholder="#{prop['ddx.add']} ..." id="ddx" mytooltip="#{prop['ddx.search']}" listUrl="#{crtContext.getMyListUrl(&quot;standard&quot;,crtContext.patillscript.locale)}"></input>
-		  				<!--  <span class="ddxpassive passive">#{prop['ddx.passive']}</span>-->
 		  			</div>
 			  			<h:form id="ddxform">
 						<h:panelGroup >
@@ -433,16 +549,10 @@ item_arr = new Array();
 					</div>
 				</div>
 		  </div>
-		  <!-- tests -->
 		  <div id="tst_box" class="container tst_cont pos_#{crtContext.patillscript.tstBoxNo} hide_#{crtContext.sessSetting.boxModeTst}" group="tst_group">
 		  		<div id="tst_title" mytooltip="#{prop['tests.search']}" class="title  contcol_#{crtContext.patillscript.testsDiff}">#{prop['tests']} <i class="fa fa-info-circle"></i>
-		  			<!--  <span class="icons">
-		  				<a href="javascript:addJokerTest();" title="#{prop['tests.joker']}"><i mytooltip="#{prop['tests.joker']}" class="fa fa-puzzle-piece"></i></a> 
-		   				<a href="javascript:togglePeersTest();" title="#{prop['tests.peers']}"><i mytooltip="#{prop['tests.peers']}" class="fa fa-users_off" id="peerFeedbackTest"></i></a> 
-		   				<a href="javascript:toggleTestFeedback();" title="#{prop['tests.exp']}"><i mytooltip="#{prop['tests.exp']}" class="fa fa-user-md_off" id="expFeedbackTest"></i></a>
-		  			</span>-->
+
 		  		</div>
-		 	 	<!-- <div class="node-collapse"></div>-->
 		  		<div class="search boxchild">
 		  			<i class="fa fa-search ininput testsearch"></i>
 		  			<input class="f_text testsearch" onkeyup="javascript:storeHistory('tests');" onFocus="javascript:hideTooltips();"  placeholder="#{prop['tests.add']} ..." id="tests" mytooltip="#{prop['tests.search']}" listUrl="#{crtContext.getMyListUrl(&quot;standard&quot;,crtContext.patillscript.locale)}"></input>
@@ -472,15 +582,14 @@ item_arr = new Array();
 					</div>
 				</div>
 		</div>
-		  <!-- managements -->
 		  <div id="mng_box" class="container mng_cont pos_#{crtContext.patillscript.mngBoxNo} hide_#{crtContext.sessSetting.boxModeMng}" group="mng_group">
 		  	<div id="mng_title"  mytooltip="#{prop['mng.search']}" class="title contcol_#{crtContext.patillscript.mngsDiff}">#{prop['mng']} <i class="fa fa-info-circle"></i>
-		  		<!-- <span class="icons">
+		  		--><!-- <span class="icons">
 		  			<a href="javascript:addJokerMng();" title="#{prop['mng.joker']}"><i mytooltip="#{prop['mng.joker']}" class="fa fa-puzzle-piece"></i></a> 
 		   			<a href="javascript:togglePeersMng();" title="#{prop['mng.peers']}"><i mytooltip="#{prop['mng.peers']}" class="fa fa-users_off" id="peerFeedbackMng"></i></a> 
 		   			<a href="javascript:toggleMngFeedback();" title="#{prop['mng.exp']}"><i  mytooltip="#{prop['mng.exp']}" class="fa fa-user-md_off" id="expFeedbackMng"></i></a>
 		  		</span>-->
-		  	</div>
+		  	<!-- ></div>
 		 	
 		  	<div class="search boxchild ">
 		  		<i class="fa fa-search ininput mngsearch"></i>
@@ -512,7 +621,7 @@ item_arr = new Array();
 				</div>				
 	  		</div>
 		<ui:include src="nursing/nursing_boxes.xhtml" />
-		<ui:include src="midwife/midwife_boxes.xhtml" />
+		<ui:include src="midwife/midwife_boxes.xhtml" />-->
 		 <div id="sum_box" class="container sum_container" group="sum_group">	
 		 	<div id="sum_title" mytooltip="#{prop['sumst.hint']}" class="title contcol_#{crtContext.patillscript.sumDiff}">#{prop['summst']} <i class="fa fa-info-circle"></i>
 		 		<span class="icons sumicons">
@@ -531,7 +640,7 @@ item_arr = new Array();
 </div>
 
 	 <h:form id="cnxsform">
-		 <h:panelGroup><!-- style="display:none;" -->
+		 <h:panelGroup>
 		 	<div id="cnxhint" onclick="javascript:hideTooltips();" class="hintdiv cnxhint_#{crtContext.displayCnxHint}"><i class="fa fa-arrow-left2"></i> #{prop['cnx.hint']}</div>
 		 	<div id="jsonConns" style="display:none;">#{crtContext.graph.jsonConns}</div> </h:panelGroup>
 		   <h:commandButton id="hiddenCnxButton" value="RenderSomething" style="visibility:hidden">
@@ -544,7 +653,6 @@ item_arr = new Array();
 	<div id="connContext"><ui:include src="cnxchange.xhtml" /></div>	
 	<div id="jdialogHelp"></div>
 	<div id="jdialogToolbox"></div>
-	<!-- <div id="jdialogFbHint"><i class="fa fa-arrow-left2"></i> #{prop['feedback.exp.hint']}</div>-->
 </h:body>
 </f:view>
 </html>

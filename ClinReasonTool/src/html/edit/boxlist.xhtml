@@ -4,25 +4,35 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core">
    	<select id="#{boxId}" onChange="javascript:chgBoxType('#{boxId}', #{boxNumber});">
+   	<optgroup label="">
    	<option value="1.1">#{prop['boxtitle.1.1']}</option>
    	<option value="1.2">#{prop['boxtitle.1.2']}</option>
    	<option value="1.14">#{prop['boxtitle.1.14']}</option>
+   </optgroup>
+   <optgroup label="_____________">
    	<option value="2.2">#{prop['boxtitle.2.2']}</option>
    	<option value="2.7">#{prop['boxtitle.2.7']}</option>
    	<option value="2.11">#{prop['boxtitle.2.11']}</option>
    	<option value="2.15">#{prop['boxtitle.2.15']}</option>
+   	</optgroup>
+   	<optgroup label="_____________">
    	<option value="3.3">#{prop['boxtitle.3.3']}</option>
-   	<option value="3.4">#{prop['boxtitle.3.4']}</option>
+   <!--  	<option value="3.4">#{prop['boxtitle.3.4']}</option>-->
+   	</optgroup>
+   	<optgroup label="_____________">
    	<option value="4.4">#{prop['boxtitle.4.4']}</option>
    	<option value="4.18">#{prop['boxtitle.4.18']}</option>
    	<option value="4.13">#{prop['boxtitle.4.13']}</option>
    	<option value="4.9">#{prop['boxtitle.4.9']}</option>
    	<option value="4.17">#{prop['boxtitle.4.17']}</option>
    	<option value="4.12">#{prop['boxtitle.4.12']}</option>
+   	</optgroup>
+   	<optgroup label="_____________">
    	<option value="6.6">#{prop['boxtitle.6.6']}</option>
-   	<option value="6.7">#{prop['boxtitle.6.7']}</option>
-   	<option value="8.8">#{prop['boxtitle.8.8']}</option>s
-   	<option value="8.16">#{prop['boxtitle.8.16']}</option>
-   	<option value="10.10">#{prop['boxtitle.10.10']}</option>
+   	<option value="6.7">#{prop['boxtitle.6.7']}</option></optgroup>
+   	<optgroup label="_____________">
+   	<option value="8.8">#{prop['boxtitle.8.8']}</option>
+   	<option value="8.16">#{prop['boxtitle.8.16']}</option></optgroup><optgroup label="_____________">
+   	<option value="10.10">#{prop['boxtitle.10.10']}</option></optgroup>
    	</select>
 </ui:composition>

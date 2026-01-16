@@ -120,6 +120,8 @@ $(function() {
 		chgSummStCrd(this);
 	 });
 	
+	$("#jdialogSwitchCat").hide();
+	
     $( ".itembox" ).draggable({
    	 start: function(event, ui) {             
            // $(ui.helper).find('.tooltip').hide(); 
@@ -138,6 +140,13 @@ $(function() {
 	});
 	
 	$("#connContext").dialog({
+		autoOpen: false,
+		modal: true,
+		width: "auto",
+		height: "auto"
+	});
+	
+	$("#jdialogSwitchCat").dialog({
 		autoOpen: false,
 		modal: true,
 		width: "auto",
@@ -444,6 +453,13 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 	</ui:repeat>	</span>
 </div>
 <div id="jdialogToolbox"></div>
+ <div id="jdialogSwitchCat">
+Do you want to keep the items you have entered so far in this box? 
+<form id="chgBoxForm"><input type="hidden" id="chgBoxId" value=""></input>
+<input type="hidden" id="chgBoxIdx" value=""></input></form>
+<a href="javascript:confirmSwitch(true);">Keep</a> <a href="javascript:confirmSwitch(false);">Remove</a>
+<a href="javascript:cancelChBoxType();">Cancel</a>
+</div>
 </body>
 </f:view>
 </html>

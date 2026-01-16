@@ -136,13 +136,54 @@ function chgStageCallback(){
 
 function chgBoxType(id, box){
 	var newType = $("#"+id).val();
-	var newCat = newType.substring(0,1);
-	if(newCat==box1Type || newCat==box2Type || newCat==box3Type || newCat==box4Type){
-		alert("Box type already assigned. You cannot have two boxes of the same type.");
+	var newCat = newType.substring(0,newType.indexOf("."));
+	var subtype = newType.substring(newType.indexOf(".")+1);
+	if((box!=1 && newCat==box1Type && subtype == box1TitleNum) || (box!=2 && newCat==box2Type && subtype == box2TitleNum) || (box!=3 && newCat==box3Type && subtype == box3TitleNum) || (box!=4 &&newCat==box4Type  && subtype == box4TitleNum)){
+		alert("Box type already in use. You cannot have two boxes of the same type.");
+		//reset the select box to the original selection:
+		$("#"+id).val(getOrgSelVal(box));
 		return;	
 	}
-	//alert(newType);
-	sendAjax(id, boxCallBack, "chgBoxType", newType, "", box);
+	//if box is not exmpty, we ask about what to do with the items:
+	var itemsCount = $(".box"+box+"s").length;
+	if(itemsCount>0){	//TODO: does not work
+		//TODO replace with jdialog:
+		//if only subtype change we can keep the items if category/tyoe change we have to inform that it cannot be changed and items will not be displayed
+		
+		$("#chgBoxId").val(id);
+		$("#chgBoxIdx").val(box);
+		$("#jdialogSwitchCat" ).dialog( "open" );
+	}
+	else //sendAjaxCM(id, callback, type, name, x, y, box)
+		sendAjaxBox(id, boxCallBack, "chgBoxType", newType, false, box);
+}
+
+
+function getOrgSelVal(box){
+	switch (box){
+		case 1: return box1Type+"."+box1TitleNum;
+		case 2: return box2Type+"."+box2TitleNum;
+		case 3: return box3Type+"."+box3TitleNum;
+		case 4: return box4Type+"."+box4TitleNum;		
+	}
+}
+/**
+** we come back from the jdialog for deciding whether to keep or discard the items
+ */
+function confirmSwitch(keepItems){
+	//var keepItems = true;
+	var id = $("#chgBoxId").val();
+	var box = $("#chgBoxIdx").val();
+	var newType = $("#"+id).val();
+	$("#jdialogSwitchCat" ).dialog( "close" );
+	
+	sendAjaxBox(id, boxCallBack, "chgBoxType", newType, keepItems, box);
+}
+
+function cancelChBoxType(){
+	var box = $("#chgBoxIdx").val();
+	$("#"+id).val(getOrgSelVal(box));
+	$("#jdialogSwitchCat" ).dialog( "close" );
 }
 
 /*function chgBoxTypeCallback(id, name, box){
