@@ -2,7 +2,10 @@ package beans.graph;
 
 import java.util.*;
 
+import javax.faces.context.FacesContext;
+
 import beans.relation.Relation;
+import controller.LocaleController;
 import properties.IntlConfiguration;
 
  /** Models a box displayed in the user interface (authoring and player). 
@@ -72,8 +75,14 @@ public class Box {
 	 * @param loc
 	 * @return title of the box to be displayed
 	 */
-	public String getTitle(Locale loc) {
+	public String getTitle() {
+		Locale loc = LocaleController.getLocale();
 		return IntlConfiguration.getValue("boxtitle."+boxType+"."+titleNum, loc);
+	}
+	
+	public String getTooltip() {
+		Locale loc = LocaleController.getLocale();
+		return IntlConfiguration.getValue("boxsearch."+boxType+"."+titleNum, loc);
 	}
 	
 	/**

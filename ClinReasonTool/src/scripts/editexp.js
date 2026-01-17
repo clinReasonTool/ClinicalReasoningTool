@@ -35,7 +35,7 @@ function chgStage(chg, loc){
 function chgMapLang(){
 	var newLang = $("#scriptloc").val();
 	listUrl="../jsonp_"+newLang+".json";
-	listNursingUrl="../jsonp_n_"+newLang+".json";
+	//listNursingUrl="../jsonp_n_"+newLang+".json";
 	scriptlang = newLang;
 	//alert(listUrl);
 	if(isEmptyScript=="true"){ //trigger submit, script is empty

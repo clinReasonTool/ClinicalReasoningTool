@@ -111,8 +111,8 @@ public class AjaxController {
 	    	else if (methodName.startsWith("changeTier")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr});
 	    	else if (methodName.startsWith("chgSummStCard")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr});
 	    	else if (methodName.startsWith("saveSummStatement")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr});
-	    	else if (methodName.startsWith("chgBox")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr, bool, box});
-
+	    	else if (methodName.startsWith("chgBoxType")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr, bool, box});
+	    	else if (methodName.startsWith("chgBoxListType")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, box});
 	    	else stmt = new Statement(patillscript, methodName, new Object[]{idStr});
 	    	
 	    	
