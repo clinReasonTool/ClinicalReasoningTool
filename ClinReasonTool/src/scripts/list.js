@@ -425,10 +425,11 @@ function checkStartUserInput(user_input){
 /**
 ** mode currently 0=no list, 1= with default list
  */
-function selList(box, mode){
-	sendAjax(mode, boxCallBack, "chgBoxListType", "", "", "", box);
+function selList(box, mode){ 
+	sendAjax(mode, /*boxCallBack*/callBackReload, "chgBoxListType", "", "", "", box);
 	$("#box"+box+"ListType").val(mode);
 	
 }
+
 
 

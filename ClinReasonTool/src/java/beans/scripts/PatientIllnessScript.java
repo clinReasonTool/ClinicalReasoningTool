@@ -489,11 +489,11 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	public int getSubmittedStage() {return submittedStage;}
 	public void setSubmittedStage(int submittedStage) {this.submittedStage = submittedStage;}
 	
-	public void addBox1Item(String idStr, String prefix) {new AddRelationAction(this, box1).add(idStr, prefix);}
+	public void addBox1Item(String idStr, String prefix, String name) {new AddRelationAction(this, box1).add(idStr, prefix, name);}
 	//public void addBox1Item(String idStr) {new AddRelationAction(this, box1).add(idStr, "");}
-	public void addBox2Item(String idStr, String prefix) {new AddRelationAction(this, box2).add(idStr, prefix);}
-	public void addBox3Item(String idStr, String prefix) {new AddRelationAction(this, box3).add(idStr, prefix);}
-	public void addBox4Item(String idStr, String prefix) {new AddRelationAction(this, box4).add(idStr, prefix);}
+	public void addBox2Item(String idStr, String prefix, String name) {new AddRelationAction(this, box2).add(idStr, prefix, name);}
+	public void addBox3Item(String idStr, String prefix, String name) {new AddRelationAction(this, box3).add(idStr, prefix, name);}
+	public void addBox4Item(String idStr, String prefix, String name) {new AddRelationAction(this, box4).add(idStr, prefix, name);}
 	//public void addBox1Item(String idStr, String name, String x, String y){new AddRelationAction(this, box1).add(idStr, name, x,y);}
 	
 	public void delBox1Item(String idStr){ new DelRelationAction(this, box1).delete(idStr);}
@@ -1108,10 +1108,10 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	public List getBox4Relations(){return getListByType(box4.getBoxType(), box4.getSubType());}		
 	public List<Relation> getBox4RelationsStage(){return getRelationsByStage(getListByType(box4.getBoxType(), box4.getSubType()));}
 	
-	public String getBox1Title() {return box1.getTitle(this.getLocale());}
+	/*public String getBox1Title() {return box1.getTitle(this.getLocale());}
 	public String getBox2Title() {return box2.getTitle(this.getLocale());}
 	public String getBox3Title() {return box3.getTitle(this.getLocale());}
-	public String getBox4Title() {return box4.getTitle(this.getLocale());}
+	public String getBox4Title() {return box4.getTitle(this.getLocale());}*/
 	/**
 	 * Called when in authoring the type / subtype of a box is changed
 	 * @param id
@@ -1281,6 +1281,17 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(box3.getBoxType()==type) return box3;
 		if(box4.getBoxType()==type) return box4;
 		return null;
-		
+	}
+	
+	/**
+	 * change the list mode of a box. Currently either with or without list. 
+	 * @param mode
+	 * @param box
+	 */
+	public void chgBoxListType(String mode, String box) {
+		Box b = this.getBoxByNo(Integer.parseInt(box));
+		if(b==null) return;
+		b.setListType(Integer.parseInt(mode));
+		new DBClinReason().saveAndCommit(b);
 	}
 }

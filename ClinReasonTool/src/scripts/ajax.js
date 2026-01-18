@@ -234,7 +234,7 @@ function handleResponse(response, callback, name, box){
 	 var action =  $(response).find('action').text();
 	 var type =  $(response).find('type').text();
 	 var isOk =  $(response).find('ok').text();
-	 var box =  $(response).find('box').text();
+	 if(box=="") box =  $(response).find('box').text();
 	 //var box = $(response).find('box').text();
 	 //TODO we might need shortnam here (for tooltip in map)s
 	 if(isOk=="1"){

@@ -163,6 +163,13 @@ $(function() {
 		height: "auto"
 	});
 	
+	$(".search input.f_text").keyup(function(event) {
+		//alert("hallo");
+	    if (event.keyCode === 13) {
+	    	addBoxItemWithoutList(event);
+	    }
+	});
+	
 	/*$("#boxesSel").dialog({
 		autoOpen: false,
 		modal: true,
@@ -320,11 +327,10 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
   		   		</ui:include>
 		   		<i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box1.tooltip}"></i>
 	   		</div>
-		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box1_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box1list" placeholder="#{prop['add']} #{adminContext.patillscript.box1.title}"></input>
+		  			<input class="f_text" style="width:155px;" id="box1list" placeholder="#{prop['add']} #{adminContext.patillscript.box1.title}" listUrl="../#{adminContext.patillscript.box1.getListUrl(adminContext.patillscript.locale)}"></input>
 		  			<input type="hidden" id="box1ListType" value="#{adminContext.patillscript.box1.listType}"></input>
 		  			<a href="javascript:selList(1,1);">with</a><a href="javascript:selList(1,2);">no list</a>
 		  			</div>
@@ -352,12 +358,12 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  		   			<ui:param name="boxId" value="box_sel_2"/>
 		  		   			<ui:param name="boxNumber" value="2" />
 		  		   		</ui:include>
-		   		<i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box2.tooltip}">></i></div>
+		   		<i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box2.tooltip}"></i></div>
 		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box2_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box2list" placeholder="#{prop['add']} #{adminContext.patillscript.box2.title}"></input>
+		  			<input class="f_text" style="width:155px;" id="box2list" placeholder="#{prop['add']} #{adminContext.patillscript.box2.title}" listUrl="../#{adminContext.patillscript.box2.getListUrl(adminContext.patillscript.locale)}"></input>
 		  			<input type="hidden" id="box2ListType" value="#{adminContext.patillscript.box2.listType}"></input>
 		  			<a href="javascript:selList(2,1);">with</a><a href="javascript:selList(2,2);">no list</a></div>
 						<h:form id="box2form">
@@ -384,12 +390,12 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  		   			<ui:param name="boxId" value="box_sel_3"/>
 		  		   			<ui:param name="boxNumber" value="3" />
 		  		   		</ui:include>
-		   		<i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box3.tooltip}">></i></div>
+		   		<i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box3.tooltip}"></i></div>
 		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box3_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box3list" placeholder="#{prop['add']} #{adminContext.patillscript.box3.title}"></input>
+		  			<input class="f_text" style="width:155px;" id="box3list" placeholder="#{prop['add']} #{adminContext.patillscript.box3.title}" listUrl="../#{adminContext.patillscript.box3.getListUrl(adminContext.patillscript.locale)}"></input>
 		  			<input type="hidden" id="box3ListType" value="#{adminContext.patillscript.box3.listType}"></input>
 		  			<a href="javascript:selList(3,1);">with</a><a href="javascript:selList(3,2);">no list</a></div>
 						<h:form id="box3form">
@@ -416,12 +422,12 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  		   			<ui:param name="boxId" value="box_sel_4"/>
 		  		   			<ui:param name="boxNumber" value="4" />
 		  		   		</ui:include>
-		   		<i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box4.tooltip}">></i></div>
+		   		<i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box4.tooltip}"></i></div>
 		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box4_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box4list" placeholder="#{prop['add']} #{adminContext.patillscript.box4.title}"></input>
+		  			<input class="f_text" style="width:155px;" id="box4list" placeholder="#{prop['add']} #{adminContext.patillscript.box4.title}" listUrl="../#{adminContext.patillscript.box4.getListUrl(adminContext.patillscript.locale)}"></input>
 		  			<input type="hidden" id="box4ListType" value="#{adminContext.patillscript.box4.listType}"></input>
 		  			<a href="javascript:selList(4,1);">with</a><a href="javascript:selList(4,2);">no list</a></div>
 						<h:form id="box4form">

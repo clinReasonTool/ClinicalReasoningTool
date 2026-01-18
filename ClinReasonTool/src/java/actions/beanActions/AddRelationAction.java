@@ -58,19 +58,19 @@ public class AddRelationAction implements AddAction, Scoreable{
 	/* (non-Javadoc)
 	 * @see beanActions.AddAction#add(java.lang.String)
 	 */
-	public void add(String idStr, String name){ 
+	public void add(String idStr, String prefix, String name){ 
 		//addProblem(idStr, name);
 		//long id = Long.valueOf(idStr.trim());
-		add(idStr, name, "-1", "-1");
+		add(idStr, prefix, name, "-1", "-1");
 	}
 	
 
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#add(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public void add(String idStr, String prefix, String xStr, String yStr){ 
+	public void add(String idStr, String prefix, String name, String xStr, String yStr){ 
 		this.prefix = prefix;
-		new RelationController().initAdd(idStr, prefix, xStr, yStr, this, patIllScript.getLocale());
+		new RelationController().initAdd(idStr, name, prefix, xStr, yStr, this, patIllScript.getLocale());
 	}
 	
 	public void addRelation(ListItem li, int x, int y, long synId){
@@ -127,8 +127,11 @@ public class AddRelationAction implements AddAction, Scoreable{
 		save(rel);
 		notifyLog(rel);
 		updateGraph(rel, box.getIdx());
-		triggerScoringAction(rel, isJoker);
-		if(!patIllScript.isExpScript()) updateXAPIStatement(rel);
+		
+		if(!patIllScript.isExpScript()) {
+			triggerScoringAction(rel, isJoker);
+			updateXAPIStatement(rel);
+		}
 		return true;
 	}
 	
@@ -168,9 +171,9 @@ public class AddRelationAction implements AddAction, Scoreable{
 	/* (non-Javadoc)
 	 * @see beanActions.AddAction#notifyLog(beans.relation.Relation)
 	 */
-	public void notifyLog(Relation relProb){
-		new LogEntry(LogEntry.ADDPROBLEM_ACTION, patIllScript.getId(), relProb.getListItemId()).save();
-		if(!patIllScript.isExpScript()) new TypeAheadBean(relProb.getListItemId(), Relation.TYPE_PROBLEM).save();
+	public void notifyLog(Relation rel){
+		new LogEntry(LogEntry.ADDPROBLEM_ACTION, patIllScript.getId(), rel.getListItemId()).save();
+		if(!patIllScript.isExpScript()) new TypeAheadBean(rel.getListItemId(), Relation.TYPE_PROBLEM).save();
 	}
 	
 
@@ -178,7 +181,7 @@ public class AddRelationAction implements AddAction, Scoreable{
 	 * @see actions.scoringActions.Scoreable#triggerScoringAction(java.beans.Beans)
 	 */
 	public void triggerScoringAction(Beans relProb, boolean isJoker){		
-		new ScoringAddAction().scoreAction(((RelationProblem) relProb).getListItemId(), this.patIllScript, isJoker, Relation.TYPE_PROBLEM);
+		new ScoringAddAction().scoreAction(((Relation) relProb).getListItemId(), this.patIllScript, isJoker, Relation.TYPE_PROBLEM);
 		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_PROBLEM_LIST, Relation.TYPE_PROBLEM);
 
 	}

@@ -102,7 +102,7 @@ public class AjaxController {
 
 	    	//String patIllScriptId = reqParams.get(REQPARAM_SCRIPT); //TODO check whether belongs to currently loaded script!
 	    	Statement stmt; 
-	    	if(methodName.startsWith("addBox")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, prefix});
+	    	if(methodName.startsWith("addBox")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, prefix, nameStr});
 	    	
 	    	else if(methodName.startsWith("moveItem")) stmt = new Statement(patillscript, methodName, new Object[]{idStr,x,y});
 	    	else if(methodName.startsWith("addConnection")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr,x, x1,y});

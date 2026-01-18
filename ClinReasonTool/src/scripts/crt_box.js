@@ -15,6 +15,18 @@ function addBoxItem(itemId, name, typedinName, box){
 	}
 }
 
+
+/**
+** user has entered an entry in a box working without a list and clicked on enter, so we submit the 
+new entry. 
+ */
+function addBoxItemWithoutList(event){
+	var box = event.target.id.substring(3,4); //e.g. box1list
+	var name = event.target.value;
+	sendAjax(-99, boxCallBack, "addBox"+box+"Item", name, "", "", box);	
+}
+
+
 //id, callback, type, methodName, typedinName, box
 function delBoxItem(id, box){
 	clearErrorMsgs();

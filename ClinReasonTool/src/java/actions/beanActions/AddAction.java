@@ -22,7 +22,7 @@ public interface AddAction{
 	 * @param id
 	 * @param name
 	 */
-	void add(String id, String name);
+	void add(String id, String prefix, String name);
 	/**
 	 * called when item is added thru the concept map (then we have a position of the item in the map)
 	 * @param idStr either an id or syn_id (for a synonym)
@@ -30,7 +30,7 @@ public interface AddAction{
 	 * @param xStr  (e.g. "199.989894") -> we have to convert it into int
 	 * @param yStr
 	 */
-	void add(String idStr, String name, String xStr, String yStr);
+	void add(String idStr, String prefix, String name, String xStr, String yStr);
 	//void initScoreCalc(Relation rel);
 	void createErrorMessage(String summary, String details, Severity sev);
 	void updateGraph(Relation rel, int box);
