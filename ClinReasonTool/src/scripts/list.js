@@ -428,7 +428,7 @@ function checkStartUserInput(user_input){
 function selList(box, mode){ 
 	sendAjax(mode, /*boxCallBack*/callBackReload, "chgBoxListType", "", "", "", box);
 	$("#box"+box+"ListType").val(mode);
-	
+	try { hideBoxListSettings(); } catch(x) {};
 }
 
 
