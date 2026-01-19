@@ -64,6 +64,17 @@ a{
 }
 a:focus{outline:none !important;}
 
+a.option_button  {
+	 border: 1px solid #666666;
+	 color: #111111;
+	 background-color:#eeeeee;
+	 padding: 4px;
+
+	 border-radius: 4px;
+  	 -webkit-border-radius: 4px;
+  	 -moz-border-radius: 4px;
+}
+
 .ui-widget-content { /*needs to be at the beginning, otherwise the slider background will be overwritten*/
 	border: 1px solid #dddddd;
 	background: #ffffff url("../jquery112/ui-lightness/images/ui-bg_highlight-soft_100_eeeeee_1x100.png") 50% top repeat-x;
@@ -556,6 +567,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bbbbbb', end
     
 }
 
+.title select {
+	position: relative;
+	top: -6px;
+}
 
 .icons i{
 	background: #ffffff;
@@ -695,7 +710,11 @@ span.icons{
 .sum_container{
 	width: 425px /*440px*/  !important;
 	min-height: 120px; /*110px;*/
+}
 
+.sum_container textarea{
+	margin:3px;
+	width: calc( 100% - 6px );
 }
 
 .pos1x .title span.icons,
