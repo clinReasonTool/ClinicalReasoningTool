@@ -334,7 +334,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
      </div>
 </div>
 <br/>
-<div class="options"><a href="import/cm_upload.xhtml" target="new" class="option_button">Upload CM</a></div>
+<div id="cmupload" class="options"><a href="import/cm_upload.xhtml" target="new" class="option_button">Upload CM</a></div>
 
 <div class="boxes_container">
 	<div id="canvas" class="canvas jtk-surface drag-drop jtk-surface-nopan" >
@@ -345,7 +345,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
   		   			<ui:param name="boxId" value="box_sel_1"/>
   		   			<ui:param name="boxNumber" value="1" />
   		   		</ui:include>
-  		   		<i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box1.tooltip}"></i>
+  		   		<span class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box1.tooltip}"></i></span>
 	   		</div>
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box1_prefix" style="display:none;" />
@@ -355,8 +355,8 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box1ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
 		  			<span id="box1ListSettings" class="boxListSetings"><ul>
-		  				<li><a href="javascript:selList(1,1);">with</a></li>
-		  				<li><a href="javascript:selList(1,2);">no list</a></li>
+		  				<li><a href="javascript:selList(1,1);">#{prop['box.withlist']}</a></li>
+		  				<li><a href="javascript:selList(1,2);">#{prop['box.nolist']}</a></li>
 		  			</ul></span>
 		  			
 		  			</div>
@@ -394,8 +394,8 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box2ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
 		  			<span id="box2ListSettings" class="boxListSetings"><ul>
-		  				<li><a href="javascript:selList(2,1);">with</a></li>
-		  				<li><a href="javascript:selList(2,2);">no list</a></li>
+		  				<li><a href="javascript:selList(2,1);">#{prop['box.withlist']}</a></li>
+		  				<li><a href="javascript:selList(2,2);">#{prop['box.nolist']}</a></li>
 		  			</ul></span>
 		  			
 		  			</div>
@@ -433,8 +433,8 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box3ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
 		  			<span id="box3ListSettings" class="boxListSetings"><ul>
-		  				<li><a href="javascript:selList(3,1);">with</a></li>
-		  				<li><a href="javascript:selList(3,2);">no list</a></li>
+		  				<li><a href="javascript:selList(3,1);">#{prop['box.withlist']}</a></li>
+		  				<li><a href="javascript:selList(3,2);">#{prop['box.nolist']}</a></li>
 		  			</ul></span>
 		  			
 		  			</div>
@@ -472,8 +472,8 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box4ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
 		  			<span id="box4ListSettings" class="boxListSetings"><ul>
-		  				<li><a href="javascript:selList(4,1);">with</a></li>
-		  				<li><a href="javascript:selList(4,2);">no list</a></li>
+		  				<li><a href="javascript:selList(4,1);">#{prop['box.withlist']}</a></li>
+		  				<li><a href="javascript:selList(4,2);">#{prop['box.nolist']}</a></li>
 		  			</ul></span>
 		  			
 		  			</div>
