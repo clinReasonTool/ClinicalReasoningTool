@@ -1129,7 +1129,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 			//get items if they should be kept and if they are from the same type - atm we cannot change the type of relations as
 			//this would require moving them in the database as well.
 			if(keepItems && boxType==b.getBoxType()) {			
-				List rels = getListByType(b.getBoxType(), b.getSubType()); //get original list of Relation objects
+				List rels = getListByType(b.getBoxType(), -1/*b.getSubType()*/); //get original list of Relation objects
 				if(rels!=null && !rels.isEmpty()) {
 					for(int i=0;i<rels.size();i++) {
 						Relation rel = (Relation) rels.get(i);
@@ -1159,7 +1159,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		List l = new ArrayList();
 		if (type==Box.BOXTYPE_FDG && problems!=null) { //subtype midwife fdg and fdgs
 			for (int i = 0; i<problems.size();i++) {
-				if(subtype>0 && problems.get(i).getDiscriminator() == subtype)
+				if(subtype<0 || (subtype>0 && problems.get(i).getDiscriminator() == subtype))
 					l.add(problems.get(i));
 			}				
 			return l; //1
@@ -1169,7 +1169,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		
 		if (type==Box.BOXTYPE_DDX && diagnoses!=null) { //subtypes 2=ddx, 7==nursing ddx, 11 = midwife hypos; 15 = drug-related problems
 			for (int i = 0; i<diagnoses.size();i++) {
-				if(subtype>0 && diagnoses.get(i).getDiscriminator() == subtype)
+				if(subtype<0 || (subtype>0 && diagnoses.get(i).getDiscriminator() == subtype))
 					l.add(diagnoses.get(i));
 			}
 			return l; //2
@@ -1178,7 +1178,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		
 		if (type==Box.BOXTYPE_MNG && mngs !=null) { //4 = mngs, 13 = midwife mng, midwife recomm = 12, nursing mng = 9, ...
 			for (int i = 0; i<mngs.size();i++) {
-				if(subtype>0 && mngs.get(i).getDiscriminator() == subtype)
+				if(subtype<0 || (subtype>0 && mngs.get(i).getDiscriminator() == subtype))
 					l.add(mngs.get(i));
 			}
 			return l;

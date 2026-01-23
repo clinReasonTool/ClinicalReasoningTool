@@ -107,7 +107,7 @@ public class AddRelationAction implements AddAction, Scoreable{
 		rel.setDestId(this.patIllScript.getId());
 		rel.setListItemId(li.getItem_id());
 		if(synId>0) rel.setSynId(synId);
-		rel.setDiscriminator(this.box.getBoxType());
+		rel.setDiscriminator(this.box.getTitleNum());
 		rel.setOrder(pos);
 		return rel;
 	}

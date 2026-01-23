@@ -159,7 +159,8 @@ function chgBoxType(id, box){
 }
 
 
-function getOrgSelVal(box){
+function getOrgSelVal(boxStr){
+	var box = +boxStr;
 	switch (box){
 		case 1: return box1Type+"."+box1TitleNum;
 		case 2: return box2Type+"."+box2TitleNum;
@@ -182,6 +183,7 @@ function confirmSwitch(keepItems){
 
 function cancelChBoxType(){
 	var box = $("#chgBoxIdx").val();
+	var id = $("#chgBoxId").val();
 	$("#"+id).val(getOrgSelVal(box));
 	$("#jdialogSwitchCat" ).dialog( "close" );
 }
