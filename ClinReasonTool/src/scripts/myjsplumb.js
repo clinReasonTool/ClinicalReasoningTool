@@ -228,6 +228,7 @@ function addToGroup(itemId, item){
 
 /*
  * an item is moved, so we store the new position
+ * this is the jquery stlye, event registered below!
  */
 function handleRectDrop(ui){
 	//if((xDragStart>-1 && xDragStart>-1) && rect.x >= xDragStart+10 || rect.x <= xDragStart-10 || rect.y >= yDragStart+10 || rect.y <= yDragStart-10){
@@ -241,7 +242,20 @@ function handleRectDrop(ui){
 		sendAjaxCM(id, doNothing, "moveItemBox"+box, name, x, y, box);
 }
 
-
+/*
+ * an item is moved, so we store the new position
+ * this is using the jsplumb internal stop event, so slightly different from the jquery version
+ */
+function handleRectDropJSPlumb(jsp_evt){
+	//if((xDragStart>-1 && xDragStart>-1) && rect.x >= xDragStart+10 || rect.x <= xDragStart-10 || rect.y >= yDragStart+10 || rect.y <= yDragStart-10){
+		//var position = ui.position;
+		var x = jsp_evt.finalPos[0];
+		var y = jsp_evt.finalPos[1];
+		var id = jsp_evt.el.id;
+		  //after drag&drop we have to re-hide the connections if they are turned off:
+		initCnxDisplay();	  
+		sendAjaxCM(id, doNothing, "moveItem", name, x, y);
+}
 
 
 function toggleContainerCollapse(elem){
@@ -407,13 +421,28 @@ function checkDisplayCnxHint(){
 	$(".cnxhint_true").toggle("drop", {direction: "right"},1000);
 }
 
+/*
+ * changed 20230829 -> moved to internal jsplumb draggable stop event handling
+ */
 function initDraggables(){
 	if(isView) return;
-    instance.draggable(jsPlumb.getSelector(".drag-drop .itembox"));   
+    instance.draggable(jsPlumb.getSelector(".drag-drop .itembox"),{
+		start:function( evt ) {
+			// $(ui.helper).find('.tooltip').hide(); 
+			$('.ui-tooltip').remove();
+		},
+		stop: function( evt ) {
+			console.log( "instance.draggable stop ",evt);  
+			handleRectDropJSPlumb(evt);
+		} 
+	});  
     
+    // now using the jsplumb instance internal stop function for drag, as using jquery and jsplumb event in parallel
+    // caused issues on tablets
 	//item was moved -> trigger ajax call to update position
-    $( ".drag-drop .itembox" ).draggable({
+    /*$( ".drag-drop .itembox" ).draggable({
     	  stop: function( event, ui ) {
+			  console.log( "initElems .itembox mouseup ",ui);  
     		  handleRectDrop(ui);
     	  },	
         start: function(event, ui) {             
@@ -421,6 +450,6 @@ function initDraggables(){
              $('.ui-tooltip').remove();
          }, 
     
-    });
+    });*/
 }
 

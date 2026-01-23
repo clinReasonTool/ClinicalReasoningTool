@@ -697,11 +697,10 @@ function showDropDown(id, category){
 		//$("#jdialogError").load("errors.xhtml");
 		
 		$('#jdialogToolbox .dropdownX').hide();
-		if(category<2)
-			$(".linkscategory").hide();
-		else $(".linkscategory").show();
 		
-		$("#jdialogToolbox").dialog( "open" );
+		try { showDropDown_afterInit(); } catch (x) {};
+		
+		$("#jdialogToolbox" ).dialog( "open" );
 		$("#jdialogToolbox").show();
 	}
 	/*else {
@@ -719,8 +718,8 @@ function showDropDown(id, category){
  */
 /*function hideDropDown(id){
 	$("#"+id).hide();
-	$("#jdialogToolbox").hide();
-}*/
+	try { $("#jdialogToolbox" ).dialog( "close" );} catch (x) {};
+}
 
 /**
  * not needed when using jq dlg, as this is modal!

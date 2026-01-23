@@ -109,19 +109,25 @@ $(function() {
 	//$("#boxesSel").hide();
 	$("#summStText").on('change',function(){
 		saveSummSt('#{adminContext.patillscript.summStId}');
-	 });
-
-	/*$(".chgfinal").on('change',function(){
+	});
+	
+	$(".chgstage").on('change',function(){
+		chgStageItem(this);
+	});
+	
+	$(".chgfinal").on('change',function(){
 		chgStageFinal(this);
-	 });*/
+	});
 	
 	$(".chgstage2").on('change',function(){
 		chgStageEdge(this);
-	 });
+	});
+	
+	
 	
 	$("#chgsummstCrd").on('change',function(){
 		chgSummStCrd(this);
-	 });
+	});
 	
 	$("#jdialogSwitchCat").hide();
 	
@@ -149,42 +155,25 @@ $(function() {
 		height: "auto"
 	});
 	
-	$("#jdialogSwitchCat").dialog({
+	$("#boxesSel").dialog({
 		autoOpen: false,
 		modal: true,
 		width: "auto",
 		height: "auto"
 	});
 	
+
 	$("#jdialogToolbox").dialog({
 		autoOpen: false,
 		modal: true,
-		width: "auto",
-		height: "auto"
-	});
-	
-	$("#jdialog_boxlist_settings").dialog({
-		autoOpen: false,
-		modal: true,
-		width: 150,
+		width: 175,
 		height: "auto",
-		minWidth: 150
-	});
-	
-	
-	$(".search input.f_text").keyup(function(event) {
-		//alert("hallo");
-	    if (event.keyCode === 13) {
-	    	addBoxItemWithoutList(event);
+		minWidth: 200,
+		maxWidth: 220,
+		close: function (event) { //closing effect to show where help button is
+	        $("#jdialogToolbox").html("");
 	    }
 	});
-	
-	/*$("#boxesSel").dialog({
-		autoOpen: false,
-		modal: true,
-		width: "auto",
-		height: "auto"
-	});*/
 	
 	
 	$( this ).tooltip({
@@ -207,6 +196,17 @@ $(function() {
 	}
 
 });
+
+function showDropDown_afterInit() {
+	$("#jdialogToolbox .chgstage").on('change',function(){
+		try { console.log("showDropDown_afterInit chgStageItem",$(this).val(),this); } catch (x) {};
+		chgStageItem(this);
+	});
+	
+	$("#jdialogToolbox .chgfinal").on('change',function(){
+		chgStageFinal(this);
+	});
+}
 
 
 jsPlumb.ready(function () {
@@ -525,15 +525,9 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		<ui:include src="edges_exp.xhtml" />
 	</ui:repeat>	</span>
 </div>
+
 <div id="jdialogToolbox"></div>
-<div id="jdialog_boxlist_settings"></div>
- <div id="jdialogSwitchCat">
-Do you want to keep the items you have entered so far in this box? 
-<form id="chgBoxForm"><input type="hidden" id="chgBoxId" value=""></input>
-<input type="hidden" id="chgBoxIdx" value=""></input></form>
-<a href="javascript:confirmSwitch(true);">Keep</a> <a href="javascript:confirmSwitch(false);">Remove</a>
-<a href="javascript:cancelChBoxType();">Cancel</a>
-</div>
+
 </body>
 </f:view>
 </html>

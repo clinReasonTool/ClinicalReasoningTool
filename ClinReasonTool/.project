@@ -16,9 +16,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>casus-support-lib</name>
+			<name>casus-support-lib-src</name>
 			<type>2</type>
-			<location>/Users/Shared/git/casus-support-library/src</location>
+			<location>/Users/Shared/git/casus-support-lib/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>

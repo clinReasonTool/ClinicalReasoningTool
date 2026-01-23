@@ -4,7 +4,7 @@
 	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/jfreechart/jfreechart-swt.jar"/>
 	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/jfreechart/jfreechart.jar"/>
 	<classpathentry kind="src" path="src/java"/>
-	<classpathentry kind="src" path="casus-support-lib"/>
+	<classpathentry kind="src" path="casus-support-lib-src"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-codec-1.4.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-collections-3.2.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-digester-1.8.jar"/>
