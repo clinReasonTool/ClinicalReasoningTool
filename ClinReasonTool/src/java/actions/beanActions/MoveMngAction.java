@@ -12,7 +12,7 @@ import database.DBClinReason;
  * @author ingahege
  * @deprecated
  */
-public class MoveMngAction implements MoveAction{
+/*public class MoveMngAction implements MoveAction{
 
 	private PatientIllnessScript patIllScript;
 	
@@ -20,24 +20,18 @@ public class MoveMngAction implements MoveAction{
 		this.patIllScript = patIllScript;
 	}
 	
-	/* (non-Javadoc)
-	 * @see beanActions.MoveAction#save()
-	 */
+
 	public void save(List l){
 		new DBClinReason().saveAndCommit(l);
 	}
 	
-	/* (non-Javadoc)
-	 * @see beanActions.MoveAction#notifyLog(beans.relation.Relation)
-	 */
+
 	public void notifyLog(Relation relBeforeReSort) {
 		LogEntry le = new LogEntry(LogEntry.MOVEMNG_ACTION, patIllScript.getId(), relBeforeReSort.getListItemId(), relBeforeReSort.getOrder());
 		le.save();			
 	}
 
-	/* (non-Javadoc)
-	 * @see beanActions.MoveAction#reorder(java.lang.String)
-	 */
+
 	public void reorder(String idStrMovedItem, String newOrderStr) {		
 		String[] newOrderArr = newOrderStr.split("&");
 		List<RelationManagement> newList  = new ArrayList<RelationManagement>();
@@ -57,4 +51,4 @@ public class MoveMngAction implements MoveAction{
 		//now we change the order attribute of each Relationproblem object:
 		//new ActionHelper().reOrderItems(this.patIllScript.getProblems());
 	}
-}
+}*/

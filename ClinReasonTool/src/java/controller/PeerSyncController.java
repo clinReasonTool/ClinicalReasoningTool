@@ -46,10 +46,10 @@ public class PeerSyncController {
 			sync_idx = i;
 			PatientIllnessScript script = scripts.get(i);
 			LearningAnalyticsBean lab = new LearningAnalyticsBean(script.getId(), script.getUserId(), script.getVpId());		
-			syncItems(script.getProblems()/*, peers*/, script.getVpId());
-			syncItems(script.getDiagnoses()/*, peers*/, script.getVpId());
-			syncItems(script.getMngs()/*, peers*/, script.getVpId());
-			syncItems(script.getTests()/*, peers*/, script.getVpId());
+			syncItems(script.getBox1Relations()/*, peers*/, script.getVpId());
+			syncItems(script.getBox2Relations()/*, peers*/, script.getVpId());
+			syncItems(script.getBox3Relations()/*, peers*/, script.getVpId());
+			syncItems(script.getBox4Relations()/*, peers*/, script.getVpId());
 			if(lab!=null && lab.getScoreContainer()!=null){
 				List<ScoreBean> scores = lab.getScoreContainer().getScores();
 				syncSummSt(scores,script.getVpId());

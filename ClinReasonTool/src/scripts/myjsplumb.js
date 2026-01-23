@@ -5,19 +5,21 @@ var ep_left_prefix = "2_";
 var ep_top_prefix = "3_";
 var ep_bottom_prefix = "4_";
 
-var groups = new Array("fdg_group", "ddx_group","tst_group", "mng_group", "sum_group", "pat_group", "nddx_group", "naim_group", "nmng_group", "info_group", "mhyp_group", "mrec_group", "mmng_group", "mfdg_group" );
-var boxes;
+//var groups = new Array("fdg_group", "ddx_group","tst_group", "mng_group", "sum_group", "pat_group", "nddx_group", "naim_group", "nmng_group", "info_group", "mhyp_group", "mrec_group", "mmng_group", "mfdg_group" );
+var groups = new Array("box1_group", "box2_group","box3_group", "box4_group", "sum_group");
+
+var boxes = new Array("box1", "box2", "box3", "box4");
 /*
  * TODO not very elegant, but the "" vs non "" is important and seems to be difficult to do when getting the items/ids from 
  * an array....
  * all groups are created and all items attached to a group
  */
 function initGroups(){
-	boxes = createBoxesArr();
+	//boxes = createBoxesArr();
 	for(var i=0; i<boxes.length;i++){
 		instance.addGroup({
 	        el: document.getElementById(boxes[i]),
-	        id: getGroupIdByElem(boxes[i]), //groups[i],
+	        id: groups[i], //getGroupIdByElem(boxes[i]),
 	        constrain:true,
 	        dropOverride:true,
 	        droppable:false,
@@ -29,8 +31,9 @@ function initGroups(){
 
 /**
 elemName e.g. fdg_box, pat_box, nddx_box
+not needed for new boxes
  */
-function getGroupIdByElem(elemName){
+/*function getGroupIdByElem(elemName){
 	if(elemName==null || elemName =="") return;
 	for(var i=0; i<groups.length;i++ ){
 		var groupPrefix = groups[i].substring(0,groups[i].indexOf("_"));
@@ -38,7 +41,7 @@ function getGroupIdByElem(elemName){
 		return groups[i];
 	}
 	
-}
+}*/
 
 function registerItemEvents(itemId, item) {
 	console.log( "regTabEvents itemId: " +  itemId );
@@ -57,7 +60,8 @@ function registerItemEvents(itemId, item) {
 	
 }
 
-function initElems(selector){
+function initElems(box){
+	var selector = box;
 	console.log( "initElems selector: " +  selector );
 	for(var i=0; i<item_arr.length;i++){
 		var itemId = item_arr[i];
@@ -119,19 +123,19 @@ function createEndpointsForItems(itemId){
 	    ep2.maxConnections = 10;
 }
 
-var lookup = new Array("", "fdg_box", "ddx_box", "tst_box", "mng_box", "sum_box", "pat_box", "nddx_box", "naim_box", "nmng_box", "info_box", "mfdg_box", "mhyp_box", "mmng_box", "mrec_box");
+//var lookup = new Array("", "fdg_box", "ddx_box", "tst_box", "mng_box", "sum_box", "pat_box", "nddx_box", "naim_box", "nmng_box", "info_box", "mfdg_box", "mhyp_box", "mmng_box", "mrec_box");
 
 /**
  * we have to create the boxes array dynamically now
  */
-function createBoxesArr(){
-	var boxesArr = new Array("fdg_box", "ddx_box", "tst_box", "mng_box", "sum_box");	
+/*function createBoxesArr(){
+	var boxesArr = new Array("box1", "ddx_box", "tst_box", "mng_box", "sum_box");	
 	boxesArr[0] = lookup[box1Type];
 	boxesArr[1] = lookup[box2Type];
 	boxesArr[2] = lookup[box3Type];
 	boxesArr[3] = lookup[box4Type];
 	return boxesArr;
-}
+}*/
 
 function createExpEndpointsForItems(itemId){	
 	var eps = instance.getEndpoints(itemId);
@@ -142,16 +146,16 @@ function createExpEndpointsForItems(itemId){
 	ep2.id = ep_right_prefix + itemId;
 }
 /*
- * called after an item has been added (and after clicking the hidden button)
+ * called after an item has been added or deleted (and after clicking the hidden button)
  */
-function updateItemCallback(data, items, boxId){ 
+/*function updateItemCallback(data, items, box){ 
 	 var status = data.status; // Can be "begin", "complete" or "success".
 	if(isCallbackStatusSuccess(data)){
 		initElems(items);
-		 initBoxHeights();
+		initBoxHeights();
 	}   
 }
-
+*/
 
 /*
  * attach an item to a group and make it a target
@@ -159,23 +163,23 @@ function updateItemCallback(data, items, boxId){
 function addToGroup(itemId, item){ 
 	try{
 		//!!!CAVE: this is with indexOf, so we need to make sure that the more specific ones are checked first - this is ugls and needs to be changed in the future!!!!
-		if(itemId.indexOf("nddx")>=0){
-			instance.addToGroup("nddx_group", item);
+		if(itemId.indexOf("box1")>=0){
+			instance.addToGroup("box1_group", item);
 			return;
 		}
-		if(itemId.indexOf("nmng")>=0){
-			instance.addToGroup("nmng_group", item);
+		if(itemId.indexOf("box2")>=0){
+			instance.addToGroup("box2_group", item);
 			return;
 			}
-		if(itemId.indexOf("mfdg")>=0){
-			instance.addToGroup("mfdg_group", item);
+		if(itemId.indexOf("box3")>=0){
+			instance.addToGroup("box3_group", item);
 			return;
 		}
-		if(itemId.indexOf("mmng")>=0){
-			instance.addToGroup("mmng_group", item);
+		if(itemId.indexOf("box4")>=0){
+			instance.addToGroup("box4_group", item);
 			return;
 		}
-		if(itemId.indexOf("fdg")>=0){
+		/*if(itemId.indexOf("fdg")>=0){
 			instance.addToGroup("fdg_group", item);
 			return;
 		}
@@ -213,7 +217,7 @@ function addToGroup(itemId, item){
 		if(itemId.indexOf("mrec")>=0){
 			instance.addToGroup("mrec_group", item);
 			return;
-		}
+		}*/
 	}
 	catch(err){
 		var x = err;
@@ -232,9 +236,10 @@ function handleRectDrop(ui){
 		var x = ui.position.left;
 		var y = ui.position.top;
 		var id = $(ui.helper).attr("id");
+		var box = id.substring(3,4); //we get the number of the box
 		  //after drag&drop we have to re-hide the connections if they are turned off:
 		initCnxDisplay();	  
-		sendAjaxCM(id, doNothing, "moveItem", name, x, y);
+		sendAjaxCM(id, doNothing, "moveItemBox"+box, name, x, y, box);
 }
 
 /*

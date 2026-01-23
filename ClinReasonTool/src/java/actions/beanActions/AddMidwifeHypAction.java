@@ -27,7 +27,11 @@ import beans.list.ListItem;
 import properties.IntlConfiguration;
 import util.CRTLogger;
 
-public class AddMidwifeHypAction implements AddAction, Scoreable{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class AddMidwifeHypAction /*implements AddAction, Scoreable*/{
 	
 	private PatientIllnessScript patIllScript;
 	
@@ -47,14 +51,14 @@ public class AddMidwifeHypAction implements AddAction, Scoreable{
 	 */
 	public void notifyLog(Relation rel) {
 		new LogEntry(LogEntry.ADDMHYP_ACTION, patIllScript.getId(), rel.getListItemId()).save();
-		if(!patIllScript.isExpScript()) new TypeAheadBean(rel.getListItemId(), Relation.TYPE_MHYP).save();
+		if(!patIllScript.isExpScript()) new TypeAheadBean(rel.getListItemId(), Relation.SUBTYPE_MHYP).save();
 
 	}
 
 	/* (non-Javadoc)
 	 * @see beanActions.AddAction#add(java.lang.String)
 	 */
-	public void add(String idStr, String name){ add(idStr, name, "-1", "-1");}
+	//public void add(String idStr, String name){ add(idStr, name, "-1", "-1");}
 	
 	/**
 	 * @param idStr either an id or syn_id (for a synonym)
@@ -62,11 +66,11 @@ public class AddMidwifeHypAction implements AddAction, Scoreable{
 	 * @param xStr (e.g. "199.989894") -> we have to convert it into int
 	 * @param yStr
 	 */
-	public void add(String idStr, String name, String xStr, String yStr){ new RelationController().initAdd(idStr, name, xStr, yStr, this, patIllScript.getLocale() );}
+	//public void add(String idStr, String name, String xStr, String yStr){ new RelationController().initAdd(idStr, name, xStr, yStr, this, patIllScript.getLocale() );}
 	
-	public void addRelation(ListItem li, int x, int y, long synId){addRelation(li, x, y, synId, false);}
+	//public void addRelation(ListItem li, int x, int y, long synId){addRelation(li, x, y, synId, false);}
 	
-	public void addRelation(ListItem li, int x, int y, long synId, boolean isJoker){
+	/*public void addRelation(ListItem li, int x, int y, long synId, boolean isJoker){
 		if(patIllScript.getMidwifeHypotheses()==null) patIllScript.setMidwifeHypotheses(new ArrayList<RelationMidwifeHypothesis>());
 		RelationMidwifeHypothesis rel = new RelationMidwifeHypothesis(li.getItem_id(), patIllScript.getId(), synId);		
 		if(patIllScript.getMidwifeHypotheses().contains(rel)){
@@ -89,7 +93,7 @@ public class AddMidwifeHypAction implements AddAction, Scoreable{
 		triggerScoringAction(rel, isJoker);	
 		if(!patIllScript.isExpScript()) updateXAPIStatement(rel);
 
-	}
+	}*/
 	
 
 	/**
@@ -97,7 +101,7 @@ public class AddMidwifeHypAction implements AddAction, Scoreable{
 	 * TODO: we could check whether the position is already taken,or others are vacant due to deleting of others
 	 * @return
 	 */
-	private Point calculateNewItemPosInCanvas(){
+	/*private Point calculateNewItemPosInCanvas(){
 		int y = AddAction.MIN_Y;
 		if(patIllScript.getMidwifeHypotheses()!=null || !patIllScript.getMidwifeHypotheses().isEmpty()){
 			y = patIllScript.getMidwifeHypotheses().size() * 26; //CAVE max y! 
@@ -106,24 +110,24 @@ public class AddMidwifeHypAction implements AddAction, Scoreable{
 			return new Point(RelationMidwifeHypothesis.DEFAULT_X+100,y);
 		}
 		return new Point(RelationMidwifeHypothesis.DEFAULT_X,y);
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see actions.scoringActions.Scoreable#triggerScoringAction(java.beans.Beans)
 	 */
-	public void triggerScoringAction(Beans rel, boolean isJoker) {
+	/*public void triggerScoringAction(Beans rel, boolean isJoker) {
 		new ScoringAddAction().scoreAction(((RelationMidwifeHypothesis) rel).getListItemId(), this.patIllScript, isJoker, Relation.TYPE_MHYP);
 		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_MHYP_LIST, Relation.TYPE_MHYP);
 	}
 	
 	public void createErrorMessage(String summary, String details, Severity sev) {
 		new ErrorMessageContainer().addErrorMessage("infoform", summary, details, sev);		
-	}
+	}*/
 	
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel) {
+	/*public void updateGraph(Relation rel) {
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED);
 
@@ -132,5 +136,5 @@ public class AddMidwifeHypAction implements AddAction, Scoreable{
 	
 	public void updateXAPIStatement(Relation rel){
 		XAPIController.getInstance().addOrUpdateAddStatement(rel);
-	}
+	}*/
 }

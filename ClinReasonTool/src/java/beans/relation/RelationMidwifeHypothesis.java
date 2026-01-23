@@ -15,6 +15,10 @@ import net.casus.util.Utility;
 import properties.IntlConfiguration;
 import util.CRTLogger;
 
+/**
+ * @author ingahege
+ * @deprecated
+ */
 public class RelationMidwifeHypothesis extends Relation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -25,8 +29,8 @@ public class RelationMidwifeHypothesis extends Relation implements Serializable 
 	public static final int TIER_NONE = 0; //I do not now
 
 	
-	public int getDiscriminator() {return TYPE_MHYP;}
-	public void setDiscriminator(int i){}
+	//public int getDiscriminator() {return TYPE_MHYP;}
+	//public void setDiscriminator(int i){}
 
 	/**
 	 * how likely is this diagnosis, from unlikely to final diagnosis
@@ -81,10 +85,11 @@ public class RelationMidwifeHypothesis extends Relation implements Serializable 
 	//public void setTier(int tier) {this.tier = tier;}
 	public ListItem getDiagnosis() {return diagnosis;}
 	public void setDiagnosis(ListItem diagnosis) {this.diagnosis = diagnosis;}	
+	public void setListItem(ListItem li) {diagnosis = li;}
 	public String getShortLabelOrSynShortLabel(){return StringUtils.abbreviate(getLabelOrSynLabel(), ListItem.MAXLENGTH_NAME-2);}
 	
 	
-	public String getIdWithPrefix(){ return GraphController.PREFIX_NDDX+this.getId();}
+	public String getIdWithPrefix(){ return ""; /*GraphController.PREFIX_NDDX+this.getId();*/}
 
 	
 	public String getColor(){		
@@ -102,7 +107,7 @@ public class RelationMidwifeHypothesis extends Relation implements Serializable 
 		PatientIllnessScript learnerscript = NavigationController.getInstance().getMyFacesContext().getPatillscript();
 		if(learnerscript.isExpScript()) return -1;
 		Graph g = NavigationController.getInstance().getCRTFacesContext().getGraph();
-		MultiVertex mv = g.getVertexByIdAndType(this.getListItemId(), Relation.TYPE_MHYP);
+		MultiVertex mv = g.getVertexByIdAndType(this.getListItemId(), Relation.SUBTYPE_MHYP);
 		if(mv==null || mv.getExpertVertex()==null) return -1;
 		RelationMidwifeHypothesis expRel = (RelationMidwifeHypothesis) mv.getExpertVertex();
 		//if(isFinalDiagnosis() && learnerscript.getSubmittedStage()<=learnerscript.getStage()) return COLOR_FINAL;
@@ -130,7 +135,7 @@ public class RelationMidwifeHypothesis extends Relation implements Serializable 
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getRelationType()
 	 */
-	public int getRelationType() {return TYPE_MHYP;}	
+	public int getRelationType() {return SUBTYPE_MHYP;}	
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getLabel()
 	 */
@@ -176,7 +181,7 @@ public class RelationMidwifeHypothesis extends Relation implements Serializable 
 	 */
 	public String getExp(){ 
 		Graph g = NavigationController.getInstance().getMyFacesContext().getGraph();
-		MultiVertex mvertex = g.getVertexByIdAndType(this.getListItemId(), Relation.TYPE_MHYP);
+		MultiVertex mvertex = g.getVertexByIdAndType(this.getListItemId(), Relation.SUBTYPE_MHYP);
 		if(mvertex==null || mvertex.getLearnerVertex()==null) return ""; //should not happen
 		//only return something if learner has chosen it as a final ddx:
 		/*boolean isLearnerFinal = ((RelationNursingDiagnosis)mvertex.getLearnerVertex()).getTier() == RelationNursingDiagnosis.TIER_FINAL;

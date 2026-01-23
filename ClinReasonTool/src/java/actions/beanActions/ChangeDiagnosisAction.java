@@ -16,7 +16,7 @@ import database.DBClinReason;
  * @author ingahege
  *
  */
-public class ChangeDiagnosisAction extends ChgAction {
+public class ChangeDiagnosisAction /*extends ChgAction*/ {
 
 	private PatientIllnessScript patIllScript;
 	
@@ -28,8 +28,8 @@ public class ChangeDiagnosisAction extends ChgAction {
 		long oldDDXId = Long.valueOf(oldDDXIdStr.trim());
 		int changeMode = Integer.valueOf(changeModeStr.trim());
 		//if(changeMode==1) toggleDiagnosis(oldDDXId); //change prefix
-		if(changeMode==2 || changeMode==3) 
-			changeItem(oldDDXId, patIllScript, Relation.TYPE_DDX);
+		//if(changeMode==2 || changeMode==3) 
+		//	changeItem(oldDDXId, patIllScript, Relation.TYPE_DDX);
 		/*long oldDDXId = Long.valueOf(oldDDXIdStr.trim());
 		long newDDXId = Long.valueOf(newDDXIdStr.trim());
 		changeDiagnosis(oldDDXId, newDDXId);*/
@@ -87,8 +87,8 @@ public class ChangeDiagnosisAction extends ChgAction {
 		le.save();
 	}
 
-	private void notifyMnMLog(Beans ddxToChg, int newMnM){
-		LogEntry le = new LogEntry(LogEntry.CHGDDXMNM_ACTION, patIllScript.getId(), ((Relation) ddxToChg).getListItemId(), newMnM);
+	private void notifyMnMLog(Relation ddxToChg, int newMnM){
+		LogEntry le = new LogEntry(LogEntry.CHGDDXMNM_ACTION, patIllScript.getId(), ddxToChg.getListItemId(), newMnM);
 		le.save();
 	}
 	
@@ -101,9 +101,8 @@ public class ChangeDiagnosisAction extends ChgAction {
 	 * @param idStr
 	 * @param newVal "0"|"1"
 	 */
-	public void toggleMnM(String idStr/*, String newVal*/){
+	public void toggleMnM(String idStr){
 		long id = Long.valueOf(idStr.trim());
-		//int mnm = Integer.valueOf(newVal.trim());
 		RelationDiagnosis ddxToChg = patIllScript.getDiagnosisById(id);
 		if(ddxToChg.getMnm()==0) ddxToChg.setMnm(1);
 		else ddxToChg.setMnm(0);
@@ -112,10 +111,10 @@ public class ChangeDiagnosisAction extends ChgAction {
 		save(ddxToChg);
 		notifyMnMLog(ddxToChg, ddxToChg.getMnm());
 	}
-
+/*
 	@Override
 	public void triggerScoringAction(Beans beanToScore, boolean isJoker) {
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 }

@@ -95,7 +95,7 @@ public class ExpPortfolio implements Serializable{
 		if(!vpId.contains("_")) vpId = vpId + "_" +systemId;
 		String lang = AjaxController.getInstance().getRequestParamByKey(AjaxController.REQPARAM_SCRIPTLOC);
 		if(lang==null || lang.isEmpty()) lang = "en";
-		PatientIllnessScript patillscript = new PatientIllnessScript(user.getUserId(), vpId, new Locale(lang), 2);
+		PatientIllnessScript patillscript = new PatientIllnessScript(user.getUserId(), vpId, new Locale(lang));
 		int maxStage = AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_MAXSTAGE, -1);
 		int maxddxstage = AjaxController.getInstance().getIntRequestParamByKey("maxddxstage", -1);
 		patillscript.iniExpertScript(maxStage, maxddxstage);
@@ -134,6 +134,7 @@ public class ExpPortfolio implements Serializable{
 		PatientIllnessScript patillscript = new DBClinReason().selectExpertPatIllScriptByVPId(vpId+"_"+systemId);
 		if(patillscript!=null){
 			if(maxstage>0 && patillscript.getStage()!=maxstage) patillscript.setCurrentStage(maxstage);
+			patillscript.initOrLoadBoxes();
 			
 			patillscript.setLastAccessDate(new Timestamp(System.currentTimeMillis()));
 			new DBClinReason().saveAndCommit(patillscript);

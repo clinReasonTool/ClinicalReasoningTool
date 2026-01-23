@@ -30,7 +30,11 @@ import beans.list.ListItem;
 import properties.IntlConfiguration;
 import util.CRTLogger;
 
-public class AddTestAction implements AddAction, Scoreable/*, FeedbackCreator*/{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class AddTestAction /*implements AddAction, Scoreable*/{
 	
 	private PatientIllnessScript patIllScript;
 	
@@ -57,7 +61,7 @@ public class AddTestAction implements AddAction, Scoreable/*, FeedbackCreator*/{
 	/* (non-Javadoc)
 	 * @see beanActions.AddAction#add(java.lang.String)
 	 */
-	public void add(String idStr, String name){ add(idStr, name, "-1", "-1");}
+	//public void add(String idStr, String name){ add(idStr, name, "-1", "-1");}
 	
 	/**
 	 * @param idStr either an id or syn_id (for a synonym)
@@ -65,17 +69,17 @@ public class AddTestAction implements AddAction, Scoreable/*, FeedbackCreator*/{
 	 * @param xStr (e.g. "199.989894") -> we have to convert it into int
 	 * @param yStr
 	 */
-	public void add(String idStr, String name, String xStr, String yStr){ 
+	/*public void add(String idStr, String name, String xStr, String yStr){ 
 		new RelationController().initAdd(idStr, name, xStr, yStr, this, patIllScript.getLocale());
 	}
 	
-	public void addRelation(/*long id, String prefix*/ListItem li, int x, int y, long synId){		
-		addRelation(li/*id, prefix*/, x, y, synId, false);
-	}
+	public void addRelation(ListItem li, int x, int y, long synId){		
+		addRelation(li, x, y, synId, false);
+	}*/
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#addRelation(long, java.lang.String, int, int, long)
 	 */
-	public void addRelation(/*long id, String name*/ListItem li, int x, int y, long synId, boolean isJoker){
+	/*public void addRelation(ListItem li, int x, int y, long synId, boolean isJoker){
 		if(patIllScript.getTests()==null) patIllScript.setTests(new ArrayList<RelationTest>());
 		RelationTest rel = new RelationTest(li.getItem_id(), patIllScript.getId(), synId);		
 		if(patIllScript.getTests().contains(rel)){
@@ -100,14 +104,14 @@ public class AddTestAction implements AddAction, Scoreable/*, FeedbackCreator*/{
 		if(!patIllScript.isExpScript()) updateXAPIStatement(rel);
 		//((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).setAttribute("tst", rel);
 
-	}
+	}*/
 	
 	/**
 	 * we calculate a position for the new item. 
 	 * TODO: we could check whether the position is already taken,or others are vacant due to deleting of others
 	 * @return
 	 */
-	private Point calculateNewItemPosInCanvas(){
+	/*private Point calculateNewItemPosInCanvas(){
 		int size=0;
 		if(patIllScript.getTests()!=null || !patIllScript.getTests().isEmpty()){
 			size = patIllScript.getTests().size();
@@ -124,7 +128,7 @@ public class AddTestAction implements AddAction, Scoreable/*, FeedbackCreator*/{
 			return new Point(RelationTest.DEFAULT_X+100,y);
 		}
 		return new Point(RelationTest.DEFAULT_X,y);
-	}
+	}*/
 	
 	/*private Point calculateNewItemPosInCanvas(){
 		int y = AddAction.MIN_Y;
@@ -153,7 +157,7 @@ public class AddTestAction implements AddAction, Scoreable/*, FeedbackCreator*/{
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel) {
+	/*public void updateGraph(Relation rel) {
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED);
 	
@@ -168,5 +172,5 @@ public class AddTestAction implements AddAction, Scoreable/*, FeedbackCreator*/{
 	
 	public void updateXAPIStatement(Relation rel){
 		XAPIController.getInstance().addOrUpdateAddStatement(rel);
-	}
+	}*/
 }

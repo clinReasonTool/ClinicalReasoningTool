@@ -13,9 +13,9 @@ import database.DBClinReason;
  * A ProblemRelation is changed and a different Problem object attached, id remains the same, so, no
  * other changes necessary.
  * @author ingahege
- *
+ * @deprecated
  */
-public class ChangePathoAction extends ChgAction{
+public class ChangePathoAction /*extends ChgAction*/{
 
 	private PatientIllnessScript patIllScript;
 	
@@ -26,7 +26,7 @@ public class ChangePathoAction extends ChgAction{
 	public void changePatho(String oldPathoIdStr, String changeModeStr){
 		long oldPathoId = Long.valueOf(oldPathoIdStr.trim());
 		int changeMode = Integer.valueOf(changeModeStr.trim());
-		if(changeMode==2 || changeMode==3) changeItem(oldPathoId, patIllScript, Relation.TYPE_PATHO); //synonyma or hierarchy item
+		//if(changeMode==2 || changeMode==3) changeItem(oldPathoId, patIllScript, Relation.TYPE_PATHO); //synonyma or hierarchy item
 	}
 	
 
@@ -49,10 +49,10 @@ public class ChangePathoAction extends ChgAction{
 		new DBClinReason().saveAndCommit(rel);
 	}
 
-	@Override
+	/*@Override
 	public void triggerScoringAction(Beans beanToScore, boolean isJoker) {
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 }
 

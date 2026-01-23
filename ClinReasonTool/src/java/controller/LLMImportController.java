@@ -236,7 +236,9 @@ public class LLMImportController {
 	private boolean saveRelation(Relation rel, int orderNr, long pisId) {
 		rel.setDestId(pisId);
 		rel.setOrder(orderNr);
-		rel.calculatePoints(orderNr, true);
+		//TODO needs to be changed for new mechanism!!!
+		//rel.calculatePoints(orderNr, true);
+		
 		new DBClinReason().saveAndCommit(rel);
 		
 		return true;

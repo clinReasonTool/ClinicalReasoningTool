@@ -1,0 +1,43 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+
+	<div id="box#{boxNumber}_#{itembox.id}" suffix="#{itembox.cssClass}" class="itembox box#{boxNumber}s row#{rowNumber} ddxclass_#{itembox.cssClass}"  style="left:#{itembox.x}px; top:#{itembox.boxY}px;" oncontextmenu="javascript:showDropDown('ddbox#{boxNumber}_#{itembox.id}', 'box#{boxNumber}_#{itembox.id}');">
+ 		<span id="expstyle_ddx_#{itembox.id}" style="display:none;" suffix="#{itembox.expCssClass}" ></span>
+  		<i id="mnmicon_#{itembox.id}" title="#{prop['ddx.mnm.hint2']}" class="fa fa-exclamation-circle#{itembox.mnm}"></i>
+  	 	
+ 		<span mytooltip="#{itembox.labelOrSynLabel}">#{itembox.prefix} #{itembox.shortLabelOrSynShortLabel}</span>
+	 	<script language="Javascript">
+	 			item_arr.push("box#{boxNumber}_#{itembox.id}");
+	 	</script>
+ 
+ 		<span class="dropdown" onClick="javascript:showDropDown('ddbox#{boxNumber}_#{itembox.id}', '#{boxCategory}');"><i class="fa fa-chevron-circle-down"></i></span>
+	</div>
+	
+	<div class="dropdown-content" id="ddbox#{boxNumber}_#{itembox.id}" >
+		<span style="float:left;" class="dropd_#{itembox.isExpertHierarchyItem}">#{prop['change']}:</span>
+		<span class="dropdownX"><a href="javascript:hideDropDown('ddbox#{boxNumber}_#{itembox.id}');"><i class="fa fa fa-times"></i></a></span> <br/>	
+		<br/>
+		
+		<div class="links linkscategory">
+			<span class="dropd_#{itembox.isExpertHierarchyItem}"><a class="dropd_#{itembox.isExpertHierarchyItem}" href="javascript:chgDiagnosis(#{itembox.id}, 2);"><i class="fa fa-long-arrow-right"></i> #{itembox.expItemLabel}</a><br/></span>  <!-- Hierarchy -->
+			<a href="javascript:toggleMnM('#{itembox.id}', '#{boxNumber}');" title="#{prop['ddx.mnm.hint']}"><i class="fa fa-long-arrow-right"></i> #{prop['ddx.mnm']}</a><br/>
+			<a class="ro_#{itembox.ruledOutBool}" id="ro_a_#{itembox.id}" href="javascript:ruleOut('#{itembox.id}', '#{boxNumber}');" title=">#{prop['ddx.ruledout.hint']}"><i class="fa fa-long-arrow-right"></i> #{prop['ddx.ruledout']}</a>
+			<a class="ri_#{itembox.ruledOutBool}" id="ri_a_#{itembox.id}" href="javascript:ruleIn('#{itembox.id}', '#{boxNumber}');" title="#{prop['ddx.rulein.hint']}"><i class="fa fa-long-arrow-right"></i> #{prop['ddx.rulein']}</a>
+			<a class="wdon_#{itembox.workingDDXBool}" id="wdon_a_#{itembox.id}" href="javascript:workingDDXOn('#{itembox.id}', '#{boxNumber}');" title=">#{prop['ddx.workingddx.on.hint']}"><i class="fa fa-long-arrow-right"></i> #{prop['ddx.workingddx.on']}</a>
+			<a class="wdoff_#{itembox.workingDDXBool}" id="wdoff_a_#{itembox.id}" href="javascript:workingDDXOff('#{itembox.id}', '#{boxNumber}');" title="#{prop['ddx.workingddx.off.hint']}"><i class="fa fa-long-arrow-right"></i> #{prop['ddx.workingddx.off']}</a>
+
+			<a class="f_on_#{itembox.finalDDX}" href="javascript:expFinalDiagnosis(#{itembox.id}, #{boxNumber});"><i class="fa fa-long-arrow-right"></i>#{prop['ddx.finalddx']}</a>
+			<a class="f_off_#{itembox.finalDDX}" href="javascript:expNoFinalDiagnosis(#{itembox.id}, #{boxNumber});"><i class="fa fa-long-arrow-right"></i>#{prop['ddx.nofinalddx']}</a>
+		</div>
+	
+			<a class="del" href="javascript:delBoxItem(#{itembox.id}, #{boxNumber});"><i class="fa fa-trash"></i> #{prop['delete']}</a>		
+		
+			Display on card <input id="chgstage_#{itembox.listItemId}" value="#{itembox.stage}" class="chgstage" style="width:20px;" onchange="chgStageItem(#{itembox.listItemId}, this);"/>
+			<span class="f_off_#{itembox.finalDDX} linkscategory">Final diagnosis from card <input id="chgfinal_#{itembox.listItemId}" value="#{itembox.finalDiagnosis}"  onchange="chgStageFinal(#{itembox.listItemId}, this);" class="chgstage" style="width:20px;" /></span>
+		
+	 </div>
+</ui:composition>

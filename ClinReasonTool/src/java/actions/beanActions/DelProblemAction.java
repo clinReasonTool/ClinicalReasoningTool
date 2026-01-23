@@ -14,7 +14,11 @@ import controller.XAPIController;
 import database.DBClinReason;
 import util.CRTLogger;
 
-public class DelProblemAction implements DelAction{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class DelProblemAction /*implements DelAction*/{
 	private PatientIllnessScript patIllScript;
 	
 	public DelProblemAction(PatientIllnessScript patIllScript){
@@ -26,7 +30,7 @@ public class DelProblemAction implements DelAction{
 	 */
 	public void save(Object rel) {
 		new DBClinReason().deleteAndCommit(rel);
-		new DBClinReason().saveAndCommit(patIllScript.getProblems()); //orderNrs have changed, so we have to save all
+		//new DBClinReason().saveAndCommit(patIllScript.getProblems()); //orderNrs have changed, so we have to save all
 	}
 
 	/* (non-Javadoc)
@@ -41,7 +45,7 @@ public class DelProblemAction implements DelAction{
 	 * @see beanActions.DelAction#delete(java.lang.String)
 	 */
 	public void delete(String id) {
-		if(id==null || id.trim().equals("") || patIllScript==null || patIllScript.getProblems()==null || patIllScript.getProblems().isEmpty()){
+	/*	if(id==null || id.trim().equals("") || patIllScript==null || patIllScript.getProblems()==null || patIllScript.getProblems().isEmpty()){
 			//todo error msg
 			return;		
 		}
@@ -53,11 +57,11 @@ public class DelProblemAction implements DelAction{
 		new DelConnectionAction(patIllScript).deleteConns(rel.getId());
 		if(!patIllScript.isExpScript()) XAPIController.getInstance().removeXAPIAddActionStatement(rel);
 		save(rel);
-		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_PROBLEM_LIST, Relation.TYPE_PROBLEM);
+		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_PROBLEM_LIST, Relation.TYPE_PROBLEM);*/
 
 	}
 	
-	public void updateGraph(Relation rel){
+	/*public void updateGraph(Relation rel){
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		MultiVertex vertex = graph.getVertexByIdAndType(rel.getListItemId(), Relation.TYPE_PROBLEM);
 		if(vertex==null) return; //Should not happen
@@ -69,5 +73,5 @@ public class DelProblemAction implements DelAction{
 			}
 		}
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
-	}
+	}*/
 }

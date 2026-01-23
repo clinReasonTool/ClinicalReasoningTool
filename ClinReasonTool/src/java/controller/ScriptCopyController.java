@@ -19,6 +19,7 @@ import util.StringUtilities;
 /**
  * Copies a script/map created by an expert including translation into a different language (e.g. from de to en). 
  * @author ingahege
+ * TODO: adapt to new mechanism
  *
  */
 @ManagedBean(name = "copyctrl", eager = true)
@@ -99,36 +100,36 @@ public class ScriptCopyController {
 		
 		StringBuffer sb = new StringBuffer();
 		String tmp = null;
-		if(orgScript.getProblems()!=null){
-			for(int i=0;i<orgScript.getProblems().size();i++){
-				tmp = checkItemsTranslation(orgScript.getProblems().get(i).getListItem().getFirstCode(), langNew);
+		if(orgScript.getBox1Relations()!=null){
+			for(int i=0;i<orgScript.getBox1Relations().size();i++){
+				tmp = checkItemsTranslation(((Relation)orgScript.getBox1Relations().get(i)).getListItem().getFirstCode(), langNew);
 				if (StringUtilities.isValidString(tmp)) {
 					sb.append(tmp);
 					sb.append("\n");
 				}
 			}
 		}
-		if(orgScript.getDiagnoses()!=null){
-			for(int i=0;i<orgScript.getDiagnoses().size();i++){
-				tmp = checkItemsTranslation(orgScript.getDiagnoses().get(i).getListItem().getFirstCode(), langNew);	
+		if(orgScript.getBox2Relations()!=null){
+			for(int i=0;i<orgScript.getBox2Relations().size();i++){
+				tmp = checkItemsTranslation(((Relation)orgScript.getBox2Relations().get(i)).getListItem().getFirstCode(), langNew);	
 				if (StringUtilities.isValidString(tmp)) {
 					sb.append(tmp);
 					sb.append("\n");
 				}
 			}
 		}
-		if(orgScript.getTests()!=null){
-			for(int i=0;i<orgScript.getTests().size();i++){
-				tmp = checkItemsTranslation(orgScript.getTests().get(i).getListItem().getFirstCode(), langNew);
+		if(orgScript.getBox3Relations()!=null){
+			for(int i=0;i<orgScript.getBox3Relations().size();i++){
+				tmp = checkItemsTranslation(((Relation)orgScript.getBox3Relations().get(i)).getListItem().getFirstCode(), langNew);
 				if (StringUtilities.isValidString(tmp)) {
 					sb.append(tmp);
 					sb.append("\n");
 				}		
 			}
 		}
-		if(orgScript.getMngs()!=null){
-			for(int i=0;i<orgScript.getMngs().size();i++){
-				tmp = checkItemsTranslation(orgScript.getMngs().get(i).getListItem().getFirstCode(), langNew);		
+		if(orgScript.getBox4Relations()!=null){
+			for(int i=0;i<orgScript.getBox4Relations().size();i++){
+				tmp = checkItemsTranslation(((Relation)orgScript.getBox4Relations().get(i)).getListItem().getFirstCode(), langNew);		
 				if (StringUtilities.isValidString(tmp)) {
 					sb.append(tmp);
 					sb.append("\n");
@@ -185,33 +186,43 @@ public class ScriptCopyController {
 		PatientIllnessScript newScript = createNewScript(orgScript.getLocale().getLanguage(), vpId);
 		if(newScript==null) return;
 		createVPScriptRef(newScript);
-		if(orgScript.getProblems()!=null){
-			if(newScript.getProblems()==null) newScript.setProblems(new ArrayList());
-			for(int i=0;i<orgScript.getProblems().size();i++){
-				if(newScript.getProblems()==null) newScript.setProblems(new ArrayList());
-				newScript.getProblems().add(copyProblem(orgScript.getProblems().get(i)));
+		copyBoxes();
+		
+		if(orgScript.getBox1Relations()!=null){
+			if(newScript.getBox1Relations()==null) newScript.setProblems(new ArrayList());
+			for(int i=0;i<orgScript.getBox1Relations().size();i++){
+				if(newScript.getBox1Relations()==null) newScript.setProblems(new ArrayList());
+				newScript.getBox1Relations().add(copyProblem((Relation)orgScript.getBox1Relations().get(i)));
 			}
-		if(orgScript.getDiagnoses()!=null){
-			if(newScript.getDiagnoses()==null) newScript.setDiagnoses(new ArrayList());
-			for(int i=0;i<orgScript.getDiagnoses().size();i++){
-				newScript.getDiagnoses().add(copyDDX(orgScript.getDiagnoses().get(i)));
+		if(orgScript.getBox2Relations()!=null){
+			if(newScript.getBox2Relations()==null) newScript.setDiagnoses(new ArrayList());
+			for(int i=0;i<orgScript.getBox2Relations().size();i++){
+				newScript.getBox2Relations().add(copyDDX((RelationDiagnosis)orgScript.getBox2Relations().get(i)));
 			}
 			}
-		if(orgScript.getTests()!=null){
-			if(newScript.getTests()==null) newScript.setTests(new ArrayList());
-			for(int i=0;i<orgScript.getTests().size();i++){
-				newScript.getTests().add(copyTest(orgScript.getTests().get(i)));
+		if(orgScript.getBox3Relations()!=null){
+			if(newScript.getBox3Relations()==null) newScript.setTests(new ArrayList());
+			for(int i=0;i<orgScript.getBox3Relations().size();i++){
+				newScript.getBox3Relations().add(copyTest((Relation)orgScript.getBox3Relations().get(i)));
 			}
 		}
-		if(orgScript.getMngs()!=null){
-			if(newScript.getMngs()==null) newScript.setMngs(new ArrayList());
-			for(int i=0;i<orgScript.getMngs().size();i++){
-				newScript.getMngs().add(copyManagement(orgScript.getMngs().get(i)));
+		if(orgScript.getBox4Relations()!=null){
+			if(newScript.getBox4Relations()==null) newScript.setMngs(new ArrayList());
+			for(int i=0;i<orgScript.getBox4Relations().size();i++){
+				newScript.getBox4Relations().add(copyManagement((Relation)orgScript.getBox4Relations().get(i)));
 			}
 		}						
 			copyConnections();	
 			copySummStatement();
 		}
+	}
+	
+	/**
+	 * TODO!!!
+	 */
+	private static void copyBoxes() {
+		
+		
 	}
 	
 	/**
@@ -223,23 +234,23 @@ public class ScriptCopyController {
 		PatientIllnessScript newScript = createNewScript(newLang, vpId);
 		if(newScript==null) return; //can happen if there is already an expert map!
 		createVPScriptRef(newScript);
-		if(orgScript.getProblems()!=null){
-			for(int i=0;i<orgScript.getProblems().size();i++){
-				copyAndTranslateProblem(orgScript.getProblems().get(i), newLang);
+		if(orgScript.getBox1Relations()!=null){
+			for(int i=0;i<orgScript.getBox1Relations().size();i++){
+				copyAndTranslateProblem((Relation)orgScript.getBox1Relations().get(i), newLang);
 			}
-		if(orgScript.getDiagnoses()!=null){
-			for(int i=0;i<orgScript.getDiagnoses().size();i++){
-				copyAndTranslateDDX(orgScript.getDiagnoses().get(i));
+		if(orgScript.getBox2Relations()!=null){
+			for(int i=0;i<orgScript.getBox2Relations().size();i++){
+				copyAndTranslateDDX((RelationDiagnosis)orgScript.getBox2Relations().get(i));
 			}
 			}
-		if(orgScript.getTests()!=null){
-			for(int i=0;i<orgScript.getTests().size();i++){
-				copyAndTranslateTests(orgScript.getTests().get(i));
+		if(orgScript.getBox3Relations()!=null){
+			for(int i=0;i<orgScript.getBox3Relations().size();i++){
+				copyAndTranslateTests((Relation)orgScript.getBox3Relations().get(i));
 			}
 		}
-		if(orgScript.getMngs()!=null){
-			for(int i=0;i<orgScript.getMngs().size();i++){
-				copyAndTranslateManagements(orgScript.getMngs().get(i));
+		if(orgScript.getBox4Relations()!=null){
+			for(int i=0;i<orgScript.getBox4Relations().size();i++){
+				copyAndTranslateManagements((Relation)orgScript.getBox4Relations().get(i));
 			}
 		}		
 		//TODO new items for nursing etc...
@@ -281,7 +292,7 @@ public class ScriptCopyController {
 		}
 		
 		else if(pis==null){ //no script has been created yet... 
-			newScript = new PatientIllnessScript(orgScript.getUserId(), vpId, new Locale(newLang), 2);
+			newScript = new PatientIllnessScript(orgScript.getUserId(), vpId, new Locale(newLang));
 			newScript.setFinalDDXType(orgScript.getFinalDDXType());
 			newScript.setType(PatientIllnessScript.TYPE_EXPERT_CREATED);
 			newScript.setCurrentStage(orgScript.getCurrentStage());
@@ -302,14 +313,14 @@ public class ScriptCopyController {
 		
 	}
 	
-	private static Relation copyAndTranslateProblem(RelationProblem rel, String newLang){
+	private static Relation copyAndTranslateProblem(Relation rel, String newLang){
 		RelationProblem newRel = (RelationProblem) copyBasicData(new RelationProblem(), rel, newLang);
 		
-		ListItem li = getListItem(rel.getProblem().getFirstCode());
+		ListItem li = getListItem(rel.getListItem().getFirstCode());
 		
 		if (li!=null){ //we found a match in the list
 			newRel.setProblem(li);
-			CRTLogger.out(rel.getProblem().getName() + "->" + li.getName(), CRTLogger.LEVEL_PROD);
+			CRTLogger.out(rel.getListItem().getName() + "->" + li.getName(), CRTLogger.LEVEL_PROD);
 			newRel.setListItemId(li.getItem_id());
 			new DBClinReason().saveAndCommit(newRel);
 			idTable.put(new Long(rel.getId()), newRel.getId());
@@ -319,8 +330,16 @@ public class ScriptCopyController {
 		return null;
 	}
 	
-	private static RelationProblem copyProblem(RelationProblem rel){
+	/*private static RelationProblem copyProblem(RelationProblem rel){
 		RelationProblem newRel = (RelationProblem) copyBasicData(new RelationProblem(), rel);
+		newRel.setListItemId(rel.getListItemId());
+		new DBClinReason().saveAndCommit(newRel);
+		idTable.put(new Long(rel.getId()), newRel.getId());
+		return newRel;
+	}*/
+	
+	private static Relation copyProblem(Relation rel){
+		Relation newRel = (Relation) copyBasicData(new RelationProblem(), rel);
 		newRel.setListItemId(rel.getListItemId());
 		new DBClinReason().saveAndCommit(newRel);
 		idTable.put(new Long(rel.getId()), newRel.getId());
@@ -340,7 +359,7 @@ public class ScriptCopyController {
 		return newRel;
 	}
 	
-	private static RelationTest copyTest(RelationTest rel){
+	private static RelationTest copyTest(Relation rel){
 		RelationTest newRel = (RelationTest) copyBasicData(new RelationTest(), rel);
 		newRel.setListItemId(rel.getListItemId());
 		new DBClinReason().saveAndCommit(newRel);
@@ -348,7 +367,7 @@ public class ScriptCopyController {
 		return newRel;
 	}
 	
-	private static RelationManagement copyManagement(RelationManagement rel){
+	private static RelationManagement copyManagement(Relation rel){
 		RelationManagement newRel = (RelationManagement) copyBasicData(new RelationManagement(), rel);
 		newRel.setListItemId(rel.getListItemId());
 		new DBClinReason().saveAndCommit(newRel);
@@ -377,13 +396,13 @@ public class ScriptCopyController {
 		return null;
 	}
 	
-	private static Relation copyAndTranslateTests(RelationTest rel){
+	private static Relation copyAndTranslateTests(Relation rel){
 		RelationTest newRel = (RelationTest) copyBasicData(new RelationTest(), rel);	
-		ListItem li = getListItem(rel.getTest().getFirstCode());
+		ListItem li = getListItem(rel.getListItem().getFirstCode());
 		
 		if (li!=null){ //we found a match in the list
 			newRel.setTest(li);
-			CRTLogger.out(rel.getTest().getName() + "->" + li.getName(), CRTLogger.LEVEL_PROD);
+			CRTLogger.out(rel.getListItem().getName() + "->" + li.getName(), CRTLogger.LEVEL_PROD);
 			newRel.setListItemId(li.getItem_id());
 			new DBClinReason().saveAndCommit(newRel);
 			idTable.put(new Long(rel.getId()), newRel.getId());
@@ -393,14 +412,14 @@ public class ScriptCopyController {
 		return null;
 	}
 	
-	private static Relation copyAndTranslateManagements(RelationManagement rel){
+	private static Relation copyAndTranslateManagements(Relation rel){
 		RelationManagement newRel = (RelationManagement) copyBasicData(new RelationManagement(), rel);	
-		ListItem li = getListItem(rel.getManagement().getFirstCode());
+		ListItem li = getListItem(rel.getListItem().getFirstCode());
 		
 		if (li!=null){ //we found a match in the list
 			newRel.setListItemId(li.getItem_id());
 			newRel.setManagement(li);
-			CRTLogger.out(rel.getManagement().getName() + "->" + li.getName(), CRTLogger.LEVEL_PROD);
+			CRTLogger.out(rel.getListItem().getName() + "->" + li.getName(), CRTLogger.LEVEL_PROD);
 
 			new DBClinReason().saveAndCommit(newRel);
 			idTable.put(new Long(rel.getId()), newRel.getId());

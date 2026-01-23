@@ -11,7 +11,7 @@ import beans.scripts.*;
  * @author ingahege
  * @deprecated
  */
-public class MoveProblemAction implements MoveAction{
+/*public class MoveProblemAction implements MoveAction{
 
 	private PatientIllnessScript patIllScript;
 	
@@ -19,24 +19,18 @@ public class MoveProblemAction implements MoveAction{
 		this.patIllScript = patIllScript;
 	}
 	
-	/* (non-Javadoc)
-	 * @see beanActions.MoveAction#save()
-	 */
+
 	public void save(List l){
 		new DBClinReason().saveAndCommit(l);
 	}
 	
-	/* (non-Javadoc)
-	 * @see beanActions.MoveAction#notifyLog(beans.relation.Relation)
-	 */
+
 	public void notifyLog(Relation relBeforeReSort) {
 		LogEntry le = new LogEntry(LogEntry.MOVEPROBLEM_ACTION, patIllScript.getId(), relBeforeReSort.getListItemId(), relBeforeReSort.getOrder());
 		le.save();			
 	}
 
-	/* (non-Javadoc)
-	 * @see beanActions.MoveAction#reorder(java.lang.String)
-	 */
+
 	public void reorder(String idStrMovedItem, String newOrderStr) {		
 		String[] newOrderArr = newOrderStr.split("&");
 		List<RelationProblem> newList  = new ArrayList<RelationProblem>();
@@ -55,4 +49,4 @@ public class MoveProblemAction implements MoveAction{
 		//now we change the order attribute of each Relationproblem object:
 		//new ActionHelper().reOrderItems(this.patIllScript.getProblems());
 	}
-}
+}*/

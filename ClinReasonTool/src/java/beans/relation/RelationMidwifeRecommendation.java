@@ -8,6 +8,10 @@ import net.casus.util.Utility;
 import util.CRTLogger;
 import beans.list.*;
 
+/**
+ * @author ingahege
+ * @deprecated
+ */
 public class RelationMidwifeRecommendation extends Relation implements Serializable{
 	
 	public static final int DEFAULT_X = 5; //245; //325; //default x position of problems in canvas
@@ -25,12 +29,13 @@ public class RelationMidwifeRecommendation extends Relation implements Serializa
 		
 	public ListItem getRecommendation() {return recommendation;}
 	public void setRecommendation(ListItem recommendation) {this.recommendation = recommendation;}
-	public String getIdWithPrefix(){ return GraphController.PREFIX_MREC+this.getId();}
+	public void setListItem(ListItem li) {recommendation = li;}
+	public String getIdWithPrefix(){ return ""; /*GraphController.PREFIX_MREC+this.getId();*/}
 
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getRelationType()
 	 */
-	public int getRelationType() {return TYPE_MREC;}	
+	public int getRelationType() {return SUBTYPE_MREC;}	
 
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getLabel()

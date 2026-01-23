@@ -10,6 +10,7 @@ import actions.scoringActions.ScoringAction;
 import actions.scoringActions.ScoringFinalDDXAction;
 import application.ErrorMessageContainer;
 import beans.LogEntry;
+import beans.graph.Box;
 import beans.scripts.*;
 import controller.IllnessScriptController;
 import controller.ScoringController;
@@ -28,6 +29,7 @@ import util.StringUtilities;
 public class DiagnosisSubmitAction /*implements Scoreable*/{
 
 	private PatientIllnessScript patIllScript;
+	private Box box;
 	
 	public DiagnosisSubmitAction(PatientIllnessScript patIllScript){
 		this.patIllScript = patIllScript;
@@ -81,14 +83,14 @@ public class DiagnosisSubmitAction /*implements Scoreable*/{
 	 */
 	public void submitDDX(String idStr){
 		//if idStr = 0, then learner has chosen "no diagnosis" option
-		
+		List l = patIllScript.getListByType(Box.BOXTYPE_DDX, -1); 
 		boolean hasDDX = changeTierForDDXs(idStr);
 		if(!hasDDX) return;
 		
 		float score = triggerScoringAction(patIllScript);
 		//if learner has correctly chosen "no diagnosis" we create a dummy RelationDiagnosis for display purposes:
 		if(score==1 && this.patIllScript.getFinalDDXType()==PatientIllnessScript.FINAL_DDX_NO){
-			new AddNoDiagnosisAction(this.patIllScript).add();
+			new AddNoDiagnosisAction(this.patIllScript).add(l, patIllScript.getBoxByType(Relation.TYPE_DDX).getIdx());
 		}
 		//if learner submits the wrong diagnoses we allow him to re-submit 
 		if(score>=ScoringController.scoreForAllowReSubmit || score==ScoringAction.NO_SCORING_POSSIBLE){

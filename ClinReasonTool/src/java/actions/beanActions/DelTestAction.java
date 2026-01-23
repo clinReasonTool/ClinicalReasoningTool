@@ -14,7 +14,11 @@ import controller.NavigationController;
 import database.DBClinReason;
 import util.CRTLogger;
 
-public class DelTestAction implements DelAction{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class DelTestAction /*implements DelAction*/{
 	private PatientIllnessScript patIllScript;
 	
 	public DelTestAction(PatientIllnessScript patIllScript){
@@ -26,7 +30,7 @@ public class DelTestAction implements DelAction{
 	 */
 	public void save(Object o) {
 		new DBClinReason().deleteAndCommit((Relation)o);
-		new DBClinReason().saveAndCommit(patIllScript.getTests());
+		//new DBClinReason().saveAndCommit(patIllScript.getTests());
 	}
 
 	/* (non-Javadoc)
@@ -40,7 +44,7 @@ public class DelTestAction implements DelAction{
 	/* (non-Javadoc)
 	 * @see beanActions.DelAction#delete(java.lang.String)
 	 */
-	public void delete(String id) {
+	/*public void delete(String id) {
 		if(id==null || id.trim().equals("") || patIllScript==null || patIllScript.getTests()==null || patIllScript.getTests().isEmpty()){
 			//todo error msg
 			return;		
@@ -54,12 +58,12 @@ public class DelTestAction implements DelAction{
 		save(rel);
 		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_TEST_LIST, Relation.TYPE_TEST);
 
-	}
+	}*/
 	
 	/* (non-Javadoc)
 	 * @see actions.beanActions.DelAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel){
+	/*public void updateGraph(Relation rel){
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		MultiVertex vertex = graph.getVertexByIdAndType(rel.getListItemId(), Relation.TYPE_TEST);
 		if(vertex==null) return; //Should not happen
@@ -71,5 +75,5 @@ public class DelTestAction implements DelAction{
 			}
 		}
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
-	}
+	}*/
 }

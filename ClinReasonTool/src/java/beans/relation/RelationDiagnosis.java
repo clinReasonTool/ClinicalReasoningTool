@@ -2,11 +2,9 @@ package beans.relation;
 import java.awt.Point;
 import java.io.Serializable;
 import java.util.*;
-
 import org.apache.commons.lang3.StringUtils;
-
-import actions.beanActions.AddDiagnosisAction;
-import actions.beanActions.AddProblemAction;
+//import actions.beanActions.AddDiagnosisAction;
+import actions.beanActions.AddRelationAction;
 import beans.scripts.*;
 import beans.user.SessionSetting;
 import beans.graph.Graph;
@@ -30,6 +28,7 @@ public class RelationDiagnosis extends Relation implements Serializable {
 	public static final int REL_TYPE_DDX = 2; //differential diagnosis 
 	public static final int REL_TYPE_COMPL = 3; //complication of IS diagnosis 
 	public static final int REL_TYPE_RELATED = 4; //otherwise related diagnosis 
+	/** @deprecated **/
 	public static final int DEFAULT_X = 5; //165; //default x position of problems in canvas
 	//public static final String COLOR_DEFAULT = "#ffffff";
 	//public static final String COLOR_RED = "#990000";
@@ -49,8 +48,6 @@ public class RelationDiagnosis extends Relation implements Serializable {
 	public static final int PREVALENCE_RARE = 1; //disease is relatively rare
 	public static final int PREVALENCE_COMMON = 2; //we could add a more detailed scale here... 
 	
-	public int getDiscriminator() {return REL_TYPE_DDX;}
-	public void setDiscriminator(int i){}
 
 	/**
 	 * has this diagnosis been submitted as final the learner? If yes for certain components no more changes 
@@ -92,6 +89,8 @@ public class RelationDiagnosis extends Relation implements Serializable {
 	 * This could also be something to be inherited from the ListItem if a disease is very rare in general... 
 	 */
 	private int prevalence = -1;
+	
+	//private int discriminator = Relation.TYPE_DDX;
 
 	
 	public RelationDiagnosis(){}
@@ -114,9 +113,13 @@ public class RelationDiagnosis extends Relation implements Serializable {
 		return 0;
 	}
 	
+	//public int getDiscriminator() {return discriminator;}
+	//public void setDiscriminator(int i){discriminator = i}
+
 	public void setTier(int tier) {this.tier = tier;}
 	public ListItem getDiagnosis() {return diagnosis;}
 	public void setDiagnosis(ListItem diagnosis) {this.diagnosis = diagnosis;}	
+	public void setListItem(ListItem li) {diagnosis = li;}
 	public String getShortLabelOrSynShortLabel(){return StringUtils.abbreviate(getLabelOrSynLabel(), ListItem.MAXLENGTH_NAME-2);}
 	
 	public int getPrevalence() {return prevalence;}
@@ -173,7 +176,7 @@ public class RelationDiagnosis extends Relation implements Serializable {
 		else setWorkingDDXAtCurrStage();
 	}
 	
-	public String getIdWithPrefix(){ return GraphController.PREFIX_DDX+this.getId();}
+	//public String getIdWithPrefix(){ return GraphController.PREFIX_DDX+this.getId();}
 	public int getMnm() {
 		return mnm;}
 	public void setMnm(int mnm) {this.mnm = mnm;}
@@ -322,7 +325,7 @@ public class RelationDiagnosis extends Relation implements Serializable {
 		return NavigationController.getInstance().getMyFacesContext().getPatillscript().isExpScript();}
 	
 	public void calculatePoints(int pos, boolean isExp) {
-		Point p = new AddDiagnosisAction().calculateNewItemPosInCanvas(pos, isExp);
+		Point p = new AddRelationAction().calculateNewItemPosInCanvas(pos, isExp);
 		this.setXAndY(p);
 	}
 }

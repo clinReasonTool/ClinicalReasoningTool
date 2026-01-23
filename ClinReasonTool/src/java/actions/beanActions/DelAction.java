@@ -1,12 +1,13 @@
 package actions.beanActions;
 
+import java.util.*;
 import beans.relation.Relation;
 
 //simport beans.relation.Relation;
 
 public interface DelAction {
 
-	void save(Object rel);
+	void save(Object rel, List rels);
 	/**
 	 * A log entry for the delete action is created and saved in a Log object
 	 */
@@ -22,5 +23,5 @@ public interface DelAction {
 	 * we remove any edge weight (implicit and explicit) from the MultiEdges for this Relation. 
 	 * @param rel
 	 */
-	void updateGraph(Relation rel);
+	void updateGraph(Relation rel, List rels);
 }

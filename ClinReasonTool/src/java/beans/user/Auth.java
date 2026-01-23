@@ -22,7 +22,7 @@ import util.StringUtilities;
  * Authentication of admins or editors; the need to login in order to access the script editor or reports
  * (corresponds with login.xhtml)
  * @author ingahege
- *
+ * @deprecated
  */
 @ManagedBean
 @ViewScoped
@@ -53,6 +53,7 @@ public class Auth implements Serializable{
     /**
      * login of admin users for script editing or reports
      * @throws IOException
+     * 
      */
     public void login() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();

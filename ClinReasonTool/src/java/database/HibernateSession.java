@@ -82,19 +82,20 @@ public class HibernateSession {
 			//load classes here....
 			cfg.addClass(beans.list.ListItem.class);
 			cfg.addClass(beans.list.Synonym.class);
-			cfg.addClass(beans.scripts.PatientIllnessScript.class);	
+			cfg.addClass(beans.graph.Box.class);	//new box 
+			cfg.addClass(beans.scripts.PatientIllnessScript.class);				
 			cfg.addClass(beans.relation.RelationProblem.class);
 			cfg.addClass(beans.relation.RelationPatho.class);
 			cfg.addClass(beans.relation.RelationSyndrome.class);
 			cfg.addClass(beans.relation.RelationDiagnosis.class);	
-			cfg.addClass(beans.relation.RelationNursingDiagnosis.class);
+			//cfg.addClass(beans.relation.RelationNursingDiagnosis.class);
 			cfg.addClass(beans.relation.RelationInformation.class);
-			cfg.addClass(beans.relation.RelationNursingManagement.class);
-			cfg.addClass(beans.relation.RelationNursingAim.class);
-			cfg.addClass(beans.relation.RelationMidwifeHypothesis.class);
-			cfg.addClass(beans.relation.RelationMidwifeFinding.class);
-			cfg.addClass(beans.relation.RelationMidwifeManagement.class);
-			cfg.addClass(beans.relation.RelationMidwifeRecommendation.class);
+			//fg.addClass(beans.relation.RelationNursingManagement.class);
+			cfg.addClass(beans.relation.RelationAim.class);
+			//cfg.addClass(beans.relation.RelationMidwifeHypothesis.class);
+			//cfg.addClass(beans.relation.RelationMidwifeFinding.class);
+			//cfg.addClass(beans.relation.RelationMidwifeManagement.class);
+			//cfg.addClass(beans.relation.RelationMidwifeRecommendation.class);
 			cfg.addClass(beans.LogEntry.class);
 			cfg.addClass(beans.relation.Connection.class);
 			cfg.addClass(beans.relation.RelationManagement.class);			

@@ -21,7 +21,7 @@ public class RelationController {
 		return null; //TODO Error handling, this should not happen!
 	}
 	
-	public void initAdd(String idStr, String name, String xStr, String yStr, AddAction aa, Locale scriptLoc){
+	public void initAdd(String idStr, String name, String prefix, String xStr, String yStr, AddAction aa, Locale scriptLoc){
 		long id;
 		ListItem li = null;
 		float x = Float.valueOf(xStr.trim());
@@ -29,31 +29,38 @@ public class RelationController {
 
 		
 		if(idStr.startsWith(Synonym.SYN_VERTEXID_PREFIX)){ //synonym selected
-			//type = AddAction.ADD_TYPE_SYNITEM;
 			id = Long.valueOf(idStr.substring(Synonym.SYN_VERTEXID_PREFIX.length()));
 			Synonym syn = new DBList().selectSynonymById(id);
-			li = getListItemById(syn.getListItemId(), scriptLoc);
-			aa.addRelation(/*syn.getListItemId(), name*/li, (int)x, (int)y, id); //then we add a synonym
+			li = getListItemById(syn.getListItemId(), scriptLoc, name);
+			aa.addRelation(li, (int)x, (int)y, id); //then we add a synonym
 			return;
 		}
 		if(idStr!=null && idStr.startsWith("IGNORE")) //for certain entries in the list, we do not want to trigger an event.
 			return;
 		id = Long.valueOf(idStr.trim());
-		li = getListItemById(id, scriptLoc);
-		if(li!=null) aa.addRelation(/*id, name*/li, (int)x, (int)y, -1);
+		li = getListItemById(id, scriptLoc, name);
+		if(li!=null) aa.addRelation(li, (int)x, (int)y, -1);
 		
 	}
 	
-	private ListItem getListItemById(long id, Locale loc){
+	/**
+	 * We either get the listItem with the given id from the database or we create a PRIVATE one, if id=-99 
+	 * and user (learner or author) wants to create his/her own one. 
+	 * @param id
+	 * @param loc
+	 * @param name
+	 * @return
+	 */
+	private ListItem getListItemById(long id, Locale loc, String name){
 		
 		if(id == -99 || id == -999){ //-99: user has selected own entry and we have to save this entry into the database, -999 no list available
 			PatientIllnessScript patillscript = NavigationController.getInstance().getMyFacesContext().getPatillscript();
-			if(patillscript==null || patillscript.isExpScript()) return null;
-			String entry = AjaxController.getInstance().getRequestParamByKeyNoDecrypt("orgname");
-			User u = NavigationController.getInstance().getCRTFacesContext().getUser();
+			if(patillscript==null /*|| patillscript.isExpScript()*/) return null;
+			//String entry = AjaxController.getInstance().getRequestParamByKeyNoDecrypt("orgname");
+			User u = NavigationController.getInstance().getMyFacesContext().getUser();
 			if(u!=null) u.getUserSetting().setDisplayOwnEntryWarn(false);
 			
-			return new DBList().saveNewEntry(entry, loc);
+			return new DBList().saveNewEntry(name, loc);
 		}
 		else return new DBList().selectListItemById(id);
 	}

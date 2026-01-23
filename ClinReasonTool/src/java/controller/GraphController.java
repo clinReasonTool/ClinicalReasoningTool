@@ -23,27 +23,27 @@ public class GraphController implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String PREFIX_PROB = "cmprb_";
-	public static final String PREFIX_EPI = "cmepi_";
-	public static final String PREFIX_DDX = "cmddx_";
-	public static final String PREFIX_MNG = "cmmng_";
+	//public static final String PREFIX_PROB = "cmprb_";
+	//public static final String PREFIX_EPI = "cmepi_";
+	//public static final String PREFIX_DDX = "cmddx_";
+	//public static final String PREFIX_MNG = "cmmng_";
 	public static final String PREFIX_CNX = "cnx_";
-	public static final String PREFIX_TEST = "cmtes_";
-	public static final String PREFIX_PATHO = "cmpat_";
-	public static final String PREFIX_PROB2 = "fdg_";
-	public static final String PREFIX_EPI2 = "epi_";
-	public static final String PREFIX_DDX2 = "ddx_";
-	public static final String PREFIX_MNG2 = "mng_";
-	public static final String PREFIX_TEST2 = "tst_";
-	public static final String PREFIX_PATHO2 = "pat_";
-	public static final String PREFIX_NDDX = "nddx_"; //nursing diagnoses
-	public static final String PREFIX_NURSINGAIM = "naim_"; //nursing aims
-	public static final String PREFIX_NMNG = "nmng_"; //nursing management
-	public static final String PREFIX_INFO = "info_";
-	public static final String PREFIX_MHYP = "mhyp_"; //midwife hypotheses
-	public static final String PREFIX_MREC = "mrec_"; //midwife recommendations
-	public static final String PREFIX_MMNG = "mmng_"; //midwife management
-	public static final String PREFIX_MFDG = "mfdg_"; //midwife findings
+	//public static final String PREFIX_TEST = "cmtes_";
+	//public static final String PREFIX_PATHO = "cmpat_";
+	//public static final String PREFIX_PROB2 = "fdg_";
+	//public static final String PREFIX_EPI2 = "epi_";
+	//public static final String PREFIX_DDX2 = "ddx_";
+	//public static final String PREFIX_MNG2 = "mng_";
+	//public static final String PREFIX_TEST2 = "tst_";
+	//public static final String PREFIX_PATHO2 = "pat_";
+	//public static final String PREFIX_NDDX = "nddx_"; //nursing diagnoses
+	//public static final String PREFIX_NURSINGAIM = "naim_"; //nursing aims
+	//public static final String PREFIX_NMNG = "nmng_"; //nursing management
+	//public static final String PREFIX_INFO = "info_";
+	//public static final String PREFIX_MHYP = "mhyp_"; //midwife hypotheses
+	//public static final String PREFIX_MREC = "mrec_"; //midwife recommendations
+	//public static final String PREFIX_MMNG = "mmng_"; //midwife management
+	//ublic static final String PREFIX_MFDG = "mfdg_"; //midwife findings
 	
 	//public static final long PREFIX_MMNG = 0;
 	
@@ -64,7 +64,7 @@ public class GraphController implements Serializable{
 	    	graph.setExpertPatIllScriptId(expIllScript.getId());
 	    	addVerticesOfPatientIllnessScript(expIllScript, IllnessScriptInterface.TYPE_EXPERT_CREATED);
 	    	addExplicitEdgesOfPatientIllnessScript(expIllScript, IllnessScriptInterface.TYPE_EXPERT_CREATED); //and connect all implicitly
-		    addImplicitEdgesOfPatientIllnessScript(expIllScript,  IllnessScriptInterface.TYPE_EXPERT_CREATED);		    
+		   // addImplicitEdgesOfPatientIllnessScript(expIllScript,  IllnessScriptInterface.TYPE_EXPERT_CREATED);		    
 	    }
 	}
 	/**
@@ -76,7 +76,7 @@ public class GraphController implements Serializable{
 		PatientIllnessScript patIllScript = NavigationController.getInstance().getMyFacesContext().getPatillscript();
 	    addVerticesOfPatientIllnessScript(patIllScript, IllnessScriptInterface.TYPE_LEARNER_CREATED);
 	    addExplicitEdgesOfPatientIllnessScript(patIllScript, IllnessScriptInterface.TYPE_LEARNER_CREATED);
-	    addImplicitEdgesOfPatientIllnessScript(patIllScript,  IllnessScriptInterface.TYPE_LEARNER_CREATED);
+	    //addImplicitEdgesOfPatientIllnessScript(patIllScript,  IllnessScriptInterface.TYPE_LEARNER_CREATED);
 	}
 	
 	/**
@@ -102,33 +102,24 @@ public class GraphController implements Serializable{
 	}	
 	
 	private void addVerticesOfPatientIllnessScript(PatientIllnessScript patIllScript, int illnessScriptType){
-		 addVertices( patIllScript.getProblems(),illnessScriptType);
-		 addVertices( patIllScript.getDiagnoses(), illnessScriptType);
-		 addVertices( patIllScript.getMngs(), illnessScriptType);
-		 addVertices( patIllScript.getTests(), illnessScriptType);
-		 addVertices( patIllScript.getPatho(), illnessScriptType);
-		 addVertices( patIllScript.getInfos(), illnessScriptType);
-		 addVertices( patIllScript.getNursingAims(), illnessScriptType);
-		 addVertices( patIllScript.getNursingDiagnoses(), illnessScriptType);
-		 addVertices( patIllScript.getNursingManagement(), illnessScriptType);
-		 addVertices( patIllScript.getMidwifeFindings(), illnessScriptType);
-		 addVertices( patIllScript.getMidwifeHypotheses(), illnessScriptType);
-		 addVertices( patIllScript.getMidwifeManagement(), illnessScriptType);
-		 addVertices( patIllScript.getMidwifeRecommendations(), illnessScriptType);
+		 addVertices( patIllScript.getBox1Relations(),illnessScriptType, 1);
+		 addVertices( patIllScript.getBox2Relations(), illnessScriptType,2 );
+		 addVertices( patIllScript.getBox3Relations(), illnessScriptType,3 );
+		 addVertices( patIllScript.getBox4Relations(), illnessScriptType,4 );
 	}
 	
 	/**
 	 * if a relation has a synId we add the SimpleVertex for the syn:
-	 * Learnerskript: we ONLY add the SimpleVertex
+	 * Learnerscript: we ONLY add the SimpleVertex
 	 * ExpertSkript: we add the main relation and ALL synonyma as SimpleVertex
 	 * @param vertices (List of Relation items)
 	 * @param illnessScriptType
 	 */
-	private void addVertices(List vertices, int illnessScriptType){
+	private void addVertices(List vertices, int illnessScriptType, int boxNo){
 		if(vertices==null) return;
 		for(int i=0; i<vertices.size(); i++){
 			Relation rel = (Relation) vertices.get(i);
-			graph.addVertex(rel, illnessScriptType);
+			graph.addVertex(rel, illnessScriptType, boxNo);
 		}
 	}
 	
@@ -141,7 +132,7 @@ public class GraphController implements Serializable{
 		}
 	}
 	
-	private void addImplicitEdgesOfPatientIllnessScript(PatientIllnessScript patIllScript, int illScriptType){
+	/*private void addImplicitEdgesOfPatientIllnessScript(PatientIllnessScript patIllScript, int illScriptType){
 		if(patIllScript==null || patIllScript.getDiagnoses()==null) return;
 		for(int i=0; i < patIllScript.getDiagnoses().size(); i++){
 			//add problems -> ddx
@@ -152,11 +143,6 @@ public class GraphController implements Serializable{
 						graph.addImplicitEdge(patIllScript.getProblems().get(j).getListItemId(), patIllScript.getDiagnoses().get(i).getListItemId(), illScriptType);
 				}
 			}
-			/*for(int j=0; j < patIllScript.getEpis().size(); j++){
-				//graph.addImplicitEdge(sourceId, targetId, type);
-				
-				graph.addImplicitEdge(patIllScript.getEpis().get(j).getListItemId(), patIllScript.getDiagnoses().get(i).getListItemId(), illScriptType);
-			}*/
 
 			//add ddx -> tests
 			if(patIllScript.getTests()!=null){
@@ -171,7 +157,7 @@ public class GraphController implements Serializable{
 				}
 			}
 		}
-	}
+	}*/
 	
 	
 	/**
@@ -202,40 +188,42 @@ public class GraphController implements Serializable{
 	}
 	
 	
-	public static int getTypeByPrefix(String prefix){
+	public static int getTypeByPrefix(String prefix){ //"box1_", "box2_"
 		if(prefix==null) return 0;
-		if(prefix.equals(PREFIX_PROB) || prefix.equals(PREFIX_PROB2)) return Relation.TYPE_PROBLEM;
+		return Integer.parseInt(prefix.substring(4));
+		/*if(prefix.equals("box) || prefix.equals(PREFIX_PROB2)) return Relation.TYPE_PROBLEM;
 		if(prefix.equals(PREFIX_DDX) || prefix.equals(PREFIX_DDX2)) return Relation.TYPE_DDX;
 		if(prefix.equals(PREFIX_TEST) || prefix.equals(PREFIX_TEST2)) return Relation.TYPE_TEST;
 		if(prefix.equals(PREFIX_MNG) || prefix.equals(PREFIX_MNG2)) return Relation.TYPE_MNG;
-		if(prefix.equals(PREFIX_NMNG) /*|| prefix.equals(PREFIX_MNG2)*/) return Relation.TYPE_NMNG;
-		if(prefix.equals(PREFIX_INFO) /*|| prefix.equals(PREFIX_MNG2)*/) return Relation.TYPE_INFO;
-		if(prefix.equals(PREFIX_NDDX) /*|| prefix.equals(PREFIX_MNG2)*/) return Relation.TYPE_NDDX;
-		if(prefix.equals(PREFIX_NURSINGAIM) /*|| prefix.equals(PREFIX_MNG2)*/) return Relation.TYPE_NURSAIM;
+		//if(prefix.equals(PREFIX_NMNG) ) return Relation.TYPE_NMNG;
+		if(prefix.equals(PREFIX_INFO) ) return Relation.TYPE_INFO;
+		//if(prefix.equals(PREFIX_NDDX) ) return Relation.TYPE_NDDX;
+		if(prefix.equals(PREFIX_NURSINGAIM) ) return Relation.TYPE_AIM;
 		if(prefix.equals(PREFIX_PATHO) || prefix.equals(PREFIX_PATHO2)) return Relation.TYPE_PATHO;
-		if(prefix.equals(PREFIX_MFDG)) return Relation.TYPE_MFDG;
-		if(prefix.equals(PREFIX_MHYP)) return Relation.TYPE_MHYP;
-		if(prefix.equals(PREFIX_MREC)) return Relation.TYPE_MREC;
-		if(prefix.equals(PREFIX_MMNG)) return Relation.TYPE_MMNG;
+		//if(prefix.equals(PREFIX_MFDG)) return Relation.TYPE_MFDG;
+		//if(prefix.equals(PREFIX_MHYP)) return Relation.TYPE_MHYP;
+		//if(prefix.equals(PREFIX_MREC)) return Relation.TYPE_MREC;
+		//if(prefix.equals(PREFIX_MMNG)) return Relation.TYPE_MMNG;
 
-		return 0;
+		return 0;*/
 	}
 	
-	public static String getPrefixByType(int type){
-		if(type==Relation.TYPE_PROBLEM) return PREFIX_PROB2;
+	public static String getPrefixByType(int type){ //1,2,3,4,6,8,10
+		return "box"+type+"_";
+	/*	if(type==Relation.TYPE_PROBLEM) return PREFIX_PROB2;
 		if(type==Relation.TYPE_DDX) return PREFIX_DDX2;
 		if(type==Relation.TYPE_TEST) return PREFIX_TEST2;
 		if(type==Relation.TYPE_MNG) return PREFIX_MNG2;
-		if(type==Relation.TYPE_NMNG) return PREFIX_NMNG;
-		if(type==Relation.TYPE_NDDX) return PREFIX_NDDX;
+		//if(type==Relation.TYPE_NMNG) return PREFIX_NMNG;
+		//if(type==Relation.TYPE_NDDX) return PREFIX_NDDX;
 		if(type==Relation.TYPE_INFO) return PREFIX_INFO;
 		if(type==Relation.TYPE_PATHO) return PREFIX_PATHO;
-		if(type==Relation.TYPE_NURSAIM) return PREFIX_NURSINGAIM;
-		if(type==Relation.TYPE_MFDG) return PREFIX_MFDG;
-		if(type==Relation.TYPE_MHYP) return PREFIX_MHYP;
-		if(type==Relation.TYPE_MREC) return PREFIX_MREC;
-		if(type==Relation.TYPE_MMNG) return PREFIX_MMNG;
-		return "";
+		if(type==Relation.TYPE_AIM) return PREFIX_NURSINGAIM;
+		//if(type==Relation.TYPE_MFDG) return PREFIX_MFDG;
+		//if(type==Relation.TYPE_MHYP) return PREFIX_MHYP;
+		//if(type==Relation.TYPE_MREC) return PREFIX_MREC;
+		//if(type==Relation.TYPE_MMNG) return PREFIX_MMNG;
+		return "";*/
 	}
 	
 	public void transferEdges(MultiVertex oldVertex, MultiVertex newVertex){

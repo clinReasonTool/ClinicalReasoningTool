@@ -25,7 +25,8 @@ public class RelationInformation extends Relation implements Serializable{
 		
 	public ListItem getInfo() {return info;}
 	public void setInfo(ListItem info) {this.info = info;}
-	public String getIdWithPrefix(){ return GraphController.PREFIX_INFO+this.getId();}
+	public void setListItem(ListItem li) {info = li;}
+	//public String getIdWithPrefix(){ return GraphController.PREFIX_INFO+this.getId();}
 
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getRelationType()

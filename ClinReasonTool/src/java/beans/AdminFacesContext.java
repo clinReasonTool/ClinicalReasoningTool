@@ -214,6 +214,7 @@ public class AdminFacesContext extends FacesContextWrapper implements MyFacesCon
 	public void initGraph(){	  
 		if(graph!=null && patillscript!=null && graph.isSameGraph(patillscript.getVpId(), patillscript.getId())) return; //nothing todo, graph already loaded
 		graph = new Graph(patillscript.getVpId(), true, patillscript.getId());
+		patillscript.initOrLoadBoxes();
 
 	}
 	public PatientIllnessScript getPatillscript() {return this.patillscript;}
@@ -366,5 +367,4 @@ public class AdminFacesContext extends FacesContextWrapper implements MyFacesCon
 	public String getMyListUrlByMode(String mode, String type, String lang) {
 		return JsonCreator.getDisplayListName(mode, type, lang);
 	}
-	
 }

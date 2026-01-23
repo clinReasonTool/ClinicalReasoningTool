@@ -13,8 +13,11 @@ import beans.scoring.ScoreBean;
 import controller.NavigationController;
 import database.DBClinReason;
 import util.CRTLogger;
-
-public class DelNursingDiagnosisAction implements DelAction{
+/**
+ * @author ingahege
+ * @deprecated
+ */
+public class DelNursingDiagnosisAction /*implements DelAction*/{
 	private PatientIllnessScript patIllScript;
 	
 	public DelNursingDiagnosisAction(PatientIllnessScript patIllScript){
@@ -26,7 +29,7 @@ public class DelNursingDiagnosisAction implements DelAction{
 	 */
 	public void save(Object o) {
 		new DBClinReason().deleteAndCommit((Relation)o);
-		new DBClinReason().saveAndCommit(patIllScript.getNursingDiagnoses());
+		//new DBClinReason().saveAndCommit(patIllScript.getNursingDiagnoses());
 	}
 
 	/* (non-Javadoc)
@@ -40,7 +43,7 @@ public class DelNursingDiagnosisAction implements DelAction{
 	/* (non-Javadoc)
 	 * @see beanActions.DelAction#delete(java.lang.String)
 	 */
-	public void delete(String id) {
+	/*public void delete(String id) {
 		if(id==null || id.trim().equals("") || patIllScript==null || patIllScript.getNursingDiagnoses()==null || patIllScript.getNursingDiagnoses().isEmpty()){
 			//todo error msg
 			return;		
@@ -54,12 +57,12 @@ public class DelNursingDiagnosisAction implements DelAction{
 		save(rel);
 		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_NDDX_LIST, Relation.TYPE_NDDX);
 
-	}
+	}*/
 	
 	/* (non-Javadoc)
 	 * @see actions.beanActions.DelAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel){
+	/*public void updateGraph(Relation rel){
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		MultiVertex vertex = graph.getVertexByIdAndType(rel.getListItemId(), Relation.TYPE_NDDX);
 		if(vertex==null) return; //Should not happen
@@ -67,5 +70,5 @@ public class DelNursingDiagnosisAction implements DelAction{
 		//remove complete edge param for all these edges:
 		
 		CRTLogger.out(graph.toString(), CRTLogger.LEVEL_TEST);
-	}
+	}*/
 }

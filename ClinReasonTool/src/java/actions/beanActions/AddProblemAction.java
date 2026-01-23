@@ -35,9 +35,9 @@ import actions.scoringActions.Scoreable;
  * or from the concept map view.We add the new problem to the problems list in the PatientIllnessScript, save it, 
  * and trigger a scoring and feedback action.
  * @author ingahege
- *
+ * @deprecated
  */
-public class AddProblemAction implements AddAction, Scoreable{
+public class AddProblemAction /*implements AddAction, Scoreable*/{
 
 	private PatientIllnessScript patIllScript;
 	private String prefix = null;
@@ -57,33 +57,33 @@ public class AddProblemAction implements AddAction, Scoreable{
 	public void add(String idStr, String name){ 
 		//addProblem(idStr, name);
 		//long id = Long.valueOf(idStr.trim());
-		add(idStr, name, "-1", "-1");
+		//add(idStr, name, "-1", "-1");
 	}
 	
 
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#add(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public void add(String idStr, String prefix, String xStr, String yStr){ 
+	/*public void add(String idStr, String prefix, String xStr, String yStr){ 
 		this.prefix = prefix;
 		new RelationController().initAdd(idStr, prefix, xStr, yStr, this, patIllScript.getLocale());
 	}
 	
-	public void addRelation(/*long id*/ListItem li, int x, int y, long synId){
+	public void addRelation(ListItem li, int x, int y, long synId){
 		this.prefix = prefix;
 		addRelation(li, x, y, synId, false);
-	}
+	}*/
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#addRelation(long, java.lang.String, int, int, long)
 	 */
-	public void addRelation(ListItem li,/*long id, String prefix,*/ int x, int y, long synId, boolean isJoker){
+/*	public void addRelation(ListItem li, int x, int y, long synId, boolean isJoker){
 		if(patIllScript.getProblems()==null) patIllScript.setProblems(new ArrayList<RelationProblem>());
 		RelationProblem rel = new RelationProblem(li.getItem_id(), patIllScript.getId(), synId);		
 		if(patIllScript.getProblems().contains(rel)){
 			createErrorMessage(IntlConfiguration.getValue("findings.duplicate"),"optional details", FacesMessage.SEVERITY_WARN);
 			return;
 		}
-		if(prefix!=null && !prefix.trim().equals("") /*&& StringUtils.isAlphanumeric(prefix)*/){ //check whether a prefix has been chosen
+		if(prefix!=null && !prefix.trim().equals("") ){ //check whether a prefix has been chosen
 			//rel.setPrefix(Integer.valueOf(prefix).intValue());
 			rel.setPrefix(prefix);
 		}
@@ -104,7 +104,7 @@ public class AddProblemAction implements AddAction, Scoreable{
 		if(!patIllScript.isExpScript()) updateXAPIStatement(rel);
 		//((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).setAttribute("prob", rel);
 
-	}
+	}*/
 	
 	/* (non-Javadoc)
 	 * @see beanActions.AddAction#createErrorMessage(java.lang.String, java.lang.String, javax.faces.application.FacesMessage.Severity)
@@ -118,7 +118,7 @@ public class AddProblemAction implements AddAction, Scoreable{
 	 * TODO: we could check whether the position is already taken,or others are vacant due to deleting of others
 	 * @return
 	 */
-	private Point calculateNewItemPosInCanvas(){
+	/*private Point calculateNewItemPosInCanvas(){
 		int size=0;
 		if(patIllScript.getProblems()!=null || !patIllScript.getProblems().isEmpty()){
 			size = patIllScript.getProblems().size();
@@ -135,7 +135,7 @@ public class AddProblemAction implements AddAction, Scoreable{
 			return new Point(RelationProblem.DEFAULT_X+100,y);
 		}
 		return new Point(RelationProblem.DEFAULT_X,y);
-	}
+	}*/
 	
 	/* (non-Javadoc)
 	 * @see beanActions.AddAction#save(beans.relation.Relation)
@@ -160,7 +160,7 @@ public class AddProblemAction implements AddAction, Scoreable{
 
 	}
 
-	@Override
+	
 	/*public void triggerFeedbackAction() {
 		// TODO Auto-generated method stub
 		
@@ -169,7 +169,7 @@ public class AddProblemAction implements AddAction, Scoreable{
 	/* (non-Javadoc)
 	 * @see actions.beanActions.AddAction#updateGraph(beans.relation.Relation)
 	 */
-	public void updateGraph(Relation rel) {
+	/*public void updateGraph(Relation rel) {
 		Graph graph = NavigationController.getInstance().getMyFacesContext().getGraph();
 		graph.addVertex(rel, IllnessScriptInterface.TYPE_LEARNER_CREATED);
 		if( patIllScript.getDiagnoses()!=null && patIllScript.getDiagnoses().size()>0){
@@ -182,5 +182,5 @@ public class AddProblemAction implements AddAction, Scoreable{
 	
 	private void updateXAPIStatement(Relation rel){
 		XAPIController.getInstance().addOrUpdateAddStatement(rel);
-	}
+	}*/
 }

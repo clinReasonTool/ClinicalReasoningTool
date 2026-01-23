@@ -15,6 +15,7 @@ import actions.scoringActions.ScoringListAction;
 import application.AppBean;
 import beans.*;
 import beans.error.MyError;
+import beans.graph.Box;
 import beans.helper.TypeAheadBean;
 import beans.relation.*;
 import beans.relation.summary.SummaryStatement;
@@ -106,24 +107,21 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	 * created by learner or expert
 	 */
 	private int type = IllnessScriptInterface.TYPE_LEARNER_CREATED;
-	/**
-	 * List of related problems to the PatientIllnessScript
-	 */
-	private List<RelationProblem> problems;
-	private List<RelationDiagnosis> diagnoses; //contains all diagnoses, including the final(s)?
-	private List<RelationManagement> mngs;
-	private List<RelationTest> tests;
-	private List<RelationPatho> patho;	
-	private List<RelationNursingDiagnosis> nursingDiagnoses;	
-	private List<RelationNursingAim> nursingAims;	
-	private List<RelationInformation> infos;
-	private List<RelationNursingManagement> nursingManagement;	
-	private List<RelationMidwifeManagement> midwifeManagement;	
-	private List<RelationMidwifeHypothesis> midwifeHypotheses;
-	private List<RelationMidwifeRecommendation> midwifeRecommendations;
-	private List<RelationMidwifeFinding> midwifeFindings;
-	
 
+	private List<RelationProblem> problems; //category 1
+	private List<RelationDiagnosis> diagnoses; //category 2
+	private List<RelationManagement> mngs; //category 4
+	private List<RelationTest> tests;//category 3
+	private List<RelationPatho> patho;	//category 6
+	private List<RelationAim> aims;	//category 8
+	private List<RelationInformation> infos; //category 10
+	
+	private Box box1;
+	private Box box2;
+	private Box box3;
+	private Box box4;
+	
+	
 	/**
 	 * key = cnxId (Long), value = Connection object
 	 */
@@ -189,26 +187,55 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	 */
 	private long sessionId;
 	
+	
+	//we keep these for backwardscompatibility to turn them into real boxes: 
+	/**
+	 * @deprecated
+	 */	
 	private int[] tsttypes = new int[]{1,2,3,4};
-	//private int box1Type = 1; //default is fdgs, upper left corner box
-	//private int box2Type = 2; //default is ddxs, upper right corner box
-	//private int box3Type = 3; //default is tests, lower left corner box
-	//private int box4Type = 4; //default is mngs, lower right corner box
+	/**
+	 * @deprecated
+	 */
+	private int box1Type = 1; //default is fdgs, upper left corner box	
+	/**
+	 * @deprecated
+	 */ 
+	private int box2Type = 2; //default is ddxs, upper right corner box
+	/**
+	 * @deprecated
+	 */
+	private int box3Type = 3; //default is tests, lower left corner box
+	/**
+	 * @deprecated
+	 */
+	private int box4Type = 4; //default is mngs, lower right corner box
+	/**
+	 * @deprecated
+	 */
 	private int box1Mode = 1; //0=not display, 1=active, 2=passive
+	/**
+	 * @deprecated
+	 */
 	private int box2Mode = 1; //0=not display, 1=active, 2=passive
-	private int box3Mode = 1; //0=not display, 1=active, 2=passive
+	/**
+	 * @deprecated
+	 */
+	private int box3Mode = 1; //0=not display, 1=active, 2=passive	
+	/**
+	 * @deprecated
+	 */
 	private int box4Mode = 1; //0=not display, 1=active, 2=passive
 	
 	private int showAll = 0; //0 = only show until open card, 1 = show all nodes and cnxs (authoring only!)
 
 	public PatientIllnessScript(){}
-	public PatientIllnessScript(long userId, String vpId, Locale loc, int systemId){
+	public PatientIllnessScript(long userId, String vpId, Locale loc/*, int systemId*/){
 		if(vpId==null) vpId = "";
 		if(userId>0) this.userId = userId;
 		this.locale = loc;
-		if(!vpId.contains("_")) this.vpId = vpId.trim() +"_"+systemId;
+		if(!vpId.contains("_")) this.vpId = vpId.trim() +"_"+2;
 		else this.vpId = vpId.trim();
-		this.stmtContainer = new StatementContainer(userId, this.vpId, systemId);
+		this.stmtContainer = new StatementContainer(userId, this.vpId, 2);
 	}
 	
 	/**
@@ -218,6 +245,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		this.type = TYPE_EXPERT_CREATED;	
 		this.currentStage = maxStage;
 		this.maxSubmittedStage = maxddxstage;
+		initOrLoadBoxes();
 	}
 	
 	public long getId() {return id;}
@@ -237,8 +265,11 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	}
 	public void setStage(int stage) {this.stage = stage;}
 	public int getCourseOfTime() {return courseOfTime;}
-	public void setCourseOfTime(int courseOfTime) {this.courseOfTime = courseOfTime;}
-	public List<RelationProblem> getProblems() {
+	public void setCourseOfTime(int courseOfTime) {this.courseOfTime = courseOfTime;}	
+//	public List<Box> getBoxes() {return boxes;}
+//	public void setBoxes(List<Box> boxes) {this.boxes = boxes;}
+	
+	private List<RelationProblem> getProblems() {
 	//	if(!this.isExpScript())
 			return problems;
 	/*	else {
@@ -246,7 +277,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 			else return getProblemsStage();
 		}*/
 	}
-	public List<RelationProblem> getProblemsStage() { return getRelationsByStage(problems);}
+	//private List<RelationProblem> getProblemsStage() { return getRelationsByStage(problems);}
 	public void setProblems(List<RelationProblem> problems) {this.problems = problems;}
 	public Timestamp getCreationDate(){ return this.creationDate;} //setting is done in DB	
 	public void setCreationDate(Timestamp creationDate) {this.creationDate = creationDate;}	
@@ -263,54 +294,31 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	public boolean isDeleteFlag() {return deleteFlag;}
 	public void setDeleteFlag(boolean deleteFlag) {this.deleteFlag = deleteFlag;}
 	
-	public List<RelationDiagnosis> getDiagnoses() {return diagnoses;}
-	public List<RelationDiagnosis> getDiagnosesStage() { return getRelationsByStage(diagnoses);}
+	//public List<RelationDiagnosis> getDiagnosesStage() { return getRelationsByStage(diagnoses);}
 	public void setDiagnoses(List<RelationDiagnosis> diagnoses) {this.diagnoses = diagnoses;}
 	
-	public List<RelationNursingDiagnosis> getNursingDiagnoses() {return nursingDiagnoses;}
-	public List<RelationNursingDiagnosis> getNursingDiagnosesStage() { return getRelationsByStage(nursingDiagnoses);}
-	public void setNursingDiagnoses(List<RelationNursingDiagnosis> nursingDiagnoses) {this.nursingDiagnoses = nursingDiagnoses;}
+	//public List<RelationNursingDiagnosis> getNursingDiagnosesStage() { return getRelationsByStage(nursingDiagnoses);}
+	//public void setNursingDiagnoses(List<RelationNursingDiagnosis> nursingDiagnoses) {this.nursingDiagnoses = nursingDiagnoses;}
 
-	public List<RelationNursingAim> getNursingAims() {return nursingAims;}
-	public List<RelationNursingAim> getNursingAimsStage() { return getRelationsByStage(nursingAims);}
-	public void setNursingAims(List<RelationNursingAim> nursingAims) {this.nursingAims = nursingAims;}
+	//public List<RelationNursingAim> getNursingAimsStage() { return getRelationsByStage(nursingAims);}
+	public void setAims(List<RelationAim> nursingAims) {this.aims = aims;}
 
-	public List<RelationNursingManagement> getNursingManagement() {return nursingManagement;}
-	public List<RelationNursingManagement> getNursingManagementStage() { return getRelationsByStage(nursingManagement);}
-	public void setNursingManagement(List<RelationNursingManagement> nursingManagement) {this.nursingManagement = nursingManagement;}
+	//public List<RelationNursingManagement> getNursingManagement() {return nursingManagement;}
+	//public List<RelationNursingManagement> getNursingManagementStage() { return getRelationsByStage(nursingManagement);}
+	//public void setNursingManagement(List<RelationNursingManagement> nursingManagement) {this.nursingManagement = nursingManagement;}
 
-	public List<RelationInformation> getInfos() {return infos;}
-	public List<RelationInformation> getInformationStage() { return getRelationsByStage(infos);}
+	//public List<RelationInformation> getInfos() {return infos;}
+	//public List<RelationInformation> getInformationStage() { return getRelationsByStage(infos);}
 	public void setInformation(List<RelationInformation> infos) {this.infos = infos;}
 	
-	public List<RelationManagement> getMngs() {return mngs;}
-	public List<RelationManagement> getMngsStage() { return getRelationsByStage(mngs);}
+	//public List<RelationManagement> getMngsStage() { return getRelationsByStage(mngs);}
 	public void setMngs(List<RelationManagement> mngs) {this.mngs = mngs;}	
 	
-	public List<RelationTest> getTests() {return tests;}
-	public List<RelationTest> getTestsStage() { return getRelationsByStage(tests);}
+	//public List<RelationTest> getTests() {return tests;}
+	//public List<RelationTest> getTestsStage() { return getRelationsByStage(tests);}
 	public void setTests(List<RelationTest> tests) {this.tests = tests;}	
-
-	public List<RelationPatho> getPatho() {return patho;}
-	public List<RelationPatho> getPathoStage() { return getRelationsByStage(patho);}
 	public void setPatho(List<RelationPatho> patho) {this.patho = patho;}	
-	
-	public List<RelationMidwifeManagement> getMidwifeManagement() {return midwifeManagement;}
-	public List<RelationMidwifeManagement> getMidwifeManagementStage() { return getRelationsByStage(midwifeManagement);}
-	public void setMidwifeManagement(List<RelationMidwifeManagement> mngs) {this.midwifeManagement = mngs;}	
-
-	public List<RelationMidwifeRecommendation> getMidwifeRecommendations() {return midwifeRecommendations;}
-	public List<RelationManagement> getMidwifeRecommendationsStage() { return getRelationsByStage(midwifeRecommendations);}
-	public void setMidwifeRecommendations(List<RelationMidwifeRecommendation> midwifeRecommendations) {this.midwifeRecommendations = midwifeRecommendations;}	
-
-	public List<RelationMidwifeHypothesis> getMidwifeHypotheses() {return midwifeHypotheses;}
-	public List<RelationMidwifeHypothesis> getMidwifeHypothesesStage() { return getRelationsByStage(midwifeHypotheses);}
-	public void setMidwifeHypotheses(List<RelationMidwifeHypothesis> mh) {this.midwifeHypotheses = mh;}	
-	
-	public List<RelationMidwifeFinding> getMidwifeFindings() {return midwifeFindings;}
-	public List<RelationMidwifeFinding> getMidwifeFindingsStage() { return getRelationsByStage(midwifeFindings);}
-	public void setMidwifeFindings(List<RelationMidwifeFinding> mf) {this.midwifeFindings = mf;}	
-	
+		
 	
 	public Map<Long,Connection> getConns() {return conns;}
 	public void setConns(Map<Long,Connection> conns) {this.conns = conns;}
@@ -369,9 +377,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(confidence==100) return IntlConfiguration.getValue("submit.slider.after") + " " + IntlConfiguration.getValue("confidence.high") +"."; 
 		else return IntlConfiguration.getValue("submit.slider.after") + " " + IntlConfiguration.getValue("confidence.highest") +".";
 	}
-	/**
-	 * @deprecated
-	 */
+
 	public void setConfidence(int confidence) {this.confidence = confidence;}
 	public long getSummStId() {return summStId;}
 	public void setSummStId(long summStId) {this.summStId = summStId;}		
@@ -481,70 +487,91 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		return false;
 	}	
 	public int getSubmittedStage() {return submittedStage;}
-	
-
 	public void setSubmittedStage(int submittedStage) {this.submittedStage = submittedStage;}
-	//public void setSubmitted(boolean submitted) {this.submitted = submitted;}
-	public void addProblem(String idStr, String prefix){new AddProblemAction(this).add(idStr, prefix);}
-	public void addProblem(String idStr){new AddProblemAction(this).add(idStr,"");}
-	public void addProblem(String idStr, String name, String x, String y){ new AddProblemAction(this).add(idStr, name, x,y);}
-	public void addDiagnosis(String idStr, String name){ new AddDiagnosisAction(this).add(idStr, name);}
-	public void addDiagnosis(String idStr, String name, String x, String y){ new AddDiagnosisAction(this).add(idStr, name, x,y);}
-	public void addTest(String idStr, String name){ new AddTestAction(this).add(idStr, name);}
-	public void addTest(String idStr, String name, String x, String y){ new AddTestAction(this).add(idStr, name, x,y);}
-	public void addMng(String idStr, String name){ new AddMngAction(this).add(idStr, name);}
-	public void addMng(String idStr, String name, String x, String y){ new AddMngAction(this).add(idStr, name, x,y);}
-	public void addPatho(String idStr, String name){ new AddPathoAction(this).add(idStr, name);}	
-	public void addPatho(String idStr, String name, String x, String y){ new AddPathoAction(this).add(idStr, name, x,y);}
+	
+	public void addBox1Item(String idStr, String prefix, String name) {new AddRelationAction(this, box1).add(idStr, prefix, name);}
+	//public void addBox1Item(String idStr) {new AddRelationAction(this, box1).add(idStr, "");}
+	public void addBox2Item(String idStr, String prefix, String name) {new AddRelationAction(this, box2).add(idStr, prefix, name);}
+	public void addBox3Item(String idStr, String prefix, String name) {new AddRelationAction(this, box3).add(idStr, prefix, name);}
+	public void addBox4Item(String idStr, String prefix, String name) {new AddRelationAction(this, box4).add(idStr, prefix, name);}
+	//public void addBox1Item(String idStr, String name, String x, String y){new AddRelationAction(this, box1).add(idStr, name, x,y);}
+	
+	public void delBox1Item(String idStr){ new DelRelationAction(this, box1).delete(idStr);}
+	public void delBox2Item(String idStr){ new DelRelationAction(this, box2).delete(idStr);}
+	public void delBox3Item(String idStr){ new DelRelationAction(this, box3).delete(idStr);}
+	public void delBox4Item(String idStr){ new DelRelationAction(this, box4).delete(idStr);}
+	
+	//public void addProblem(String idStr, String prefix){new AddProblemAction(this).add(idStr, prefix);}
+	//public void addProblem(String idStr){new AddProblemAction(this).add(idStr,"");}
+	//public void addProblem(String idStr, String name, String x, String y){ new AddProblemAction(this).add(idStr, name, x,y);}
+	//public void addDiagnosis(String idStr, String name){ new AddDiagnosisAction(this).add(idStr, name);}
+	//public void addDiagnosis(String idStr, String name, String x, String y){ new AddDiagnosisAction(this).add(idStr, name, x,y);}
+	//public void addTest(String idStr, String name){ new AddTestAction(this).add(idStr, name);}
+	//public void addTest(String idStr, String name, String x, String y){ new AddTestAction(this).add(idStr, name, x,y);}
+	//public void addMng(String idStr, String name){ new AddMngAction(this).add(idStr, name);}
+	//public void addMng(String idStr, String name, String x, String y){ new AddMngAction(this).add(idStr, name, x,y);}
+	//public void addPatho(String idStr, String name){ new AddPathoAction(this).add(idStr, name);}	
+	//public void addPatho(String idStr, String name, String x, String y){ new AddPathoAction(this).add(idStr, name, x,y);}
 	
 	//nursing stuff:
-	public void addNddx(String idStr, String name){ new AddNursingDiagnosisAction(this).add(idStr, name);}
-	public void addNddx(String idStr, String name, String x, String y){ new AddNursingDiagnosisAction(this).add(idStr, name, x,y);}
-	public void addInfo(String idStr, String name){ new AddInfoAction(this).add(idStr, name);}
-	public void addInfo(String idStr, String name, String x, String y){ new AddInfoAction(this).add(idStr, name, x,y);}
-	public void addNaim(String idStr, String name){ new AddNursingAimAction(this).add(idStr, name);}
-	public void addNaim(String idStr, String name, String x, String y){ new AddNursingAimAction(this).add(idStr, name, x,y);}
-	public void addNmng(String idStr, String name){new AddNursingMngAction(this).add(idStr, name);}
-	public void addNmng(String idStr, String name, String x, String y){ new AddNursingMngAction(this).add(idStr, name, x,y);}
+	//public void addNddx(String idStr, String name){ new AddNursingDiagnosisAction(this).add(idStr, name);}
+	//public void addNddx(String idStr, String name, String x, String y){ new AddNursingDiagnosisAction(this).add(idStr, name, x,y);}
+	//public void addInfo(String idStr, String name){ new AddInfoAction(this).add(idStr, name);}
+	//public void addInfo(String idStr, String name, String x, String y){ new AddInfoAction(this).add(idStr, name, x,y);}
+	//public void addNaim(String idStr, String name){ new AddAimAction(this).add(idStr, name);}
+	//public void addNaim(String idStr, String name, String x, String y){ new AddAimAction(this).add(idStr, name, x,y);}
+	//public void addNmng(String idStr, String name){new AddNursingMngAction(this).add(idStr, name);}
+	//public void addNmng(String idStr, String name, String x, String y){ new AddNursingMngAction(this).add(idStr, name, x,y);}
 
 	//midwife stuff
-	public void addMmng(String idStr, String name){new AddMidwifeMngAction(this).add(idStr, name);}
-	public void addMmng(String idStr, String name, String x, String y){ new AddMidwifeMngAction(this).add(idStr, name, x,y);}
-	public void addMfdg(String idStr, String name){new AddMidwifeFdgAction(this).add(idStr, name);}
-	public void addMfdg(String idStr, String name, String x, String y){ new AddMidwifeFdgAction(this).add(idStr, name, x,y);}
-	public void addMrec(String idStr, String name){new AddMidwifeRecAction(this).add(idStr, name);}
-	public void addMrec(String idStr, String name, String x, String y){ new AddMidwifeRecAction(this).add(idStr, name, x,y);}
-	public void addMhyp(String idStr, String name){new AddMidwifeHypAction(this).add(idStr, name);}
-	public void addMhyp(String idStr, String name, String x, String y){ new AddMidwifeHypAction(this).add(idStr, name, x,y);}
+	//public void addMmng(String idStr, String name){new AddMidwifeMngAction(this).add(idStr, name);}
+	//public void addMmng(String idStr, String name, String x, String y){ new AddMidwifeMngAction(this).add(idStr, name, x,y);}
+	//public void addMfdg(String idStr, String name){new AddMidwifeFdgAction(this).add(idStr, name);}
+	//public void addMfdg(String idStr, String name, String x, String y){ new AddMidwifeFdgAction(this).add(idStr, name, x,y);}
+	//public void addMrec(String idStr, String name){new AddMidwifeRecAction(this).add(idStr, name);}
+	//public void addMrec(String idStr, String name, String x, String y){ new AddMidwifeRecAction(this).add(idStr, name, x,y);}
+	//public void addMhyp(String idStr, String name){new AddMidwifeHypAction(this).add(idStr, name);}
+	//public void addMhyp(String idStr, String name, String x, String y){ new AddMidwifeHypAction(this).add(idStr, name, x,y);}
 
 	
-	public void delProblem(String idStr){ new DelProblemAction(this).delete(idStr);}
-	public void delDiagnosis(String idStr){ new DelDiagnosisAction(this).delete(idStr);}
-	public void delTest(String idStr){ new DelTestAction(this).delete(idStr);}
-	public void delMng(String idStr){ new DelMngAction(this).delete(idStr);}
-	public void delPatho(String idStr){ new DelPathoAction(this).delete(idStr);}
-	public void delInfo(String idStr){ new DelInfoAction(this).delete(idStr);}
-	public void delNaim(String idStr){ new DelNursingAimAction(this).delete(idStr);}
-	public void delNmng(String idStr){ new DelNursingMngAction(this).delete(idStr);}
-	public void delNddx(String idStr){ new DelNursingDiagnosisAction(this).delete(idStr);}
-	public void delMfdg(String idStr){ new DelMidwifeFdgAction(this).delete(idStr);}
-	public void delMmng(String idStr){ new DelMidwifeMngAction(this).delete(idStr);}
-	public void delMrec(String idStr){ new DelMidwifeRecAction(this).delete(idStr);}
-	public void delMhyp(String idStr){ new DelMidwifeHypAction(this).delete(idStr);}
+	//public void delProblem(String idStr){ new DelProblemAction(this).delete(idStr);}
+	//public void delDiagnosis(String idStr){ new DelDiagnosisAction(this).delete(idStr);}
+	//public void delTest(String idStr){ new DelTestAction(this).delete(idStr);}
+	//public void delMng(String idStr){ new DelMngAction(this).delete(idStr);}
+	//public void delPatho(String idStr){ new DelPathoAction(this).delete(idStr);}
+	//public void delInfo(String idStr){ new DelInfoAction(this).delete(idStr);}
+	//public void delNaim(String idStr){ new DelAimAction(this).delete(idStr);}
+	//public void delNmng(String idStr){ new DelNursingMngAction(this).delete(idStr);}
+	//public void delNddx(String idStr){ new DelNursingDiagnosisAction(this).delete(idStr);}
+	//public void delMfdg(String idStr){ new DelMidwifeFdgAction(this).delete(idStr);}
+	//public void delMmng(String idStr){ new DelMidwifeMngAction(this).delete(idStr);}
+	//public void delMrec(String idStr){ new DelMidwifeRecAction(this).delete(idStr);}
+	//public void delMhyp(String idStr){ new DelMidwifeHypAction(this).delete(idStr);}
 
 	//public void reorderProblems(String idStr, String newOrderStr){ new MoveProblemAction(this).reorder(idStr, newOrderStr);}
 	//public void reorderDiagnoses(String idStr, String newOrderStr){ new MoveDiagnosisAction(this).reorder(idStr, newOrderStr);}
 	//public void reorderTests(String idStr, String newOrderStr){ new MoveTestAction(this).reorder(idStr, newOrderStr);}
 	//public void reorderMngs(String idStr, String newOrderStr){ new MoveMngAction(this).reorder(idStr, newOrderStr);}
-	public void moveItem(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this).move(idStr, x, y);}
-	public void moveItem(String idStr, String x, String y){ new DragDropAction(this).move(idStr, x, y);}
+	//public void moveItemBox1(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box1).move(idStr, x, y);}
+	public void moveItemBox1(String idStr, String x, String y){ new DragDropAction(this, box1).move(idStr, x, y);}
+	//public void moveItemBox2(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box2).move(idStr, x, y);}
+	public void moveItemBox2(String idStr, String x, String y){ new DragDropAction(this, box2).move(idStr, x, y);}
+	//public void moveItemBox3(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box3).move(idStr, x, y);}
+	public void moveItemBox3(String idStr, String x, String y){ new DragDropAction(this, box4).move(idStr, x, y);}
+	//public void moveItemBox4(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box4).move(idStr, x, y);}
+	public void moveItemBox4(String idStr, String x, String y){ new DragDropAction(this, box4).move(idStr, x, y);}
 
-	public void changeProblem(String idStr,String changeMode){new ChangeProblemAction(this).changeProblem(idStr, changeMode);}
+	public void changeBox1Item(String idStr,String changeMode){new ChangeRelationAction(this, box1).changeRelation(idStr);}
+	public void changeBox2Item(String idStr,String changeMode){new ChangeRelationAction(this, box2).changeRelation(idStr);}
+	public void changeBox3Item(String idStr,String changeMode){new ChangeRelationAction(this, box3).changeRelation(idStr);}
+	public void changeBox4Item(String idStr,String changeMode){new ChangeRelationAction(this, box4).changeRelation(idStr);}
+
+
+	/*public void changeProblem(String idStr,String changeMode){new ChangeProblemAction(this).changeProblem(idStr, changeMode);}
 	public void changeDiagnosis(String idStr,String changeMode){new ChangeDiagnosisAction(this).changeDiagnosis(idStr, changeMode);}
 	public void changeTest(String idStr,String changeMode){new ChangeTestAction(this).changeTest(idStr, changeMode);}
 	public void changeMng(String idStr,String changeMode){new ChangeMngAction(this).changeMng(idStr, changeMode);}
-	public void changeMnM(String idStr/*, String newValue*/){new ChangeDiagnosisAction(this).toggleMnM(idStr/*, newValue*/);}
-	public void changePatho(String idStr,String changeMode){new ChangePathoAction(this).changePatho(idStr, changeMode);}
+	public void changePatho(String idStr,String changeMode){new ChangePathoAction(this).changePatho(idStr, changeMode);}*/
 	
 	//public void addConnection(String sourceId, String targetId){new AddConnectionAction(this).add(sourceId,targetId);}
 	public void addConnection(String sourceId, String targetId, String startEpId, String targetEpX, String targetEpY){new AddConnectionAction(this).add(sourceId,targetId,startEpId,targetEpX, targetEpY);}
@@ -562,8 +589,11 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	public void chgStateOfItem(String itemId, String newStage){ new ExpChgAction().chgStage(itemId, newStage);}
 	public void chgStateOfEdge(String itemId, String newStage){ new ExpChgAction().chgEdgeStage(itemId, newStage);}
 	public void chgFinalState(String itemId, String newStage){new ChgPatIllScriptAction(this).chgFinalStage(itemId, newStage);}
+	public void changeMnM(String idStr){new ChangeDiagnosisAction(this).toggleMnM(idStr);}
 	//public void submitDDX(){new DiagnosisSubmitAction(this).submitDDX();}
-	public void changeTier(String idStr, String tierStr){new DiagnosisSubmitAction(this).changeTier(idStr, tierStr);}
+	public void changeTier(String idStr, String tierStr){
+		new DiagnosisSubmitAction(this).changeTier(idStr, tierStr);
+	}
 	public void changeConfidence(String idStr, String confVal){new ChgPatIllScriptAction(this).changeConfidence(idStr, confVal);}
 	public void showSolution(String s){new DiagnosisSubmitAction(this).showSolution();}
 	//public void chgCourseOfTime(String courseOfTimeStr) { new ChgPatIllScriptAction(this).chgCourseOfTime(courseOfTimeStr);}
@@ -589,27 +619,17 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	 * we get for the four boxes a string like '6,1,2,3' (patho, fdg, ddx, tests)
 	 *
 	 **/
-	public void changeBoxType(String newTypes) {
+	/*public void changeBoxType(int newType, int boxNum) {
 		try {
-			//int type = Integer.valueOf(newType).intValue();
-			if(newTypes==null || newTypes.trim().contentEquals("")) return; //an error happened... 
-			int[] types = StringUtilities.getIntArrFromString(newTypes, ",");
-
-			tsttypes = new int[]{0,0,0,0};
-			int counter = 0;
-			for(int i=0; i<types.length;i++) {
-				if(types[i]>=1) {
-					tsttypes[counter] = types[i]; //]this.box1Type = 1; 
-					counter++;
-				}
-			}
-
+			if(boxes==null || boxes.size()<boxNum-1) return; 
+			boxes.get(boxNum-1).setBoxType(newType);						
+			
 			new DBClinReason().saveAndCommit(this);
 		}
 		catch(Exception e) {
 			CRTLogger.out(StringUtilities.stackTraceToString(e),CRTLogger.LEVEL_ERROR);
 		}
-	}
+	}*/
 	
 	/*** end change of box types in authoring system *****/
 	
@@ -647,21 +667,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		return false;
 	}
 
-	
-	public RelationProblem getProblemById(long id){return (RelationProblem) getRelationById(problems, id);}	
 	public RelationDiagnosis getDiagnosisById(long id){return (RelationDiagnosis) getRelationById(diagnoses, id);}	
-	public RelationTest getTestById(long id){return (RelationTest) getRelationById(tests, id);}		
-	public RelationPatho getPathoById(long id){return (RelationPatho) getRelationById(patho, id);}		
-	public RelationManagement getMngById(long id){return (RelationManagement) getRelationById(mngs, id);}	
-	public RelationInformation getInfoById(long id){return (RelationInformation) getRelationById(infos, id);}	
-	public RelationNursingDiagnosis getNursingDiagnosisById(long id){return (RelationNursingDiagnosis) getRelationById(nursingDiagnoses, id);}	
-	public RelationNursingAim getNursingAimById(long id){return (RelationNursingAim) getRelationById(nursingAims, id);}	
-	public RelationNursingManagement getNursingMngById(long id){return (RelationNursingManagement) getRelationById(nursingManagement, id);}	
-	public RelationMidwifeManagement getMidwifeMngById(long id){return (RelationMidwifeManagement) getRelationById(midwifeManagement, id);}	
-	public RelationMidwifeFinding getMidwifeFdgById(long id){return (RelationMidwifeFinding) getRelationById(midwifeFindings, id);}	
-	public RelationMidwifeRecommendation getMidwifeRecById(long id){return (RelationMidwifeRecommendation) getRelationById(midwifeRecommendations, id);}	
-	public RelationMidwifeHypothesis getMidwifeHypById(long id){return (RelationMidwifeHypothesis) getRelationById(midwifeHypotheses, id);}	
-
 
 	public Relation getRelationByListItemIdAndType(long id, int type){
 		if(type==Relation.TYPE_PROBLEM) return getRelationByListItemId(this.problems, id);
@@ -670,13 +676,8 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(type==Relation.TYPE_TEST) return getRelationByListItemId(this.tests, id);
 		if(type==Relation.TYPE_PATHO) return getRelationByListItemId(this.patho, id);	
 		if(type==Relation.TYPE_INFO) return getRelationByListItemId(this.infos, id);	
-		if(type==Relation.TYPE_NDDX) return getRelationByListItemId(this.nursingDiagnoses, id);	
-		if(type==Relation.TYPE_NMNG) return getRelationByListItemId(this.nursingManagement, id);	
-		if(type==Relation.TYPE_NURSAIM) return getRelationByListItemId(this.nursingAims, id);	
-		if(type==Relation.TYPE_MMNG) return getRelationByListItemId(this.midwifeManagement, id);	
-		if(type==Relation.TYPE_MFDG) return getRelationByListItemId(this.midwifeFindings, id);	
-		if(type==Relation.TYPE_MREC) return getRelationByListItemId(this.midwifeRecommendations, id);	
-		if(type==Relation.TYPE_MHYP) return getRelationByListItemId(this.midwifeHypotheses, id);	
+		if(type==Relation.TYPE_AIM) return getRelationByListItemId(this.aims, id);	
+
 
 		return null;
 	}
@@ -763,14 +764,8 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(type==Relation.TYPE_MNG) return getRelationById(this.mngs, id);
 		if(type==Relation.TYPE_TEST) return getRelationById(this.tests, id);
 		if(type==Relation.TYPE_PATHO) return getRelationById(this.patho, id);
-		if(type==Relation.TYPE_NDDX) return getRelationById(this.nursingDiagnoses, id);
-		if(type==Relation.TYPE_NMNG) return getRelationById(this.nursingManagement, id);
 		if(type==Relation.TYPE_INFO) return getRelationById(this.infos, id);
-		if(type==Relation.TYPE_NURSAIM) return getRelationById(this.nursingAims, id);
-		if(type==Relation.TYPE_MMNG) return getRelationById(this.midwifeManagement, id);
-		if(type==Relation.TYPE_MFDG) return getRelationById(this.midwifeFindings, id);
-		if(type==Relation.TYPE_MHYP) return getRelationById(this.midwifeHypotheses, id);
-		if(type==Relation.TYPE_MREC) return getRelationById(this.midwifeRecommendations, id);
+		if(type==Relation.TYPE_AIM) return getRelationById(this.aims, id);
 	
 		return null;
 	}
@@ -894,11 +889,9 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	
 	/**
 	 * For displaying expert scripts in admin area we display the VP system to make selection easier
-	 * @deprecated
 	 * @return
 	 */
-	public String getVPSystem(){return AppBean.getVPSystemByVPId(this.vpId);
-}
+	//public String getVPSystem(){return AppBean.getVPSystemByVPId(this.vpId);}
 	
 	public String getVpIdCrop() {		
 		if(this.vpId==null || this.vpId.trim().equals("")) return "";
@@ -920,60 +913,36 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	 * difference between problems entered by expert and student at current stage. If view mode is on we return 0.
 	 * @return
 	 */
-	public int getProblemsDiff(){
+	public int getBox1Diff(){
 		if(this.isExpScript()) return 0;
 		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
 		//if we have view mode only, we do not change color of box:
-		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxModeFdg()==2) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, getProblems(), Relation.TYPE_PROBLEM);
+		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode1()==2) return 0;
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox1Relations(), box1.getBoxCategory());
+	}
+	public int getBox2Diff(){
+		if(this.isExpScript()) return 0;
+		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
+		//if we have view mode only, we do not change color of box:
+		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode2()==2) return 0;
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox2Relations(), box2.getBoxCategory());
+	}
+	public int getBox3Diff(){
+		if(this.isExpScript()) return 0;
+		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
+		//if we have view mode only, we do not change color of box:
+		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode3()==2) return 0;
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox3Relations(), box3.getBoxCategory());
+	}
+	public int getBox4Diff(){
+		if(this.isExpScript()) return 0;
+		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
+		//if we have view mode only, we do not change color of box:
+		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode4()==2) return 0;
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox4Relations(), box4.getBoxCategory());
 	}
 
-	/**
-	 * difference between pathophysiology items entered by expert and student at current stage. If view mode is on we return 0.
-	 * @return
-	 */
-	public int getPathoDiff(){
-		if(this.isExpScript()) return 0;
-		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
-		//if we have view mode only, we do not change color of box:
-		if(crtContext.getSessSetting()!=null /*&& crtContext.getSessSetting().getBoxModePat()==2*/) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, getPatho(), Relation.TYPE_PATHO);
-	}
-	/**
-	 * difference between differentials entered by expert and student at current stage. If view mode is on we return 0.
-	 * @return
-	 */
-	public int getDDXDiff(){
-		if(this.isExpScript()) return 0;
-		if(this.getSubmitted()) return 0; //if diagnosis has been made, we do not have to make the box red any longer...
-		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
-		//if we have view mode only, we do not change color of box:
-		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxModeDDX()==2) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, getDiagnoses(), Relation.TYPE_DDX);
-	}
-	/**
-	 * difference between tests entered by expert and student at current stage. If view mode is on we return 0.
-	 * @return
-	 */
-	public int getTestsDiff(){
-		if(this.isExpScript()) return 0;
-		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
-		//if we have view mode only, we do not change color of box:
-		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxModeTst()==2) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, getTests(), Relation.TYPE_TEST);
-	}
-	/**
-	 * difference between management options entered by expert and student at current stage. If view mode is on we return 0.
-	 * @return
-	 */
-	public int getMngsDiff(){
-		if(this.isExpScript()) return 0;
-		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
-		//if we have view mode only, we do not change color of box:
-		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxModeMng()==2) return 0;
 
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, getMngs(), Relation.TYPE_MNG);
-	}
 	
 	public int getSumDiff(){
 		if(this.getSummStId()>0) return 0;
@@ -992,35 +961,37 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	 * @return true is no items have been added (no fdgs, ddxs, tests, or mng items), otherwise false.
 	 */
 	public boolean getIsEmptyScript(){
-		if(this.getProblems()!=null && !this.getProblems().isEmpty()) return false; 
-		if(this.getDiagnoses()!=null && !this.getDiagnoses().isEmpty()) return false; 
-		if(this.getTests()!=null && !this.getTests().isEmpty()) return false; 
-		if(this.getMngs()!=null && !this.getMngs().isEmpty()) return false; 
-		if(this.getNursingAims()!=null && !this.getNursingAims().isEmpty()) return false; 
-		if(this.getNursingDiagnoses()!=null && !this.getNursingDiagnoses().isEmpty()) return false; 
-		if(this.getInfos()!=null && !this.getInfos().isEmpty()) return false; 
-		if(this.getNursingManagement()!=null && !this.getNursingManagement().isEmpty()) return false; 
-		if(this.getPatho()!=null && !this.getPatho().isEmpty()) return false;
-		if(this.getMidwifeFindings()!=null && !this.getMidwifeFindings().isEmpty()) return false;
-		if(this.getMidwifeHypotheses()!=null && !this.getMidwifeHypotheses().isEmpty()) return false;
-		if(this.getMidwifeRecommendations()!=null && !this.getMidwifeRecommendations().isEmpty()) return false;
-		if(this.getMidwifeManagement()!=null && !this.getMidwifeManagement().isEmpty()) return false;
-
+		if(this.problems!=null && !problems.isEmpty()) return false; 
+		if(this.diagnoses!=null && !diagnoses.isEmpty()) return false; 
+		if(this.tests!=null && !tests.isEmpty()) return false; 
+		if(this.mngs!=null && !mngs.isEmpty()) return false; 
+		if(this.aims!=null && !aims.isEmpty()) return false; 
+		if(infos!=null && !infos.isEmpty()) return false; 
+		if(this.patho!=null && !this.patho.isEmpty()) return false;
 		return true;
 	}
 	//used for admin purposes only (display in admin area for individual maps)
 	public List<LogEntry> getLogEntries(){return logentries;}
 	public void setLogEntries(List<LogEntry> le ){this.logentries = le;}
+	
 
+	/***** backwards compatibility ***/
 	public int getBox1Type() {
-		return this.tsttypes[0];}
-	public void setBox1Type(int box1Type) {
-		this.tsttypes[0] = box1Type;}
-	public int getBox2Type() {return tsttypes[1];}
+		if(box1!=null && box1.getBoxType()>0) return box1.getBoxType();
+		return box1Type;
+	}
+	public void setBox1Type(int box1Type) {this.tsttypes[0] = box1Type;}
+	public int getBox2Type() {
+		if(box2!=null && box2.getBoxType()>0) return box2.getBoxType();
+		return box2Type;}
 	public void setBox2Type(int box2Type) {this.tsttypes[1] = box2Type;}
-	public int getBox3Type() {return tsttypes[2];}
+	public int getBox3Type() {
+		if(box3!=null && box3.getBoxType()>0) return box3.getBoxType();
+		return box3Type;}
 	public void setBox3Type(int box3Type) {this.tsttypes[2] = box3Type;}
-	public int getBox4Type() {return tsttypes[3];}
+	public int getBox4Type() {
+		if(box4!=null && box4.getBoxType()>0) return box4.getBoxType();
+		return box4Type;}
 	public void setBox4Type(int box4Type) {this.tsttypes[3] = box4Type;}	
 	
 	public int getBox1Mode() {return box1Mode;}
@@ -1032,29 +1003,295 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	public int getBox4Mode() {return box4Mode;}
 	public void setBox4Mode(int box4Mode) {this.box4Mode = box4Mode;}
 	
-	public int getPatBoxNo() { return getBoxByType(Relation.TYPE_PATHO);}
-	public int getFdgBoxNo() { return getBoxByType(Relation.TYPE_PROBLEM);}
-	public int getDdxBoxNo() { return getBoxByType(Relation.TYPE_DDX);}
-	public int getTstBoxNo() { return getBoxByType(Relation.TYPE_TEST);}
-	public int getMngBoxNo() { return getBoxByType(Relation.TYPE_MNG);}
-	public int getNMngBoxNo() { return getBoxByType(Relation.TYPE_NMNG);}
-	public int getNDdxBoxNo() { return getBoxByType(Relation.TYPE_NDDX);}
-	public int getNAimBoxNo() { return getBoxByType(Relation.TYPE_NURSAIM);}
-	public int getInfoBoxNo() { return getBoxByType(Relation.TYPE_INFO);}
-	public int getMMngBoxNo() { return getBoxByType(Relation.TYPE_MMNG);}
-	public int getMFdgBoxNo() { return getBoxByType(Relation.TYPE_MFDG);}
-	public int getMRecBoxNo() { return getBoxByType(Relation.TYPE_MREC);}
-	public int getMHypBoxNo() { return getBoxByType(Relation.TYPE_MHYP);}
+	//***** end backwards compatibility *****// 
+	
+	
+	//************ new box functionalities ************************ 
+	
 	/**
-	 * we return the box that contains the given type (fgd, ddx,...) or 
-	 * 0 if should not be displayed. 
-	 * @param type
+	 * For expert scripts we check whether there are boxes retrieved from the database. If not, we create and save them
+	 * based on the data stored in the map (deprecated fields)
+	 */
+	public void initOrLoadBoxes(){
+		if(this.getType()!=PatientIllnessScript.TYPE_EXPERT_CREATED) return;// we only create boxes for expert scripts! 
+		
+		if(box1==null) {
+			box1 = new Box(this.id, getBox1Type(), 1, 1, box1Mode); //init a default box
+			new DBClinReason().saveAndCommit(box1);
+		}
+		if(box2==null) {
+			box2 = new Box(this.id, getBox2Type(), 2, 2, box2Mode);
+			new DBClinReason().saveAndCommit(box2);
+		}
+		if(box3==null) {
+			box3 = new Box(this.id, getBox3Type(), 3, 3, box3Mode);
+			new DBClinReason().saveAndCommit(box3);
+		}
+		if(box4==null) {
+			box4 = new Box(this.id, getBox4Type(), 4, 4, box4Mode);
+			new DBClinReason().saveAndCommit(box4);
+		}	
+		new DBClinReason().saveAndCommit(this);
+	}
+	
+	/**
+	 * Player: Display of box title (read only)
+	 * @param num 1-based! 
 	 * @return
 	 */
-	private int getBoxByType(int type) {
-		for(int i=0;i< tsttypes.length;i++) {
-			if(tsttypes[i] == type ) return i+1;
+	/*public String getBoxTitle(int num) {
+		if(boxes!=null & boxes.size()>=num-1)
+			return boxes.get(num-1).getTitle(this.locale);
+		return "";
+	}*/
+	
+	//*** needed for display of box title selection box in authoring:
+	
+	public int getBox1TitleNum() {return box1.getTitleNum();}
+	public int getBox2TitleNum() {return box2.getTitleNum();}
+	public int getBox3TitleNum() {return box3.getTitleNum();}
+	public int getBox4TitleNum() {return box4.getTitleNum();}
+	
+	public Box getBox1() {return box1;}
+	public void setBox1(Box box1) {this.box1 = box1;}
+	public Box getBox2() {return box2;}
+	public void setBox2(Box box2) {this.box2 = box2;}
+	public Box getBox3() {return box3;}
+	public void setBox3(Box box3) {this.box3 = box3;}
+	public Box getBox4() {return box4;}
+	public void setBox4(Box box4) {this.box4 = box4;}
+	public void setBoxes(Box b1, Box b2, Box b3, Box b4) {
+		box1 = b1;
+		box2 = b2; 
+		box3 = b3;
+		box4 = b4;
+	}
+	public long getBox1Id() { 
+		if (box1!=null) return box1.getId(); 
+		return -1;
+	}
+	public long getBox2Id() { 
+		if (box2!=null) return box2.getId(); 
+		return -1;
+	}
+	public long getBox3Id() { 
+		if (box3!=null) return box3.getId(); 
+		return -1;
+	}
+	public long getBox4Id() { 
+		if (box4!=null) return box4.getId(); 
+		return -1;
+	}
+	
+	public void setBox1Id(long id) {if(box1!=null) box1.setId(id);}
+	public void setBox2Id(long id) {if(box2!=null) box2.setId(id);}
+	public void setBox3Id(long id) {if(box3!=null) box3.setId(id);}
+	public void setBox4Id(long id) {if(box4!=null) box4.setId(id);}
+	
+	public Box getBoxByNo(int num) {
+		switch(num) {
+			case 1: return box1;
+			case 2: return box2;
+			case 3: return box3;
+			case 4: return box4;		
 		}
-		return 0;
+		return null;	
+	}
+	
+	//****** new methods **********//
+	public List getBox1Relations(){return getListByType(box1.getBoxType(), box1.getSubType());}		
+	public List<Relation> getBox1RelationsStage(){return getRelationsByStage(getListByType(box1.getBoxType(), box1.getSubType()));}
+	public List getBox2Relations(){return getListByType(box2.getBoxType(), box2.getSubType());}		
+	public List<Relation> getBox2RelationsStage(){return getRelationsByStage(getListByType(box2.getBoxType(), box2.getSubType()));}
+	public List getBox3Relations(){return getListByType(box3.getBoxType(), box3.getSubType());}		
+	public List<Relation> getBox3RelationsStage(){return getRelationsByStage(getListByType(box3.getBoxType(), box3.getSubType()));}
+	public List getBox4Relations(){return getListByType(box4.getBoxType(), box4.getSubType());}		
+	public List<Relation> getBox4RelationsStage(){return getRelationsByStage(getListByType(box4.getBoxType(), box4.getSubType()));}
+	
+	/*public String getBox1Title() {return box1.getTitle(this.getLocale());}
+	public String getBox2Title() {return box2.getTitle(this.getLocale());}
+	public String getBox3Title() {return box3.getTitle(this.getLocale());}
+	public String getBox4Title() {return box4.getTitle(this.getLocale());}*/
+	/**
+	 * Called when in authoring the type / subtype of a box is changed
+	 * @param id
+	 * @param newtypes
+	 */
+	public void chgBoxType(String id, String newtypes, String keepItemsStr, String box) {
+		try {
+			if(id==null || newtypes==null) return;
+			boolean keepItems = Boolean.parseBoolean(keepItemsStr); //then we keep the items in the box for the new substype!
+			int subType = Integer.parseInt(newtypes.substring(newtypes.indexOf(".")+1));
+			int boxType = Integer.parseInt(newtypes.substring(0, newtypes.indexOf(".")));
+			int boxNo = Integer.parseInt(box);		
+			Box b = getBoxByNo(boxNo);
+			if(b==null) return; // should not happen
+			//get items if they should be kept and if they are from the same type - atm we cannot change the type of relations as
+			//this would require moving them in the database as well.
+			if(keepItems && boxType==b.getBoxType()) {			
+				List rels = getListByType(b.getBoxType(), b.getSubType()); //get original list of Relation objects
+				if(rels!=null && !rels.isEmpty()) {
+					for(int i=0;i<rels.size();i++) {
+						Relation rel = (Relation) rels.get(i);
+						rel.setDiscriminator(subType);
+					}
+					new DBClinReason().saveAndCommit(rels);
+				}
+			}
+			
+			
+			if(this.getBoxByType(boxType)!=null && this.getBoxByType(boxType)!=b) return; //then user selected a type that is already in the map
+			b.setBoxType(boxType);
+			b.setTitleNum(subType);
+			new DBClinReason().saveAndCommit(b);
+		}
+		catch(Exception e) {
+			CRTLogger.out("id= "+ id + " types= "+ newtypes, CRTLogger.LEVEL_ERROR);
+		}
+	}
+	/**
+	 * a lookup method to return the list retrieved from the database.
+	 * @param type
+	 * @param subtype (if -1 we get all of this type)
+	 * @return
+	 */
+	public List getListByType(int type, int subtype) {
+		List l = new ArrayList();
+		if (type==Box.BOXTYPE_FDG && problems!=null) { //subtype midwife fdg and fdgs
+			for (int i = 0; i<problems.size();i++) {
+				if(subtype>0 && problems.get(i).getDiscriminator() == subtype)
+					l.add(problems.get(i));
+			}				
+			return l; //1
+		}
+		
+		if(type==Box.BOXTYPE_PAT) return patho; //6 no subtypes
+		
+		if (type==Box.BOXTYPE_DDX && diagnoses!=null) { //subtypes 2=ddx, 7==nursing ddx, 11 = midwife hypos; 15 = drug-related problems
+			for (int i = 0; i<diagnoses.size();i++) {
+				if(subtype>0 && diagnoses.get(i).getDiscriminator() == subtype)
+					l.add(diagnoses.get(i));
+			}
+			return l; //2
+		}
+		if (type==Box.BOXTYPE_TST && tests!=null) return tests; //3 no subtypes
+		
+		if (type==Box.BOXTYPE_MNG && mngs !=null) { //4 = mngs, 13 = midwife mng, midwife recomm = 12, nursing mng = 9, ...
+			for (int i = 0; i<mngs.size();i++) {
+				if(subtype>0 && mngs.get(i).getDiscriminator() == subtype)
+					l.add(mngs.get(i));
+			}
+			return l;
+		}
+		if (type==Box.BOXTYPE_AIM && aims!=null) {//8 subtypes 16 = outcomes
+			for (int i = 0; i<aims.size();i++) {
+				if(subtype>0 && aims.get(i).getDiscriminator() == subtype)
+					l.add(aims.get(i));
+			}
+			return l;
+		}
+		if(type==Box.BOXTYPE_INF) return infos; //10
+		return l;
+	}
+	
+	public void addRelationToListByType(Relation rel, int type) {
+
+		switch(type) {
+			case Box.BOXTYPE_FDG:{
+				if(problems==null) problems = new ArrayList();
+				problems.add((RelationProblem)rel);
+				break;
+			}
+		  case Box.BOXTYPE_DDX:{
+				if(diagnoses==null) diagnoses = new ArrayList();
+				diagnoses.add((RelationDiagnosis)rel);
+				break;
+		  }
+		  case Box.BOXTYPE_MNG:{
+				if(mngs==null) mngs = new ArrayList();
+				mngs.add((RelationManagement)rel);
+				break;
+		  }
+		  case Box.BOXTYPE_TST:{
+				if(tests==null) tests = new ArrayList();
+				tests.add((RelationTest)rel);		  
+				break;
+		  }
+		  case Box.BOXTYPE_AIM:{
+				if(aims==null) aims = new ArrayList();
+				aims.add((RelationAim)rel);	
+				break;
+		  }
+		  case Box.BOXTYPE_INF:{
+				if(infos==null) infos = new ArrayList();
+				infos.add((RelationInformation)rel);	
+				break;
+		  }
+		  case Box.BOXTYPE_PAT:{
+				if(patho==null) patho = new ArrayList();
+				patho.add((RelationPatho)rel);
+				break;
+		  }
+		}
+	}
+	
+	public void removeRelationFromList(Relation rel, int type) {
+		switch(type) {
+			case Box.BOXTYPE_FDG:{
+				problems.remove(rel);
+				new ActionHelper().reOrderItems(problems);
+				break;
+			}
+		  case Box.BOXTYPE_DDX:{
+				diagnoses.remove(rel);
+				new ActionHelper().reOrderItems(diagnoses);
+				break;
+		  }
+		  case Box.BOXTYPE_MNG:{
+				mngs.remove(rel);
+				new ActionHelper().reOrderItems(mngs);
+				break;
+		  }
+		  case Box.BOXTYPE_TST:{
+				tests.remove(rel);	
+				new ActionHelper().reOrderItems(tests);
+				break;
+		  }
+		  case Box.BOXTYPE_AIM:{
+				aims.remove(rel);	
+				new ActionHelper().reOrderItems(aims);
+				break;
+		  }
+		  case Box.BOXTYPE_INF:{
+				infos.remove(rel);	
+				new ActionHelper().reOrderItems(infos);
+				break;
+		  }
+		  case Box.BOXTYPE_PAT:{
+				patho.remove(rel);
+				new ActionHelper().reOrderItems(patho);
+				break;
+		  }
+		}
+	}
+	
+	public Box getBoxByType(int type) {
+		if(box1.getBoxType()==type) return box1;
+		if(box2.getBoxType()==type) return box2;
+		if(box3.getBoxType()==type) return box3;
+		if(box4.getBoxType()==type) return box4;
+		return null;
+	}
+	
+	/**
+	 * change the list mode of a box. Currently either with or without list. 
+	 * @param mode
+	 * @param box
+	 */
+	public void chgBoxListType(String mode, String box) {
+		Box b = this.getBoxByNo(Integer.parseInt(box));
+		if(b==null) return;
+		b.setListType(Integer.parseInt(mode));
+		new DBClinReason().saveAndCommit(b);
 	}
 }

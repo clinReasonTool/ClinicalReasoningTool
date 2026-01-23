@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<!--<?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="beans.relation">
@@ -19,19 +19,9 @@
 		<property name="y" column="y" type="int"/>
 		<property name="stage" column="stage" type="int"/>
 		<property name="prefix" column="prefix" type="string"/>
-		<property name="comment" column="ccomment" type="string"/>
-		
-			<!--<property name="tier" column="tier" type="int"/>
-			<property name="mnm" column="mnm" type="int"/>
-		
-		<property name="ruledOut" column="ruled_out" type="int"/>
-		<property name="workingDDX" column="working_ddx" type="int"/>
-		<property name="finalDiagnosis" column="final_ddx" type="int"/>
-		<property name="prevalence" column="prevalence" type="int"/>-->
+		<property name="comment" column="ccomment" type="string"/>		
 		<property name="discriminator" column="discriminator" type="int" />
-
 		
-		<!--  <property name="name" column="name" type="string"/>	-->
 		<many-to-one name="diagnosis" class="beans.list.ListItem" column="source_id"  lazy="false" insert="false" update="false"/>
 </class>
-</hibernate-mapping>
+</hibernate-mapping>-->

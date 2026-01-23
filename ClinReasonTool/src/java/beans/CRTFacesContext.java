@@ -350,7 +350,7 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 		else if(vpId!=null && !vpId.equals("") && systemId>0 && user!=null){ //look whether script created, if not create it...
 			this.patillscript = isc.loadIllnessScriptsByVpId(user.getUserId(), vpId+"_"+systemId, extUId);
 			if(this.patillscript==null){
-				this.patillscript = isc.createAndSaveNewPatientIllnessScript(user.getUserId(), vpId, systemId, extUId);
+				this.patillscript = isc.createAndSaveNewPatientIllnessScript(user.getUserId(), vpId, extUId);
 				//for debugging purposes we log the userAgent:
 				if(patillscript!=null){
 					String userAgent = FacesContext.getCurrentInstance().getExternalContext().getRequestHeaderMap().get("User-Agent");
@@ -361,6 +361,7 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 		//TODO error handling!!!!
 		initLearningAnalyticsContainer();
 		loadExpScripts(true);
+		
 		initFeedbackContainer();
 		if(user!=null && this.patillscript!=null && vpId!=null && (sessSetting==null || !sessSetting.getVpId().equals(vpId))){
 				sessSetting = SessionSettingController.getInstance().initSessionSettings(vpId, user.getUserId(), this.patillscript.getLocale());				
@@ -452,16 +453,22 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 		//we have to overtake the max stage in which the final ddx has to be submitted from the expert's script: 
 		if(setMaxStage && patillscript.getMaxSubmittedStage()<=0 && expScript!=null){
 			patillscript.setMaxSubmittedStage(expScript.getMaxSubmittedStage());
-			patillscript.save();
-			//we do this here now instead of getting it from the session url as this should not be different from the expert map:
-			patillscript.setBox1Type(expScript.getBox1Type());
-			patillscript.setBox2Type(expScript.getBox2Type());
-			patillscript.setBox3Type(expScript.getBox3Type());
-			patillscript.setBox4Type(expScript.getBox4Type());
+			
+			//backward compatibility - make sure that expert script has the boxes set: 
+			expScript.initOrLoadBoxes();
 			patillscript.setLocale(expScript.getLocale());
-		}
-	    
-		// app.addIllnessScriptForDiagnoses(patillscript.getDiagnoses(), patillscript.getVpId());
+			initMapBoxes(expScript);
+			patillscript.save();
+		}	
+	}
+	
+	/**
+	 * We init the boxes for the learner script from the expert script.
+	 * @param expScript
+	 */
+	private void initMapBoxes(PatientIllnessScript expScript) {
+		if(patillscript.getBox1()!=null) return; //Boxes are already loaded, we do not have to ini them again. 
+		this.patillscript.setBoxes(expScript.getBox1(), expScript.getBox2(), expScript.getBox3(), expScript.getBox4());
 	}
 	
 	public AppBean getAppBean(){
@@ -550,13 +557,13 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 
 	public FacesContext getWrapped() {return FacesContext.getCurrentInstance();}
 	
-	public ExpViewPatientIllnessScript getExpPatIllScript(){
+	/*public ExpViewPatientIllnessScript getExpPatIllScript(){
 		int stage = 1;
 		if(patillscript!=null) stage = patillscript.getCurrentStage();
-		return new ExpViewPatientIllnessScript(graph, stage);
-	}
+		return new ExpViewPatientIllnessScript(patillscript, stage);
+	}*/
 	
-	public PatientIllnessScript getExpertPatIllScript(){
+	public PatientIllnessScript getExpPatIllScript(){
 		if(this.patillscript==null) return null;
 		return AppBean.getExpertPatIllScript(patillscript.getVpId());
 	}

@@ -92,6 +92,9 @@ public class AjaxController {
 	    	String x = reqParams.get("x"); //x-position of an item or startEpId
 	    	String y = reqParams.get("y"); //y-position of an item or targetEp
 	    	String x1 = reqParams.get("x1"); //x-position of targetEp -> needed for more flexible target enpoints
+	    	String box = reqParams.get("box");
+	    	String bool = reqParams.get("bool");
+	    	String prefix = reqParams.get("prefix");
 	    	patillscript.updateStage(reqParams.get(REQPARAM_STAGE));
 	    	String action = reqParams.get("action"); //what is performed (deleted, add, change)
 	    	String type = reqParams.get("type"); //ddx, nddx, mng,...
@@ -99,15 +102,34 @@ public class AjaxController {
 
 	    	//String patIllScriptId = reqParams.get(REQPARAM_SCRIPT); //TODO check whether belongs to currently loaded script!
 	    	Statement stmt; 
-	    	if(x1!=null && !x1.trim().equals("")){ //connection drawing with 
+	    	if(methodName.startsWith("addBox")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, prefix, nameStr});
+	    	
+	    	else if(methodName.startsWith("moveItem")) stmt = new Statement(patillscript, methodName, new Object[]{idStr,x,y});
+	    	else if(methodName.startsWith("addConnection")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr,x, x1,y});
+	    	else if(methodName.startsWith("chgConnection")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr});
+	    	else if(methodName.startsWith("chgStateOf")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr});
+	    	else if (methodName.startsWith("changeTier")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr});
+	    	else if (methodName.startsWith("chgSummStCard")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr});
+	    	else if (methodName.startsWith("saveSummStatement")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr});
+	    	else if (methodName.startsWith("chgBoxType")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr, bool, box});
+	    	else if (methodName.startsWith("chgBoxListType")) stmt = new Statement(patillscript, methodName, new Object[]{idStr, box});
+	    	else stmt = new Statement(patillscript, methodName, new Object[]{idStr});
+	    	
+	    	
+	    	/*if(x1!=null && !x1.trim().equals("")){ //connection drawing with 
 	    		stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr,x, x1,y});
 	    	}
 	    	else if(x!=null && !x.trim().equals("")){
 	    		stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr,x,y});
-	    	}
+	    	}  
+	    	
+	    	
+	    	else if(nameStr!=null && !nameStr.trim().equals("") && box!=null && !box.trim().equals("") && bool!=null && !bool.trim().equals(""))
+	    		stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr, bool, box});
+	    		
 	    	else if(nameStr!=null && !nameStr.trim().equals("")) 
 	    		stmt = new Statement(patillscript, methodName, new Object[]{idStr, nameStr});
-	    	else stmt = new Statement(patillscript, methodName, new Object[]{idStr});
+	    	else stmt = new Statement(patillscript, methodName, new Object[]{idStr});*/
 	    	
 	    	try {
 				stmt.execute();				

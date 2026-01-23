@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="beans.graph">
+
+	<class name="Box" table="crt.box">
+		<cache usage="nonstrict-read-write" />
+		<comment>Connection</comment>	
+		<id name="id" type="long" column="box_id">
+			<generator class="sequence">
+				<param name ="sequence">CRT.CR_SEQ</param>
+			</generator>
+		</id>	
+		<property name="patIllScriptId" column="pat_illscript_id" type="long" />
+		<property name="boxType" column="box_type" type="int" />
+		<property name="titleNum" column="title_num" type="int" />
+		<property name="boxMode" column="box_mode" type="int" />
+		<property name="listType" column="list_type" type="int" />
+		<property name="idx" column="idx" type="int" />
+		
+		
+</class>
+</hibernate-mapping>

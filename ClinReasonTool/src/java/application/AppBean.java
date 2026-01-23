@@ -281,6 +281,7 @@ public class AppBean extends ApplicationWrapper implements HttpSessionListener{
 		if(expertPatIllScripts==null) expertPatIllScripts = new HashMap<String, PatientIllnessScript>();
 		if(vpId!=null && !expertPatIllScripts.containsKey(vpId)){
 			PatientIllnessScript expScript = (PatientIllnessScript) new DBClinReason().selectExpertPatIllScriptByVPId(vpId);
+			expScript.initOrLoadBoxes();
 			if(expScript!=null) expertPatIllScripts.put(vpId, expScript);
 			return expScript;
 			//if(graphs!=null && graphs.get(new Long(parentId)!=null)) return
