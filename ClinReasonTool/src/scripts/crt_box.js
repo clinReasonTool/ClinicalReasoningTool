@@ -57,7 +57,7 @@ function updateBox4Callback(data){updateBoxCallback(data, 4);}
 
 function updateBoxCallback(data, box){
 	if(isCallbackStatusSuccess(data)){
-		initElems(box);
+		initElems("box"+box);
 		initBoxHeights();
 	}   
 }

@@ -557,7 +557,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	//public void moveItemBox2(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box2).move(idStr, x, y);}
 	public void moveItemBox2(String idStr, String x, String y){ new DragDropAction(this, box2).move(idStr, x, y);}
 	//public void moveItemBox3(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box3).move(idStr, x, y);}
-	public void moveItemBox3(String idStr, String x, String y){ new DragDropAction(this, box4).move(idStr, x, y);}
+	public void moveItemBox3(String idStr, String x, String y){ new DragDropAction(this, box3).move(idStr, x, y);}
 	//public void moveItemBox4(String idStr, String newOrderStr, String x, String y){ new DragDropAction(this, box4).move(idStr, x, y);}
 	public void moveItemBox4(String idStr, String x, String y){ new DragDropAction(this, box4).move(idStr, x, y);}
 
@@ -1174,7 +1174,15 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 			}
 			return l; //2
 		}
-		if (type==Box.BOXTYPE_TST && tests!=null) return tests; //3 no subtypes
+		//if (type==Box.BOXTYPE_TST && tests!=null) return tests; //3 no subtypes
+		if (type==Box.BOXTYPE_TST && tests !=null) { //3 = tests, 20 = medications
+			for (int i = 0; i<tests.size();i++) {
+				if(subtype<0 || (subtype>0 && tests.get(i).getDiscriminator() == subtype))
+					l.add(tests.get(i));
+			}
+			return l;
+		}
+		
 		
 		if (type==Box.BOXTYPE_MNG && mngs !=null) { //4 = mngs, 13 = midwife mng, midwife recomm = 12, nursing mng = 9, ...
 			for (int i = 0; i<mngs.size();i++) {

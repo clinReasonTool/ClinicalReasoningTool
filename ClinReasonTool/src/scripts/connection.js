@@ -475,15 +475,15 @@ function getErrorMsgSpanByTargetId(targetId){
 	var targetStart = targetId.substring(0,3);
 	switch(targetStart){
 	case "fdg":
-		return "msg_probform";	
+		return "msg_box1form";	
 	case "ddx":
-		return "msg_ddxform";
+		return "msg_box2form";
 	case "mng":
-		return "msg_mngform";
+		return "msg_box3form";
 	case "tst":
-		return "msg_testform";
-	case "pat":
-		return "msg_pathoform";
+		return "msg_box4form";
+	/*case "pat":
+		return "msg_pathoform";*/
 		default: return "";
 	}
 }
