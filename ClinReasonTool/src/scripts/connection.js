@@ -472,15 +472,15 @@ function isInvalidCnx(info, errormsg){
  * @param targetId
  */
 function getErrorMsgSpanByTargetId(targetId){
-	var targetStart = targetId.substring(0,3);
+	var targetStart = targetId.substring(0,4);
 	switch(targetStart){
-	case "fdg":
+	case "box1":
 		return "msg_box1form";	
-	case "ddx":
+	case "box2":
 		return "msg_box2form";
-	case "mng":
+	case "box3":
 		return "msg_box3form";
-	case "tst":
+	case "box4":
 		return "msg_box4form";
 	/*case "pat":
 		return "msg_pathoform";*/
