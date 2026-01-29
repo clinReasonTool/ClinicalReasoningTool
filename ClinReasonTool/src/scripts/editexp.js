@@ -135,9 +135,9 @@ function chgStageCallback(){
 }
 
 function chgBoxType(id, box){
-	var newType = $("#"+id).val();
-	var newCat = newType.substring(0,newType.indexOf("."));
-	var subtype = newType.substring(newType.indexOf(".")+1);
+	var newType = $("#"+id).val(); //e.g. 3.20
+	var newCat = newType.substring(0,newType.indexOf(".")); // e.g. 3
+	var subtype = newType.substring(newType.indexOf(".")+1); // e.g. 20
 	if((box!=1 && newCat==box1Type && subtype == box1TitleNum) || (box!=2 && newCat==box2Type && subtype == box2TitleNum) || (box!=3 && newCat==box3Type && subtype == box3TitleNum) || (box!=4 &&newCat==box4Type  && subtype == box4TitleNum)){
 		alert("Box type already in use. You cannot have two boxes of the same type.");
 		//reset the select box to the original selection:
@@ -147,9 +147,14 @@ function chgBoxType(id, box){
 	//if box is not exmpty, we ask about what to do with the items:
 	var itemsCount = $(".box"+box+"s").length;
 	if(itemsCount>0){	//TODO: does not work
-		//TODO replace with jdialog:
+
 		//if only subtype change we can keep the items if category/tyoe change we have to inform that it cannot be changed and items will not be displayed
-		
+		if(newCat!=getOrgSelVal(box)){ // then we cannot keep items and disable "keep button"
+			//TODO WAUDL M
+			$("#keepButton").unbind('click');
+			$("#keepButton").css('color', '#ff0000');
+		}
+		 
 		$("#chgBoxId").val(id);
 		$("#chgBoxIdx").val(box);
 		$("#jdialogSwitchCat" ).dialog( "open" );
@@ -159,7 +164,8 @@ function chgBoxType(id, box){
 }
 
 
-function getOrgSelVal(box){
+function getOrgSelVal(boxStr){
+	var box = +boxStr;
 	switch (box){
 		case 1: return box1Type+"."+box1TitleNum;
 		case 2: return box2Type+"."+box2TitleNum;
@@ -182,6 +188,7 @@ function confirmSwitch(keepItems){
 
 function cancelChBoxType(){
 	var box = $("#chgBoxIdx").val();
+	var id = $("#chgBoxId").val();
 	$("#"+id).val(getOrgSelVal(box));
 	$("#jdialogSwitchCat" ).dialog( "close" );
 }
