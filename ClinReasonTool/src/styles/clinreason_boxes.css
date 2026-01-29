@@ -712,7 +712,7 @@ span.icons{
 .pos_4 { 
 	margin-bottom:10px;
 }
-.sum_container{
+.sum_container {
 	width: 425px /*440px*/  !important;
 	min-height: 120px; /*110px;*/
 }
@@ -1282,7 +1282,7 @@ input.cmn-toggle-round:checked + label:after {
 }
 /* export button for downloading excel*/
 .reportBtn{
-		margin: 5px;
+	margin: 5px;
     padding: 5px 5px 5px 5px; /* 20px makes room for your background image */
     border: 1px solid #aaa;
     background-color:#ffffff;

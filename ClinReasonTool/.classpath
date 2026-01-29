@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/OpenJDK 1.8 (Zulu)"/>
 	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/jfreechart/jfreechart-experimental.jar"/>
 	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/jfreechart/jfreechart-swt.jar"/>
 	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/jfreechart/jfreechart.jar"/>
@@ -31,7 +32,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/slf4j-api-1.7.7.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/slf4j-log4j12-1.7.7.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/validation-api-1.0.0.GA.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/hibernate-jpa-2.0-api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/hibernate-search.jar"/>
@@ -154,6 +154,6 @@
 	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/mvel2.jar" sourcepath="/EsayRules/lib/mvel2-2.5.2.Final-sources.jar"/>
 	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/snakeyaml.jar"/>
 	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/easyrules/spring-expression.jar"/>
-	<classpathentry kind="lib" path="/Users/ingahege/Downloads/commons-fileupload-1.5.jar"/>
+	<classpathentry kind="lib" path="/CASUS_SupportLib/lib/commons-pool2.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>
