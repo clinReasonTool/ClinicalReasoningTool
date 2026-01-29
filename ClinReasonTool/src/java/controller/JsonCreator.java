@@ -332,8 +332,8 @@ public class JsonCreator {
 	 * @return
 	 */
 	static public String getDisplayListName(String mode, String type, String lang) {
-		String result = AppBean.getProperty("lists." + mode + "." + type,"");
-		result = AppBean.getProperty("lists." + mode + "." + type + (lang!=null&&lang.length()>0 ? "." + lang : ""),result);
+		String result = AppBean.getProperty("lists." + mode /*+ "." + type*/,"");
+		result = AppBean.getProperty("lists." + mode /*+ "." + type */+ (lang!=null&&lang.length()>0 ? "." + lang : ""),result);
 		
 		List<String> getStringList = AppBeanPropertyHelper.getStringList("lists.languages.", type, null);
 		if (getStringList != null && getStringList.contains(lang)) {

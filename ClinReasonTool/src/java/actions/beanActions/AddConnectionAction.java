@@ -148,11 +148,11 @@ public class AddConnectionAction implements Scoreable{
 	}
 
 	private void createErrorMessage(String summary, String details, Severity sev, int targetType) {
-		String formId = "probform";
+		/*String formId = "probform";
 		if(targetType==Relation.TYPE_DDX) formId = "cnxform";
 		else if(targetType==Relation.TYPE_TEST) formId = "testform";
-		else if(targetType == Relation.TYPE_MNG) formId = "mngform";
-		new ErrorMessageContainer().addErrorMessage(formId, summary, details, sev);
+		else if(targetType == Relation.TYPE_MNG) formId = "mngform";*/
+		new ErrorMessageContainer().addErrorMessage("", summary, details, sev);
 		
 	}
 	

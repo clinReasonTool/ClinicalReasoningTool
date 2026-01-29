@@ -17,11 +17,11 @@
 		<property name="ddxMode" column="ddx_mode" type="int" />
 		<property name="listMode" column="list_mode" type="int" />
 		<!--property name="boxesUsedStr" column="boxesusedstr" type="string" />-->
-		<property name="boxModeFdg" column="box_used_fdg" type="int" />
-		<property name="boxModeDDX" column="box_used_ddx" type="int" />
-		<property name="boxModeMng" column="box_used_mng" type="int" />
-		<property name="boxModeTst" column="box_used_tst" type="int" />
-		<property name="boxModePat" column="box_used_pat" type="int" />
+		<property name="boxMode1" column="box_used_fdg" type="int" />
+		<property name="boxMode2" column="box_used_ddx" type="int" />
+		<property name="boxMode3" column="box_used_tst" type="int" />
+		<property name="boxMode4" column="box_used_mng" type="int" />
+	<!--	<property name="boxModePat" column="box_used_pat" type="int" />-->
 		<property name="boxModeSum" column="box_used_sum" type="int" />
 		
 		

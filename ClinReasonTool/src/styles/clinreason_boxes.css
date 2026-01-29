@@ -69,7 +69,7 @@ a.option_button  {
 	 color: #111111;
 	 background-color:#eeeeee;
 	 padding: 4px;
-	 
+
 	 border-radius: 4px;
   	 -webkit-border-radius: 4px;
   	 -moz-border-radius: 4px;
@@ -318,6 +318,11 @@ a#ddx_submit_btn, errorsymbol.a{
 	padding-bottom: 0px;
 }
 
+.options_spacer{
+	display:inline-block;
+	width: 1em;
+}
+
 .switch{
 	width:40px;
 	position:absolute;
@@ -545,7 +550,7 @@ a#ddx_submit_btn, errorsymbol.a{
 .title {
     padding-right:16px;
     padding-left: 10px;
-	padding-top:10px;
+	padding-top:4px;
     font-size:12px;
     height:30px;
 	-webkit-border-top-left-radius: 12px;
@@ -569,9 +574,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bbbbbb', end
 
 .title select {
 	position: relative;
-	top: -6px;
+	top: 0px;
 }
-
 
 .icons i{
 	background: #ffffff;
@@ -1310,9 +1314,18 @@ input.cmn-toggle-round:checked + label:after {
 	display:block !important;
 }
 
+/* list settings styles */
 
 
+.search input.f_text.boxListSearchFieldEdit {
+	width:165px;
+}
 
+.boxListSetings {
+	display:none;
+}
 
-
-
+.boxListSetings ul {
+	list-style-type: none;
+	padding-left:0px;
+}

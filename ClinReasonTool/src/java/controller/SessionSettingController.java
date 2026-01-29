@@ -63,16 +63,10 @@ public class SessionSettingController {
 	 * @param sessSetting
 	 */
 	private void initBoxesSettings(SessionSetting sessSetting) {
-		sessSetting.setBoxModeFdg(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_P_MODE,1));
-		sessSetting.setBoxModeDDX(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_D_MODE,1));
-		sessSetting.setBoxModeTst(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_T_MODE,1));
-		sessSetting.setBoxModeMng(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_M_MODE,1));
-		/*sessSetting.setBoxUsedPat(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_PAT_MODE,0));
-		sessSetting.setBoxUsedNDDX(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_ND_MODE,0));
-		sessSetting.setBoxUsedNAim(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_NA_MODE,0));
-		sessSetting.setBoxUsedNInfo(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_NI_MODE,0));
-		sessSetting.setBoxUsedNMng(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_NM_MODE,0));*/
-
+		sessSetting.setBoxMode1(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_P_MODE,1));
+		sessSetting.setBoxMode2(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_D_MODE,1));
+		sessSetting.setBoxMode3(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_T_MODE,1));
+		sessSetting.setBoxMode4(AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_BOXES_M_MODE,1));
 	}
 }	
 

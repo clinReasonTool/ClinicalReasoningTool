@@ -472,18 +472,18 @@ function isInvalidCnx(info, errormsg){
  * @param targetId
  */
 function getErrorMsgSpanByTargetId(targetId){
-	var targetStart = targetId.substring(0,3);
+	var targetStart = targetId.substring(0,4);
 	switch(targetStart){
-	case "fdg":
-		return "msg_probform";	
-	case "ddx":
-		return "msg_ddxform";
-	case "mng":
-		return "msg_mngform";
-	case "tst":
-		return "msg_testform";
-	case "pat":
-		return "msg_pathoform";
+	case "box1":
+		return "msg_box1form";	
+	case "box2":
+		return "msg_box2form";
+	case "box3":
+		return "msg_box3form";
+	case "box4":
+		return "msg_box4form";
+	/*case "pat":
+		return "msg_pathoform";*/
 		default: return "";
 	}
 }

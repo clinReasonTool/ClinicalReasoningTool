@@ -11,14 +11,27 @@ function addBoxItem(itemId, name, typedinName, box){
 	
 	if(name!=""){
 		checkBoxColorOnAdd("box"+box+"_title", "box"+box+"s");
-		sendAjax(itemId, boxCallBack, "addBox"+box+"Item", prefix, typedinName, box);
+		sendAjax(itemId, boxCallBack, "addBox"+box+"Item", name, prefix, typedinName, box);
 	}
 }
+
+
+/**
+** user has entered an entry in a box working without a list and clicked on enter, so we submit the 
+new entry. 
+ */
+function addBoxItemWithoutList(event){
+	var box = event.target.id.substring(3,4); //e.g. box1list
+	var name = event.target.value;
+	sendAjax(-99, boxCallBack, "addBox"+box+"Item", name, "", "", box);	
+}
+
 
 //id, callback, type, methodName, typedinName, box
 function delBoxItem(id, box){
 	clearErrorMsgs();
-	sendAjax(id, delBoxItemCallBack, "delBox"+box+"Item", "", "", box);
+	//sendAjax(id, callback, methodName, name, prefix, typedinName, box)
+	sendAjax(id, delBoxItemCallBack, "delBox"+box+"Item", "", "", "",box);
 }
 
 
@@ -44,7 +57,7 @@ function updateBox4Callback(data){updateBoxCallback(data, 4);}
 
 function updateBoxCallback(data, box){
 	if(isCallbackStatusSuccess(data)){
-		initElems(box);
+		initElems("box"+box);
 		initBoxHeights();
 	}   
 }

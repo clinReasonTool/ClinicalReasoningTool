@@ -162,7 +162,7 @@ public class ExportController {
 				for(int i=0;i<p.getBox1Relations().size();i++) {
 					 XSSFRow row = sheetItems.createRow(rowIdx);
 					 Relation rel = (Relation) p.getBox1Relations().get(i);
-					 createCommonCells(rel, p.getBox1().getTitle(null), p.getId(), row);
+					 createCommonCells(rel, p.getBox1().getTitle(), p.getId(), row);
 					 row.createCell(5).setCellValue(rel.getPrefix());
 					 if(p.getBox1().getBoxType()==Box.BOXTYPE_DDX)
 						 addDDXCells(row, rel);
@@ -174,7 +174,7 @@ public class ExportController {
 				for(int i=0;i<p.getBox2Relations().size();i++) {
 					 XSSFRow row = sheetItems.createRow(rowIdx);
 					 Relation rel = (Relation) p.getBox2Relations().get(i);
-					 createCommonCells(rel, p.getBox2().getTitle(null), p.getId(), row);
+					 createCommonCells(rel, p.getBox2().getTitle(), p.getId(), row);
 					 if(p.getBox2().getBoxType()==Box.BOXTYPE_DDX)
 						 addDDXCells(row, rel);
 					 rowIdx++;
@@ -185,7 +185,7 @@ public class ExportController {
 				for(int i=0;i<p.getBox2Relations().size();i++) {
 					 XSSFRow row = sheetItems.createRow(rowIdx);
 					 Relation rel = (Relation) p.getBox3Relations().get(i);
-					 createCommonCells(rel, p.getBox3().getTitle(null), p.getId(), row);
+					 createCommonCells(rel, p.getBox3().getTitle(), p.getId(), row);
 					 if(p.getBox3().getBoxType()==Box.BOXTYPE_DDX)
 						 addDDXCells(row, rel);
 					 rowIdx++;
@@ -196,7 +196,7 @@ public class ExportController {
 				for(int i=0;i<p.getBox2Relations().size();i++) {
 					 XSSFRow row = sheetItems.createRow(rowIdx);
 					 Relation rel = (Relation) p.getBox3Relations().get(i);
-					 createCommonCells(rel, p.getBox4().getTitle(null), p.getId(), row);
+					 createCommonCells(rel, p.getBox4().getTitle(), p.getId(), row);
 					 if(p.getBox4().getBoxType()==Box.BOXTYPE_DDX)
 						 addDDXCells(row, rel);
 					 rowIdx++;

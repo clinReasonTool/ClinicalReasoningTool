@@ -19,7 +19,7 @@ public class ErrorMessageContainer {
 	
 	public void addErrorMessage(String formId, String summary, String details, Severity sev){
 		FacesContext facesContext = FacesContext.getCurrentInstance(); 
-		facesContext.addMessage(formId,new FacesMessage(sev, summary,details));
+		facesContext.addMessage("",new FacesMessage(sev, summary,details));
 	}
 	
 	public void toXml(StringBuffer xmlResponse){

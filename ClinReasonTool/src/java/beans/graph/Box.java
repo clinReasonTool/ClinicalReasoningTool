@@ -2,8 +2,14 @@ package beans.graph;
 
 import java.util.*;
 
+import javax.faces.context.FacesContext;
+
+import application.AppBean;
 import beans.relation.Relation;
+import controller.JsonCreator;
+import controller.LocaleController;
 import properties.IntlConfiguration;
+import util.AppBeanPropertyHelper;
 
  /** Models a box displayed in the user interface (authoring and player). 
  * Each box is defined by its position (1-4), its category ("boxType") that defines in which table it is saved, and the heading (see intlprops)
@@ -72,8 +78,14 @@ public class Box {
 	 * @param loc
 	 * @return title of the box to be displayed
 	 */
-	public String getTitle(Locale loc) {
+	public String getTitle() {
+		Locale loc = LocaleController.getLocale();
 		return IntlConfiguration.getValue("boxtitle."+boxType+"."+titleNum, loc);
+	}
+	
+	public String getTooltip() {
+		Locale loc = LocaleController.getLocale();
+		return IntlConfiguration.getValue("boxsearch."+boxType+"."+titleNum, loc);
 	}
 	
 	/**
@@ -83,6 +95,17 @@ public class Box {
 	public int getBoxCategory() {
 		if (boxType==BOXTYPE_DDX) return BOXTYPE_DDX;
 		return BOXTYPE_FDG;
+	}
+	
+	public String getListUrl(Locale loc) {
+		String result = "";
+		if(this.listType==BOX_WITH_LIST)
+			result = JsonCreator.getDisplayListName("standard", "standard", loc.getLanguage());
+			//result = AppBean.getProperty("lists.standard_","");
+			//result = AppBean.getProperty("lists.standard" + (loc.getLanguage()!=null&&loc.getLanguage().length()>0 ? "." + loc.getLanguage() : ""),result);
+		
+		//List<String> getStringList = AppBeanPropertyHelper.getStringList("lists.languages.", type, null);
+		return result;
 	}
 	
 }

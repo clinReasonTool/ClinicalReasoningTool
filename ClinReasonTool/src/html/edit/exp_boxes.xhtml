@@ -53,6 +53,9 @@ var displayOwnEntryWarnMsg = "";
 var msg2="Please connect the hypotheses with the findings";
 var scriptId = "#{adminContext.patillscript.id}";
 var listUrl="../jsonp_#{adminContext.patillscript.locale}.json";
+var listUrl1 = listUrl;
+var listUrl2 = "";
+
 //var listNursingUrl="../jsonp_n_#{adminContext.patillscript.locale}.json";
 var scriptlang = "#{adminContext.patillscript.locale}";
 var noEntryFound = "#{prop['list.noentry']}";
@@ -160,6 +163,22 @@ $(function() {
 		height: "auto"
 	});
 	
+	$("#jdialog_boxlist_settings").dialog({
+		autoOpen: false,
+		modal: true,
+		width: 150,
+		height: "auto",
+		minWidth: 150
+	});
+	
+	
+	$(".search input.f_text").keyup(function(event) {
+		//alert("hallo");
+	    if (event.keyCode === 13) {
+	    	addBoxItemWithoutList(event);
+	    }
+	});
+	
 	/*$("#boxesSel").dialog({
 		autoOpen: false,
 		modal: true,
@@ -181,7 +200,7 @@ $(function() {
 	}*/
 	
 	$("#langchgsel").hide();
-	//$("#cmupload").hide();
+	$("#cmupload").hide();
 	if(userId=="7900"){
 		$("#langchgsel").show(); //extremly ugly hack to display the changing of map language only for one super-user. 
 		$("#cmupload").show();
@@ -204,10 +223,7 @@ jsPlumb.ready(function () {
        		Container: "canvas",
        		MaxConnections: 10,
        		ReattachConnections : true
-    });
-     	
-     	
-     	
+    });   	
 
     // suspend drawing and initialise.
     instance.batch(function () {
@@ -275,6 +291,16 @@ jsPlumb.ready(function () {
 	
 });
 
+function displayBoxListSettings(id) {
+	$("#jdialog_boxlist_settings").html($("#" + id).html());
+	$("#jdialog_boxlist_settings").dialog("open");
+}
+
+function hideBoxListSettings() {
+	$("#jdialog_boxlist_settings").html("");
+	$("#jdialog_boxlist_settings").dialog("close");
+}
+
 //var item_arr = new Array();
 var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 //]]>
@@ -282,54 +308,62 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 </head>
 <body style="font-family:arial;" data-demo-id="draggableConnectors" data-library="dom">
 
-
 <div class="options">
-<div  style="position:absolute;left:15px;top:9px;" ><i id="cnxtogglei" class="fa fa-conn" style="cursor:pointer;" mytooltip="#{prop['cnx.show']}"></i>  </div>
+	<div  style="position:absolute;left:15px;top:9px;" ><i id="cnxtogglei" class="fa fa-conn" style="cursor:pointer;" mytooltip="#{prop['cnx.show']}"></i></div>
+	
 	<!-- <a href="javascript:toggleCnxDisplay();" id="cnxtoggle" title="Hide connections"><i id="cnxtogglei" class="fa fa-conn_on"></i></a>-->
-	<div class="switch" style="left:30px;margin-top:3px;" mytooltip="#{prop['cnx.show']}">
+	<div class="switch" style="left:30px;;margin-top:3px;" mytooltip="#{prop['cnx.show']}">
         <input id="cnxtoggle" class="cmn-toggle cmn-toggle-round" checked="checked" onchange="javascript:toggleCnxDisplay();" type="checkbox" />
         <label for="cnxtoggle"></label>
-        
 	</div>
-        <div id="langchgsel" style="position:absolute;left:80px;top:5px;">#{prop['authoring.language']} <select onChange="javascript:chgMapLang();" name="script_locale" id="scriptloc">
+	
+    <div id="langchgsel" style="position:absolute;left:80px;top:5px;">#{prop['authoring.language']} <select onChange="javascript:chgMapLang();" name="script_locale" id="scriptloc">
         <option value="en">en</option><option value="de">de</option><option value="es">es</option><option value="pl">pl</option><option value="pt">pt</option><option value="fr">fr</option><option value="uk">uk</option></select>
        	 <i class="fa fa-info-circle" mytooltip="Language of lists to display"></i>
-        </div>
-        <div style="position:absolute;left:210px;top:9px;;width:150px;" class="showadaptBox_#{adminContext.adaptableBoxesEnabled}"> 
+    </div>
+    <span class="options_spacer"></span>
+    <div style="position:absolute;left:210px;top:9px;;width:100px;" class="showadaptBox_#{adminContext.adaptableBoxesEnabled}"> 
         	<!-- <a href="javascript:openSelBoxes('#{prop['authoring.slctboxes']}');">#{prop['authoring.slctboxes']}</a>-->
-        
-        <span style="width:30px;visibility:hidden;"></span><a href="javascript:toggleDisplayMode();" class="option_button">
+        <a href="javascript:toggleDisplayMode();" class="option_button">
         <script language="JavaScript">
-        if(sessionStorage.displayMode==1) document.write ("Full map"); else document.write("Current stage")</script></a></div>
-
-</div><br/>
-
-<!--<div id="cmupload" style="margin-top:5px;" class="options"><a href="import/cm_upload.xhtml" target="new"  class="option_button">Upload CM</a></div>-->
+        if(sessionStorage.displayMode==1) document.write ("Full map"); else document.write("Current stage")</script></a>
+     </div>
+</div>
+<br/>
+<div id="cmupload" class="options"><a href="import/cm_upload.xhtml" target="new" class="option_button">Upload CM</a></div>
 
 <div class="boxes_container">
 	<div id="canvas" class="canvas jtk-surface drag-drop jtk-surface-nopan" >
 		 		  
 	 <div id="box1" class="container expcontainer pos_1" group="box1_group">
-		  	<div id="box1_title" class="title"  mytooltip="#{prop['findings.search']}">
+		  	<div id="box1_title" class="title">
   		   		<ui:include src="boxlist.xhtml">
   		   			<ui:param name="boxId" value="box_sel_1"/>
   		   			<ui:param name="boxNumber" value="1" />
   		   		</ui:include>
-		   		<i class="fa fa-info-circle"></i>
+  		   		<span class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box1.tooltip}"></i></span>
 	   		</div>
-		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box1_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box1list" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+		  			<input class="f_text boxListSearchFieldEdit" id="box1list" placeholder="#{prop['add']} #{adminContext.patillscript.box1.title}" listUrl="../#{adminContext.patillscript.box1.getListUrl(adminContext.patillscript.locale)}"></input>
+		  			<input type="hidden" id="box1ListType" value="#{adminContext.patillscript.box1.listType}"></input>
+		  			&nbsp;
+		  			<a href="javascript:displayBoxListSettings('box1ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
+		  			<span id="box1ListSettings" class="boxListSetings"><ul>
+		  				<li><a href="javascript:selList(1,1);">#{prop['box.withlist']}</a></li>
+		  				<li><a href="javascript:selList(1,2);">#{prop['box.nolist']}</a></li>
+		  			</ul></span>
+		  			
+		  			</div>
 						<h:form id="box1form">
 						<h:panelGroup>
 					  <ui:repeat id="repeatbox" value="#{adminContext.patillscript.box1RelationsStage}" var="itembox" varStatus="status">
-						   		<ui:include src="boxitem.xhtml">
-						   			<ui:param name="boxNumber" value="1" />
-						   			<ui:param name="rowNumber" value="1" />
-						   			<ui:param name="boxCategory" value="#{adminContext.patillscript.box1.boxCategory}" />
-						   		</ui:include>
+					   		<ui:include src="boxitem.xhtml">
+					   			<ui:param name="boxNumber" value="1" />
+					   			<ui:param name="rowNumber" value="1" />
+					   			<ui:param name="boxCategory" value="#{adminContext.patillscript.box1.boxCategory}" />
+					   		</ui:include>
 	    			  </ui:repeat>	
 	    			</h:panelGroup>
     				     <h:commandButton id="hiddenBox1Button" value="RenderSomething" style="visibility:hidden">
@@ -341,17 +375,26 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  </div>
 		  
 		  <div id="box2" class="container expcontainer pos_2" group="box2_group">
-		  		   		<div id="box2_title" class="title"  mytooltip="#{prop['findings.search']}">
+		  		   		<div id="box2_title" class="title">
 		  		   		<ui:include src="boxlist.xhtml">
 		  		   			<ui:param name="boxId" value="box_sel_2"/>
 		  		   			<ui:param name="boxNumber" value="2" />
 		  		   		</ui:include>
-		   		<i class="fa fa-info-circle"></i></div>
+		   		<i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box2.tooltip}"></i></div>
 		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box2_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box2list" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+		  			<input class="f_text boxListSearchFieldEdit" id="box2list" placeholder="#{prop['add']} #{adminContext.patillscript.box2.title}" listUrl="../#{adminContext.patillscript.box2.getListUrl(adminContext.patillscript.locale)}"></input>
+		  			<input type="hidden" id="box2ListType" value="#{adminContext.patillscript.box2.listType}"></input>
+		  			&nbsp;
+		  			<a href="javascript:displayBoxListSettings('box2ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
+		  			<span id="box2ListSettings" class="boxListSetings"><ul>
+		  				<li><a href="javascript:selList(2,1);">#{prop['box.withlist']}</a></li>
+		  				<li><a href="javascript:selList(2,2);">#{prop['box.nolist']}</a></li>
+		  			</ul></span>
+		  			
+		  			</div>
 						<h:form id="box2form">
 						<h:panelGroup>
 							<ui:repeat id="repeatbox2" value="#{adminContext.patillscript.box2RelationsStage}" var="itembox" varStatus="status">
@@ -371,17 +414,26 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  </div>		  
 
 		  <div id="box3" class="container expcontainer pos_3" group="box3_group">
-		  		   		<div id="box3_title" class="title"  mytooltip="#{prop['findings.search']}">
+		  		   		<div id="box3_title" class="title">
 		  		   		<ui:include src="boxlist.xhtml">
 		  		   			<ui:param name="boxId" value="box_sel_3"/>
 		  		   			<ui:param name="boxNumber" value="3" />
 		  		   		</ui:include>
-		   		<i class="fa fa-info-circle"></i></div>
+		   		<i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box3.tooltip}"></i></div>
 		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box3_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box3list" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+		  			<input class="f_text boxListSearchFieldEdit" id="box3list" placeholder="#{prop['add']} #{adminContext.patillscript.box3.title}" listUrl="../#{adminContext.patillscript.box3.getListUrl(adminContext.patillscript.locale)}"></input>
+		  			<input type="hidden" id="box3ListType" value="#{adminContext.patillscript.box3.listType}"></input>
+		  			&nbsp;
+		  			<a href="javascript:displayBoxListSettings('box3ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
+		  			<span id="box3ListSettings" class="boxListSetings"><ul>
+		  				<li><a href="javascript:selList(3,1);">#{prop['box.withlist']}</a></li>
+		  				<li><a href="javascript:selList(3,2);">#{prop['box.nolist']}</a></li>
+		  			</ul></span>
+		  			
+		  			</div>
 						<h:form id="box3form">
 						<h:panelGroup>
 						   <ui:repeat id="repeatbox3" value="#{adminContext.patillscript.box3RelationsStage}" var="itembox" varStatus="status">
@@ -401,17 +453,26 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  </div>	
 		  
 		  		  <div id="box4" class="container expcontainer pos_4" group="box4_group">
-		  		   		<div id="box4_title" class="title"  mytooltip="#{prop['findings.search']}">
+		  		   		<div id="box4_title" class="title">
 		  		   		<ui:include src="boxlist.xhtml">
 		  		   			<ui:param name="boxId" value="box_sel_4"/>
 		  		   			<ui:param name="boxNumber" value="4" />
 		  		   		</ui:include>
-		   		<i class="fa fa-info-circle"></i></div>
+		   		<i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box4.tooltip}"></i></div>
 		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box4_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box4list" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+		  			<input class="f_text boxListSearchFieldEdit" id="box4list" placeholder="#{prop['add']} #{adminContext.patillscript.box4.title}" listUrl="../#{adminContext.patillscript.box4.getListUrl(adminContext.patillscript.locale)}"></input>
+		  			<input type="hidden" id="box4ListType" value="#{adminContext.patillscript.box4.listType}"></input>
+		  			&nbsp;
+		  			<a href="javascript:displayBoxListSettings('box4ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
+		  			<span id="box4ListSettings" class="boxListSetings"><ul>
+		  				<li><a href="javascript:selList(4,1);">#{prop['box.withlist']}</a></li>
+		  				<li><a href="javascript:selList(4,2);">#{prop['box.nolist']}</a></li>
+		  			</ul></span>
+		  			
+		  			</div>
 						<h:form id="box4form">
 						<h:panelGroup>
 						   <ui:repeat id="repeatbox4" value="#{adminContext.patillscript.box4RelationsStage}" var="itembox" varStatus="status">
@@ -441,7 +502,15 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		</div>
 	</div>
 </div>
-<div id="jsonConns" style="display:none;">#{adminContext.graph.jsonConns}</div> 
+	 <h:form id="cnxsform">
+		 <h:panelGroup>
+		 	<div id="jsonConns" style="display:none;">#{adminContext.graph.jsonConns}</div> </h:panelGroup>
+		   <h:commandButton id="hiddenCnxButton" value="RenderSomething" style="visibility:hidden">
+	  		<f:ajax render="@form" onevent="reInitCnxsCallback"></f:ajax>
+		</h:commandButton>		 
+	</h:form>
+	
+<!--  <div id="jsonConns" style="display:none;">#{adminContext.graph.jsonConns}</div> -->
 
 <div id="connContext"><ui:include src="expcnxchange.xhtml" /></div>
 <!--  <div id="boxesSel"><ui:include src="selboxes.xhtml" /></div>-->
@@ -453,11 +522,13 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 	</ui:repeat>	</span>
 </div>
 <div id="jdialogToolbox"></div>
+<div id="jdialog_boxlist_settings"></div>
  <div id="jdialogSwitchCat">
-Do you want to keep the items you have entered so far in this box? 
+Do you want to keep the items you have entered so far in this box? (Only available for items of the same category)
 <form id="chgBoxForm"><input type="hidden" id="chgBoxId" value=""></input>
 <input type="hidden" id="chgBoxIdx" value=""></input></form>
-<a href="javascript:confirmSwitch(true);">Keep</a> <a href="javascript:confirmSwitch(false);">Remove</a>
+<a id="keepButton" class="ui-button ui-widget ui-corner-all" href="javascript:confirmSwitch(true);">Keep</a>
+ &nbsp;&nbsp;<a href="javascript:confirmSwitch(false);">Remove</a>&nbsp;&nbsp;
 <a href="javascript:cancelChBoxType();">Cancel</a>
 </div>
 </body>
