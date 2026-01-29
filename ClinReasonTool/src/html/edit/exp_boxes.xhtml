@@ -525,11 +525,17 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 <div id="jdialog_boxlist_settings"></div>
  <div id="jdialogSwitchCat">
 Do you want to keep the items you have entered so far in this box? (Only available for items of the same category)
-<form id="chgBoxForm"><input type="hidden" id="chgBoxId" value=""></input>
-<input type="hidden" id="chgBoxIdx" value=""></input></form>
-<a id="keepButton" class="ui-button ui-widget ui-corner-all" href="javascript:confirmSwitch(true);">Keep</a>
- &nbsp;&nbsp;<a href="javascript:confirmSwitch(false);">Remove</a>&nbsp;&nbsp;
-<a href="javascript:cancelChBoxType();">Cancel</a>
+<form id="chgBoxForm">
+	<input type="hidden" id="chgBoxId" value=""></input>
+	<input type="hidden" id="chgBoxIdx" value=""></input>
+</form>
+<div class="nav_buttons" style="margin-top:10px;">
+	<a id="keepButton" class="option_button" href="javascript:confirmSwitch(true);">Keep</a>
+ 	<span class="options_spacer"></span>
+ 	<a href="javascript:confirmSwitch(false);" class="option_button">Remove</a>
+ 	<span class="options_spacer"></span>
+	<a href="javascript:cancelChBoxType();"  class="option_button">Cancel</a>
+</div>
 </div>
 </body>
 </f:view>
