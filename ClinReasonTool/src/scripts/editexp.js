@@ -147,12 +147,18 @@ function chgBoxType(id, box){
 	//if box is not exmpty, we ask about what to do with the items:
 	var itemsCount = $(".box"+box+"s").length;
 	if(itemsCount>0){	//TODO: does not work
-
+		let oldType = getOrgSelVal(box);
+		let oldCat =  oldType.substring(0,oldType.indexOf("."));
+		console.log("chgBoxType", oldCat, newCat);
 		//if only subtype change we can keep the items if category/tyoe change we have to inform that it cannot be changed and items will not be displayed
-		if(newCat!=getOrgSelVal(box)){ // then we cannot keep items and disable "keep button"
+		if(newCat != oldCat){ // then we cannot keep items and disable "keep button"
 			//TODO WAUDL M
-			$("#keepButton").unbind('click');
-			$("#keepButton").css('color', '#ff0000');
+			$("#keepButton").addClass('disabled');
+			$("#keepButton").attr('href','#');
+		}
+		else {
+			$("#keepButton").removeClass('disabled');
+			$("#keepButton").attr('href','javascript:confirmSwitch(true);');
 		}
 		 
 		$("#chgBoxId").val(id);

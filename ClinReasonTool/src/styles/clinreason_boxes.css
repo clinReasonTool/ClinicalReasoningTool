@@ -58,7 +58,7 @@ body {
 }
 * {box-sizing: border-box;}
 
-a{
+a {
 	text-decoration:none;
 	color:#006699 !important;
 }
@@ -73,6 +73,11 @@ a.option_button  {
 	 border-radius: 4px;
   	 -webkit-border-radius: 4px;
   	 -moz-border-radius: 4px;
+}
+
+a.option_button.disabled  {
+	 border: 1px solid #bbbbbb;
+	 color: #bbbbbb !important;
 }
 
 .ui-widget-content { /*needs to be at the beginning, otherwise the slider background will be overwritten*/
