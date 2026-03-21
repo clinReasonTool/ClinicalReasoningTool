@@ -115,6 +115,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	private List<RelationPatho> patho;	//category 6
 	private List<RelationAim> aims;	//category 8
 	private List<RelationInformation> infos; //category 10
+	private List<RelationRecommendation> recs; //category 18
 	
 	private Box box1;
 	private Box box2;
@@ -263,20 +264,27 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(showAll == 0) showAll = 1;
 		else showAll = 0;
 	}
-	public void setStage(int stage) {this.stage = stage;}
+	public void setStage(int stage) 
+	{
+		this.stage = stage;
+		//if we have a learner script we have to set the stage also for the expertScript as otherwise the items are not displayed correctly (stage=1 all the time)
+		//if(!this.isExpScript()) {
+		//	((CRTFacesContext) NavigationController.getInstance().getMyFacesContext()).getExpPatIllScript().setStage(stage);
+		//}
+	}
 	public int getCourseOfTime() {return courseOfTime;}
 	public void setCourseOfTime(int courseOfTime) {this.courseOfTime = courseOfTime;}	
 //	public List<Box> getBoxes() {return boxes;}
 //	public void setBoxes(List<Box> boxes) {this.boxes = boxes;}
 	
-	private List<RelationProblem> getProblems() {
+	//private List<RelationProblem> getProblems() {
 	//	if(!this.isExpScript())
-			return problems;
+	//		return problems;
 	/*	else {
 			if(showAll ==0)return problems;
 			else return getProblemsStage();
 		}*/
-	}
+	//}
 	//private List<RelationProblem> getProblemsStage() { return getRelationsByStage(problems);}
 	public void setProblems(List<RelationProblem> problems) {this.problems = problems;}
 	public Timestamp getCreationDate(){ return this.creationDate;} //setting is done in DB	
@@ -310,15 +318,10 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	//public List<RelationInformation> getInfos() {return infos;}
 	//public List<RelationInformation> getInformationStage() { return getRelationsByStage(infos);}
 	public void setInformation(List<RelationInformation> infos) {this.infos = infos;}
-	
-	//public List<RelationManagement> getMngsStage() { return getRelationsByStage(mngs);}
 	public void setMngs(List<RelationManagement> mngs) {this.mngs = mngs;}	
-	
-	//public List<RelationTest> getTests() {return tests;}
-	//public List<RelationTest> getTestsStage() { return getRelationsByStage(tests);}
 	public void setTests(List<RelationTest> tests) {this.tests = tests;}	
-	public void setPatho(List<RelationPatho> patho) {this.patho = patho;}	
-		
+	public void setPatho(List<RelationPatho> patho) {this.patho = patho;}
+	public void setRecs(List<RelationRecommendation> recs) {this.recs = recs;}			
 	
 	public Map<Long,Connection> getConns() {return conns;}
 	public void setConns(Map<Long,Connection> conns) {this.conns = conns;}
@@ -581,7 +584,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	public void saveSummStatement(String idStr, String text){new SummaryStatementChgAction(this).updateOrCreateSummaryStatement( idStr, text);}
 	//public void saveNote(String idStr, String text){new NoteChgAction(this).updateOrCreateNote( idStr, text);}
 	public void submitDDX(String idStr){new DiagnosisSubmitAction(this).submitDDX(idStr);}
-	public void submitDDXAndConf(String idStr, String confStr){new DiagnosisSubmitAction(this).submitDDXAndConf(idStr, confStr);}
+	public void submitDDXAndConf(String idStr, String confStr, String box){new DiagnosisSubmitAction(this).submitDDXAndConf(idStr, confStr);}
 	public void expSetFinalDiagnosis(String idStr){new DiagnosisSubmitAction(this).submitExpFinalDiagnosis(idStr);}
 	public void expSetNoFinalDiagnosis(String idStr){new DiagnosisSubmitAction(this).submitExpNoFinalDiagnosis(idStr);}
 
@@ -677,7 +680,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(type==Relation.TYPE_PATHO) return getRelationByListItemId(this.patho, id);	
 		if(type==Relation.TYPE_INFO) return getRelationByListItemId(this.infos, id);	
 		if(type==Relation.TYPE_AIM) return getRelationByListItemId(this.aims, id);	
-
+		if(type==Relation.TYPE_REC) return getRelationByListItemId(this.recs, id);
 
 		return null;
 	}
@@ -713,7 +716,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		List<Relation> stageList = new ArrayList<Relation>();
 		for(int i=0; i< items.size(); i++){
 			Relation rel = (Relation) items.get(i);
-			if(rel.getStage()<=stage) stageList.add(rel);
+			if(rel.getStage()<=getStage()) stageList.add(rel);
 		}
 		return stageList; //nothing found
 	}
@@ -766,6 +769,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(type==Relation.TYPE_PATHO) return getRelationById(this.patho, id);
 		if(type==Relation.TYPE_INFO) return getRelationById(this.infos, id);
 		if(type==Relation.TYPE_AIM) return getRelationById(this.aims, id);
+		if(type==Relation.TYPE_REC) return getRelationById(this.recs, id);
 	
 		return null;
 	}
@@ -918,28 +922,28 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
 		//if we have view mode only, we do not change color of box:
 		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode1()==2) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox1Relations(), box1.getBoxCategory());
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox1Relations(), box1.getBoxType());
 	}
 	public int getBox2Diff(){
 		if(this.isExpScript()) return 0;
 		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
 		//if we have view mode only, we do not change color of box:
 		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode2()==2) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox2Relations(), box2.getBoxCategory());
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox2Relations(), box2.getBoxType());
 	}
 	public int getBox3Diff(){
 		if(this.isExpScript()) return 0;
 		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
 		//if we have view mode only, we do not change color of box:
 		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode3()==2) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox3Relations(), box3.getBoxCategory());
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox3Relations(), box3.getBoxType());
 	}
 	public int getBox4Diff(){
 		if(this.isExpScript()) return 0;
 		CRTFacesContext crtContext = new NavigationController().getCRTFacesContext();
 		//if we have view mode only, we do not change color of box:
 		if(crtContext.getSessSetting()!=null && crtContext.getSessSetting().getBoxMode4()==2) return 0;
-		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox4Relations(), box4.getBoxCategory());
+		return FeedbackController.getInstance().getItemsDiffExpForStage(currentStage, this.getBox4Relations(), box4.getBoxType());
 	}
 
 
@@ -968,6 +972,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(this.aims!=null && !aims.isEmpty()) return false; 
 		if(infos!=null && !infos.isEmpty()) return false; 
 		if(this.patho!=null && !this.patho.isEmpty()) return false;
+		if(this.recs!=null && !this.recs.isEmpty()) return false;
 		return true;
 	}
 	//used for admin purposes only (display in admin area for individual maps)
@@ -980,19 +985,19 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(box1!=null && box1.getBoxType()>0) return box1.getBoxType();
 		return box1Type;
 	}
-	public void setBox1Type(int box1Type) {this.tsttypes[0] = box1Type;}
+	public void setBox1Type(int box1Type) {this.box1Type = box1Type;}
 	public int getBox2Type() {
 		if(box2!=null && box2.getBoxType()>0) return box2.getBoxType();
 		return box2Type;}
-	public void setBox2Type(int box2Type) {this.tsttypes[1] = box2Type;}
+	public void setBox2Type(int box2Type) {this.box2Type = box2Type;}
 	public int getBox3Type() {
 		if(box3!=null && box3.getBoxType()>0) return box3.getBoxType();
 		return box3Type;}
-	public void setBox3Type(int box3Type) {this.tsttypes[2] = box3Type;}
+	public void setBox3Type(int box3Type) {this.box3Type = box3Type;}
 	public int getBox4Type() {
 		if(box4!=null && box4.getBoxType()>0) return box4.getBoxType();
 		return box4Type;}
-	public void setBox4Type(int box4Type) {this.tsttypes[3] = box4Type;}	
+	public void setBox4Type(int box4Type) {this.box4Type = box4Type;}	
 	
 	public int getBox1Mode() {return box1Mode;}
 	public void setBox1Mode(int box1Mode) {this.box1Mode = box1Mode;}
@@ -1016,19 +1021,19 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(this.getType()!=PatientIllnessScript.TYPE_EXPERT_CREATED) return;// we only create boxes for expert scripts! 
 		
 		if(box1==null) {
-			box1 = new Box(this.id, getBox1Type(), 1, 1, box1Mode); //init a default box
+			box1 = new Box(this.id, getBox1Type(), getBox1Type(), 1, box1Mode); //init a default box
 			new DBClinReason().saveAndCommit(box1);
 		}
 		if(box2==null) {
-			box2 = new Box(this.id, getBox2Type(), 2, 2, box2Mode);
+			box2 = new Box(this.id, getBox2Type(), getBox2Type(), 2, box2Mode);
 			new DBClinReason().saveAndCommit(box2);
 		}
 		if(box3==null) {
-			box3 = new Box(this.id, getBox3Type(), 3, 3, box3Mode);
+			box3 = new Box(this.id, getBox3Type(), getBox3Type(), 3, box3Mode);
 			new DBClinReason().saveAndCommit(box3);
 		}
 		if(box4==null) {
-			box4 = new Box(this.id, getBox4Type(), 4, 4, box4Mode);
+			box4 = new Box(this.id, getBox4Type(), getBox4Type(), 4, box4Mode);
 			new DBClinReason().saveAndCommit(box4);
 		}	
 		new DBClinReason().saveAndCommit(this);
@@ -1056,7 +1061,8 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	public void setBox1(Box box1) {this.box1 = box1;}
 	public Box getBox2() {return box2;}
 	public void setBox2(Box box2) {this.box2 = box2;}
-	public Box getBox3() {return box3;}
+	public Box getBox3() {
+		return box3;}
 	public void setBox3(Box box3) {this.box3 = box3;}
 	public Box getBox4() {return box4;}
 	public void setBox4(Box box4) {this.box4 = box4;}
@@ -1198,6 +1204,14 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 			}
 			return l;
 		}
+		
+		if (type==Box.BOXTYPE_REC && recs!=null) {//8 subtypes 16 = outcomes
+			for (int i = 0; i<recs.size();i++) {
+				if(subtype>0 && recs.get(i).getDiscriminator() == subtype)
+					l.add(recs.get(i));
+			}
+			return l;
+		}
 		if(type==Box.BOXTYPE_INF) return infos; //10
 		return l;
 	}
@@ -1238,6 +1252,11 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		  case Box.BOXTYPE_PAT:{
 				if(patho==null) patho = new ArrayList();
 				patho.add((RelationPatho)rel);
+				break;
+		  }
+		  case Box.BOXTYPE_REC:{
+				if(recs==null) recs = new ArrayList();
+				recs.add((RelationRecommendation)rel);
 				break;
 		  }
 		}
@@ -1302,4 +1321,19 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		b.setListType(Integer.parseInt(mode));
 		new DBClinReason().saveAndCommit(b);
 	}
+	
+	/**
+	 * Checks which of the 4 boxes has the diagnoses (we can no longer rely on it to be the second box!)
+	 * @return
+	 */
+	public int getDiagnosesBox() {
+		if(box1.getBoxCategory()==Box.BOXTYPE_DDX) return 1;
+		if(box2.getBoxCategory()==Box.BOXTYPE_DDX) return 2;
+		if(box3.getBoxCategory()==Box.BOXTYPE_DDX) return 3;
+		if(box4.getBoxCategory()==Box.BOXTYPE_DDX) return 4;
+		return 0;
+		
+	}
+	
+	public List getDiagnoses() {return diagnoses;}
 }

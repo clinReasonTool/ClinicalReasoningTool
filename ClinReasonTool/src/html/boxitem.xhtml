@@ -5,7 +5,7 @@
     xmlns:f="http://java.sun.com/jsf/core">
 
 
-	<div id="box#{boxNumber}_#{itembox.id}"  score="#{itembox.id}.score}" suffix="#{itembox.cssClass}" class="itembox box#{boxNumber}s row#{rowNumber} ddxclass_#{itembox.cssClass}"  style="left:#{itembox.x}px; top:#{itembox.boxY}px;" oncontextmenu="javascript:showDropDown('ddbox#{boxNumber}_#{itembox.id}', 'box#{boxNumber}_#{itembox.id}');">
+	<div id="box#{boxNumber}_#{itembox.id}"  score="#{itembox.score}" suffix="#{itembox.cssClass}" class="itembox box#{boxNumber}s row#{rowNumber} ddxclass_#{itembox.cssClass}"  style="left:#{itembox.x}px; top:#{itembox.boxY}px;" oncontextmenu="javascript:showDropDown('ddbox#{boxNumber}_#{itembox.id}', 'box#{boxNumber}_#{itembox.id}');">
  		<span id="expstyle_ddx_#{itembox.id}" style="display:none;" suffix="#{itembox.expCssClass}" ></span>
   		<i id="mnmicon_#{itembox.id}" title="#{prop['ddx.mnm.hint2']}" class="fa fa-exclamation-circle#{itembox.mnm}"></i>
   	 	
@@ -16,7 +16,8 @@
  
  		<span class="dropdown" onClick="javascript:showDropDown('ddbox#{boxNumber}_#{itembox.id}', '#{boxCategory}');"><i class="fa fa-chevron-circle-down"></i></span>
 	 	<span class="peer_score_box#{boxNumber}" title="#{prop['findings.peer.hint']}" id="peerscore#{itembox.id}"> (#{itembox.peerPercentage})</span>
- 		<div class="icons_score box#{boxNumber}_score box#{boxNumber}score_#{itembox.score}"><i class="fa fa-check"></i></div>
+ 		<div class="icons_score box#{boxNumber}_score boxscore_#{itembox.score}"><i class="fa fa-check"></i></div>
+
 	</div>
 	
 	<div class="dropdown-content" id="ddbox#{boxNumber}_#{itembox.id}" >

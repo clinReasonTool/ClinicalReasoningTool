@@ -59,7 +59,9 @@ function updateBoxCallback(data, box){
 	if(isCallbackStatusSuccess(data)){
 		initElems("box"+box);
 		initBoxHeights();
-	}   
+	}  
+	if(box==diagnosesBox) 
+		checkSubmitBtn();
 }
 
 /** TODO */
@@ -140,7 +142,7 @@ function togglePeersBox2(){
 function doSubmitDDXDialog(){
 	clearErrorMsgs();
 	//we check whether there are diagnoses, if so we open a dialog, else we display a hint
-	var ddxNum = $( ".ddxs" ).length;
+	var ddxNum = $( ".box"+diagnosesBox+"s").length;
 	$('.ui-tooltip').remove();
 	if(ddxNum>0){ //then open jdialog:
 		
@@ -171,9 +173,9 @@ function doSubmitDDXDialog(){
  */
 function continueCase(){
 	$("#jdialog" ).dialog( "close" );
-	removeElems("ddxs");
-	removeElems("expddxs");
-	$("[id='ddxform:hiddenDDXButton']").click();	
+	removeElems("box"+diagnosesBox+"s");
+	removeElems("expbox"+diagnosesBox+"s");
+	$("[id='box"+diagnosesBox+"form:hiddenBox"+diagnosesBox+"Button']").click();
 	$("[id='cnxsform:hiddenCnxButton']").click();
 }
 
@@ -190,7 +192,9 @@ function submitDDXConfirmed(){
 	}
 	ids = ids.substring(0, ids.length-1);
 	var confVal = $( "#confidence_slider" ).slider( "value" );
-	sendAjax(ids, submitDDXConfirmedCallBack, "submitDDXAndConf",  confVal);
+	//(id, callback, methodName, name, prefix, typedinName, box)
+	//sendAjax(id, doNothing, "changeTier", 5, "", box);
+	sendAjax(ids, submitDDXConfirmedCallBack, "submitDDXAndConf",  confVal, "","",diagnosesBox);
 }
 
 /** 3. we come back after the submission and have to reload ddxs once again show feedback for submitted diagnoses */
@@ -241,15 +245,18 @@ function showSolutionCallBack(data){
 	//if(isCallbackStatusSuccess(data)){
 		showSolutionStage = currentStageScriptNoUPdate;
 		$("#jdialog" ).dialog( "close" );
-		clickExpFeedbackOn();
+		
 		presubmitted = "false";
 		submitted = "true";
 		postEnforceFinalDDXSubmission("true");
 		//make changes visible in the ddx box:
-		removeElems("ddxs");
-		removeElems("expddxs");
-		$("[id='ddxform:hiddenDDXButton']").click();	
-		$("[id='cnxsform:hiddenCnxButton']").click();
+		//removeElems("box"+diagnosesBox+"s");
+		//removeElems("expbox"+diagnosesBox+"s");
+		//$("[id='box"+diagnosesBox+"form:hiddenBox"+diagnosesBox+"Button']").click();		
+		//$("[id='cnxsform:hiddenCnxButton']").click();
+		turnOverallExpFeedbackOn("", "");
+		clickExpFeedbackOn();
+		checkSubmitBtn();
 	//}
 }
 
@@ -259,10 +266,11 @@ function showSolutionCallBack(data){
 function closeSubmitDialog(){
 	//just close jdialog if diagnosis already submitted OR only submitdialog is opened.
 	if(submitted=="true" || presubmitted=="false"){
-		removeElems("ddxs");
-		removeElems("expddxs");
-		$("[id='ddxform:hiddenDDXButton']").click();	
-		$("[id='cnxsform:hiddenCnxButton']").click();
+		//removeElems("ddxs");
+		//removeElems("expddxs");
+		//$("[id='box"+diagnosesBox+"form:hiddenBox"+diagnosesBox+"Button']").click();
+		//$("[id='cnxsform:hiddenCnxButton']").click();
+		checkSubmitBtn();
 		return true; 
 	}
 	if(parseInt(currentStage) < parseInt(maxSubmittedStage)){ //user can continue the case:
@@ -341,7 +349,7 @@ function workingDDXOff(id, box){
  }
 
 function checkSubmitBtn(){
-	var ddxNum = $( ".ddxs" ).length;
+	var ddxNum = $( ".box"+diagnosesBox+"s").length;
 	//enable submit button:
 	if(ddxNum>0 && submitted!="true"){
 		$("#submitBtnSpan").removeClass("submitBtnOff");
@@ -528,10 +536,6 @@ function clickExpFeedbackOn(){
 	$("#expFeedback").prop("checked", "true");
 }
 
-/* when displaying the expert summSt we have to increase the height of the box.*/
-/*function calcAddPixForExpSum(){
-	
-}*/
 /*
  * we display the peer feedback for the given box/type
  */
@@ -584,10 +588,10 @@ function turnOverallExpFeedbackOn(iconId, itemClass){
 	$(".expbox").addClass("expboxstatus_show");
 	$(".expbox").removeClass("expboxstatus");
 	$(".expbox").removeClass("expboxinvis");
-	if(box1Mode==1)turnExpBoxFeedbackOn("expFeedbackBox1", "box1s");
-	if(box2Mode==1) turnExpBoxFeedbackOn("expFeedbackBox2", "box2s");
-	if(box3Mode==1)turnExpBoxFeedbackOn("expFeedbackBox3", "box3s");
-	if(box4Mode==1)turnExpBoxFeedbackOn("expFeedbackBox4", "box4s");
+	if(box1Mode==1)turnExpBoxFeedbackOn("expFeedbackBox1", "box1");
+	if(box2Mode==1) turnExpBoxFeedbackOn("expFeedbackBox2", "box2");
+	if(box3Mode==1)turnExpBoxFeedbackOn("expFeedbackBox3", "box3");
+	if(box4Mode==1)turnExpBoxFeedbackOn("expFeedbackBox4", "box4");
 	if(isOverallCnxOn()){
 		$(".jtk-exp-connector").addClass("jtk-exp-connector-show");
 		$(".jtk-exp-connector").removeClass("jtk-exp-connector-hide");
@@ -647,10 +651,10 @@ function turnOverallExpFeedbackOff(iconId, itemClass){
 	}
 	$(".expbox").removeClass("expboxstatus_show");
 	$(".expbox").addClass("expboxstatus");
-	turnExpBoxFeedbackOff("expFeedbackBox1", "box1s");
-	turnExpBoxFeedbackOff("expFeedbackBox2", "box2s");
-	turnExpBoxFeedbackOff("expFeedbackBox3", "box3s");
-	turnExpBoxFeedbackOff("expFeedbackBox4", "box4s");
+	turnExpBoxFeedbackOff("expFeedbackBox1", "box1");
+	turnExpBoxFeedbackOff("expFeedbackBox2", "box2");
+	turnExpBoxFeedbackOff("expFeedbackBox3", "box3");
+	turnExpBoxFeedbackOff("expFeedbackBox4", "box4");
 	$(".jtk-exp-connector").addClass("jtk-exp-connector-hide");
 	$(".jtk-exp-connector").removeClass("jtk-exp-connector-show");
 	turnViewModeOn();

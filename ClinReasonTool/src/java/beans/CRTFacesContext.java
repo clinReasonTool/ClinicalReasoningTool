@@ -557,13 +557,13 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 
 	public FacesContext getWrapped() {return FacesContext.getCurrentInstance();}
 	
-	/*public ExpViewPatientIllnessScript getExpPatIllScript(){
+	public ExpViewPatientIllnessScript getExpPatIllScript(){
 		int stage = 1;
 		if(patillscript!=null) stage = patillscript.getCurrentStage();
-		return new ExpViewPatientIllnessScript(patillscript, stage);
-	}*/
+		return new ExpViewPatientIllnessScript(patillscript, stage, graph);
+	}
 	
-	public PatientIllnessScript getExpPatIllScript(){
+	public PatientIllnessScript getExpertPatIllScript(){
 		if(this.patillscript==null) return null;
 		return AppBean.getExpertPatIllScript(patillscript.getVpId());
 	}

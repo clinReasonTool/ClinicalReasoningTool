@@ -30,6 +30,7 @@ public class Box {
 	public static final int BOXTYPE_PAT = Relation.TYPE_PATHO; //6
 	public static final int BOXTYPE_INF = Relation.TYPE_INFO; //10
 	public static final int BOXTYPE_AIM = Relation.TYPE_AIM; //8
+	public static final int BOXTYPE_REC = Relation.TYPE_REC; //18
 	
 	public static final int BOX1_3_X = 15;
 	public static final int BOX2_4_X = 5;
@@ -52,12 +53,81 @@ public class Box {
 	
 	public Box(long patIllScriptId, int boxType, int titleNum, int idx, int mode) {
 		this.patIllScriptId = patIllScriptId;
-		this.boxType = boxType;
+		checkBoxTypeANdSubType (boxType);
 		this.titleNum = titleNum;
 		this.idx = idx;
 		this.boxMode = mode;
 	}
 		
+	/**
+	 * Backward compatibility! It might happen that the type is a subtype ( =titlenum) of the new
+	 * approach. SO we have to check that and return the real type.
+	 * @param boxType
+	 */
+	private void checkBoxTypeANdSubType(int boxType) {
+		switch(boxType) {
+		//main types:
+			case Relation.TYPE_PROBLEM: 
+				this.boxType = Relation.TYPE_PROBLEM; //1
+				break;
+			case Relation.TYPE_DDX: 
+				this.boxType = Relation.TYPE_DDX; //2
+				break;
+			case Relation.TYPE_TEST: 
+				this.boxType = Relation.TYPE_TEST; //3
+				break;
+			case Relation.TYPE_MNG: 
+				this.boxType = Relation.TYPE_MNG; //4
+				break;
+			case Relation.TYPE_AIM: 
+				this.boxType = Relation.TYPE_AIM; //8
+				break;
+			case Relation.TYPE_INFO: 
+				this.boxType = Relation.TYPE_INFO; //10
+				break;
+			case Relation.TYPE_PATHO: 
+				this.boxType = Relation.TYPE_PATHO; //6
+				break;
+			case Relation.TYPE_REC:
+				this.boxType = Relation.TYPE_REC; //18
+				break;
+			
+			//subtypes: 
+			case Relation.SUBTYPE_MFDG: 
+				this.boxType = Relation.TYPE_PROBLEM; //14
+				break;
+			case Relation.SUBTYPE_MHYP: 
+				this.boxType = Relation.TYPE_DDX; //11
+				break;
+			case Relation.SUBTYPE_MMNG: 
+				this.boxType = Relation.TYPE_MNG; //13
+				break;
+			case Relation.SUBTYPE_MED: 
+				this.boxType = Relation.TYPE_TEST; //20
+				break;
+			case Relation.SUBTYPE_NDDX: 
+				this.boxType = Relation.TYPE_DDX; //7
+				break;
+			case Relation.SUBTYPE_NMNG:	
+				this.boxType = Relation.TYPE_MNG; //9
+				break;
+			case Relation.SUBTYPE_DRP : 
+				this.boxType = Relation.TYPE_DDX; //15
+				break;
+			case Relation.SUBTYPE_ASS: 
+				this.boxType = Relation.TYPE_PROBLEM; //19
+				break;
+			case Relation.SUBTYPE_INT:  
+				this.boxType = Relation.TYPE_TEST; //17
+				break;
+			case Relation.SUBTYPE_MREC: 
+				this.boxType = Relation.TYPE_REC; //12
+				break;
+			case Relation.SUBTYPE_OUTC: 
+				this.boxType = Relation.TYPE_AIM; //16			
+		}
+		
+	}
 	public int getTitleNum() {return titleNum;}
 	public int getSubType() {return titleNum;} 
 	public void setTitleNum(int titleNum) {this.titleNum = titleNum;}	

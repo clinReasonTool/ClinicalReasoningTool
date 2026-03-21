@@ -307,11 +307,11 @@ public class Graph extends DirectedWeightedMultigraph<MultiVertex, MultiEdge> {
 		return null;
 	}
 	
-	public MultiVertex getVertexByIdAndType(long vertexId, int type){
+	public MultiVertex getVertexByIdAndType(long vertexId, int boxType){
 		Iterator<MultiVertex> it = this.vertexSet().iterator();
 		while(it.hasNext()){
 			MultiVertex vi = it.next();
-			if(vi.getVertexId()==vertexId && vi.getType()==type) return vi;
+			if(vi.getVertexId()==vertexId && vi.getType()==boxType) return vi;
 		}
 		return null;
 	}
@@ -321,14 +321,14 @@ public class Graph extends DirectedWeightedMultigraph<MultiVertex, MultiEdge> {
 	 * @param type (see definitions in Relation)
 	 * @return List<MultiVertex> or null
 	 */
-	public List<MultiVertex> getVerticesByType(int type){
+	public List<MultiVertex> getVerticesByType(int boxType){
 		Set<MultiVertex> verts = this.vertexSet();
 		if(verts==null) return null;
 		List<MultiVertex> list = new ArrayList<MultiVertex>();
 		Iterator<MultiVertex> it = verts.iterator();
 		while(it.hasNext()){
 			MultiVertex mv = it.next();
-			if(mv.getType()==type) list.add(mv);				
+			if(mv.getType()==boxType) list.add(mv);				
 		}
 		return list;
 	}

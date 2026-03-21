@@ -99,6 +99,7 @@ var box2Type = #{crtContext.patillscript.box2Type};
 var box3Type = #{crtContext.patillscript.box3Type};
 var box4Type = #{crtContext.patillscript.box4Type};
 
+var diagnosesBox = #{crtContext.patillscript.diagnosesBox};
 
 var displayMode = -1;
 
@@ -301,27 +302,29 @@ item_arr = new Array();
 <div class="boxes_container">
 	<div id="canvas" class="canvas jtk-surface drag-drop jtk-surface-nopan" >
 		
-		
+
+
+		  	
 		 <div id="box1" class="container expcontainer pos_1 hide_#{crtContext.sessSetting.boxMode1}" group="box1_group">
-		  	<div id="box1_title" class="title contcol_#{crtContext.patillscript.box1Diff}"  mytooltip="#{prop['findings.search']}">
-  		   		#{crtContext.patillscript.box1Title}
+		  	<div id="box1_title" class="title contcol_#{crtContext.patillscript.box1Diff}">
+  		   		#{crtContext.patillscript.box1.title}
 		   		<i class="fa fa-info-circle"></i>
 	   		</div>
 		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box1_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box1list" onkeyup="javascript:storeHistory('box1');" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+		  			<input class="f_text" style="width:155px;" id="box1list" onkeyup="javascript:storeHistory('box1');" placeholder="#{crtContext.patillscript.box1.tooltip} ..." mytooltip="#{crtContext.patillscript.box1.tooltip}"></input></div>
 						<h:form id="box1form">
 						<h:panelGroup>
-					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box1RelationsStage}" var="itembox" varStatus="status">
+					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box1Relations}" var="itembox" varStatus="status">
 						   		<ui:include src="boxitem.xhtml">
 						   			<ui:param name="boxNumber" value="1" />
 						   			<ui:param name="rowNumber" value="1" />
 						   			<ui:param name="boxCategory" value="#{crtContext.patillscript.box1.boxCategory}" />
 						   		</ui:include>
 	    			  </ui:repeat>	
-	    			  <ui:repeat id="repeatexpbox" value="#{crtContext.expPatIllScript.box1Relations}" var="expbox" varStatus="status">
+	    			  <ui:repeat id="repeatexpbox" value="#{crtContext.expPatIllScript.box1Relations  }" var="expbox" varStatus="status">
 				   		<ui:include src="boxitem_exp.xhtml">
 				   			<ui:param name="boxNumber" value="1" />
 				   			<ui:param name="rowNumber" value="1" />						   			
@@ -338,18 +341,18 @@ item_arr = new Array();
 						<span class="errormsg" id="msg_box1form" onClick="javascript:clearErrorMsgs();"></span>
 		  </div>
 		 <div id="box2" class="container expcontainer pos_2 hide_#{crtContext.sessSetting.boxMode2}" group="box2_group">
-		  	<div id="box2_title" class="title contcol_#{crtContext.patillscript.box2Diff}"  mytooltip="#{prop['findings.search']}">
-  		   		#{crtContext.patillscript.box2Title}
+		  	<div id="box2_title" class="title contcol_#{crtContext.patillscript.box2Diff}">
+  		   		#{crtContext.patillscript.box2.title}
 		   		<i class="fa fa-info-circle"></i>
 	   		</div>
 		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box2_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box2list" onkeyup="javascript:storeHistory('box2');" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+		  			<input class="f_text" style="width:155px;" id="box2list" onkeyup="javascript:storeHistory('box2');" placeholder="#{crtContext.patillscript.box2.tooltip} ..." mytooltip="#{crtContext.patillscript.box2.tooltip}"></input></div>
 						<h:form id="box2form">
 						<h:panelGroup>
-					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box2RelationsStage}" var="itembox" varStatus="status">
+					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box2Relations}" var="itembox" varStatus="status">
 						   		<ui:include src="boxitem.xhtml">
 						   			<ui:param name="boxNumber" value="2" />
 						   			<ui:param name="rowNumber" value="1" />
@@ -370,20 +373,21 @@ item_arr = new Array();
 						
 						</h:form>
 						<span class="errormsg" id="msg_box2form" onClick="javascript:clearErrorMsgs();"></span>
+						<ui:include src="submit.xhtml" />
 		  </div>
 		 <div id="box3" class="container expcontainer pos_3 hide_#{crtContext.sessSetting.boxMode3}" group="box3_group">
-		  	<div id="box3_title" class="title contcol_#{crtContext.patillscript.box3Diff}"  mytooltip="#{prop['findings.search']}">
-  		   		#{crtContext.patillscript.box3Title}
+		  	<div id="box3_title" class="title contcol_#{crtContext.patillscript.box3Diff}">
+  		   		#{crtContext.patillscript.box3.title}
 		   		<i class="fa fa-info-circle"></i>
 	   		</div>
 		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box2_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box3list" onkeyup="javascript:storeHistory('box3');" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+		  			<input class="f_text" style="width:155px;" id="box3list" onkeyup="javascript:storeHistory('box3');" placeholder="#{crtContext.patillscript.box3.tooltip} ..." mytooltip="#{crtContext.patillscript.box3.tooltip}"></input></div>
 						<h:form id="box3form">
 						<h:panelGroup>
-					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box3RelationsStage}" var="itembox" varStatus="status">
+					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box3Relations}" var="itembox" varStatus="status">
 						   		<ui:include src="boxitem.xhtml">
 						   			<ui:param name="boxNumber" value="3" />
 						   			<ui:param name="rowNumber" value="2" />
@@ -407,18 +411,18 @@ item_arr = new Array();
 		  </div>		
 		  
 		 <div id="box4" class="container expcontainer pos_4 hide_#{crtContext.sessSetting.boxMode4}" group="box4_group">
-		  	<div id="box4_title" class="title contcol_#{crtContext.patillscript.box4Diff}"  mytooltip="#{prop['findings.search']}">
-  		   		#{crtContext.patillscript.box4Title}
+		  	<div id="box4_title" class="title contcol_#{crtContext.patillscript.box4Diff}">
+  		   		#{crtContext.patillscript.box4.title}
 		   		<i class="fa fa-info-circle"></i>
 	   		</div>
 		  
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box4_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text" style="width:155px;" id="box4list" onkeyup="javascript:storeHistory('box4');" placeholder="#{prop['findings.add']} ..." mytooltip="#{prop['findings.search']}"></input></div>
+		  			<input class="f_text" style="width:155px;" id="box4list" onkeyup="javascript:storeHistory('box4');" placeholder="#{crtContext.patillscript.box4.tooltip} ..." mytooltip="#{crtContext.patillscript.box4.tooltip}"></input></div>
 						<h:form id="box4form">
 						<h:panelGroup>
-					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box4RelationsStage}" var="itembox" varStatus="status">
+					  <ui:repeat id="repeatbox" value="#{crtContext.patillscript.box4Relations}" var="itembox" varStatus="status">
 						   		<ui:include src="boxitem.xhtml">
 						   			<ui:param name="boxNumber" value="4" />
 						   			<ui:param name="rowNumber" value="2" />

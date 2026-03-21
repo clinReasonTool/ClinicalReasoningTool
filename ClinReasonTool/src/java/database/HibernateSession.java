@@ -95,7 +95,7 @@ public class HibernateSession {
 			//cfg.addClass(beans.relation.RelationMidwifeHypothesis.class);
 			//cfg.addClass(beans.relation.RelationMidwifeFinding.class);
 			//cfg.addClass(beans.relation.RelationMidwifeManagement.class);
-			//cfg.addClass(beans.relation.RelationMidwifeRecommendation.class);
+			cfg.addClass(beans.relation.RelationRecommendation.class);
 			cfg.addClass(beans.LogEntry.class);
 			cfg.addClass(beans.relation.Connection.class);
 			cfg.addClass(beans.relation.RelationManagement.class);			

@@ -36,17 +36,21 @@ public abstract class Relation extends Beans implements Rectangle{
 	public static final int TYPE_CNX = 5;
 	public static final int TYPE_AIM = 8; //nursing aims
 	public static final int TYPE_INFO = 10; // infos
+	public static final int TYPE_REC= 18; // recommendations
+	
+	public static final int SUBTYPE_NDDX = 7; //nursing diagnoses -> 2
+	public static final int SUBTYPE_NMNG = 9; // nursing managements -> 4
+	public static final int SUBTYPE_MHYP = 11; //midwife hypotheses -> 2
+	
+	public static final int SUBTYPE_MMNG = 13; // midwife managements _> 4
+	public static final int SUBTYPE_MFDG = 14; // midwife findings	-> 1
+	public static final int SUBTYPE_OUTC = 16; // outcomes -> 8
+	public static final int SUBTYPE_DRP = 15; // drug-related problems -> 2
+	public static final int SUBTYPE_MREC = 12; //midwife recommendations -> 18
 
-	public static final int SUBTYPE_NDDX = 7; //nursing diagnoses
-	public static final int SUBTYPE_NMNG = 9; // nursing managements
-	public static final int SUBTYPE_MHYP = 11; //midwife hypotheses
-	public static final int SUBTYPE_MREC = 12; //midwife recommendations 
-	public static final int SUBTYPE_MMNG = 13; // midwife managements
-	public static final int SUBTYPE_MFDG = 14; // midwife findings	
-	public static final int SUBTYPE_OUTC = 16; // outcomes
-	public static final int SUBTYPE_DRP = 15; // drug-related problems
-	public static final int SUBTYPE_REC= 18; // midwife findings	
-	public static final int SUBTYPE_INT = 17; //interventions	
+	public static final int SUBTYPE_INT = 17; //interventions	-> 4
+	public static final int SUBTYPE_MED = 20; //medications -> 3
+	public static final int SUBTYPE_ASS = 19;//Assessment -> 1
 	
 	public static final int IS_SYNDROME = 1;
 	public static final int IS_SYNDROME_PART = 2;

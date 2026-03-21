@@ -1,8 +1,10 @@
 package beans.relation;
 
+import java.awt.Point;
 import java.io.Serializable;
 import java.util.*;
 
+import actions.beanActions.AddRelationAction;
 import controller.GraphController;
 import net.casus.util.Utility;
 import util.CRTLogger;
@@ -10,9 +12,8 @@ import beans.list.*;
 
 /**
  * @author ingahege
- * @deprecated
  */
-public class RelationMidwifeRecommendation extends Relation implements Serializable{
+public class RelationRecommendation extends Relation implements Serializable{
 	
 	public static final int DEFAULT_X = 5; //245; //325; //default x position of problems in canvas
 
@@ -20,8 +21,8 @@ public class RelationMidwifeRecommendation extends Relation implements Serializa
 	private ListItem recommendation;
 
 	
-	public RelationMidwifeRecommendation(){}
-	public RelationMidwifeRecommendation(long listItemId, long destId, long synId){
+	public RelationRecommendation(){}
+	public RelationRecommendation(long listItemId, long destId, long synId){
 		this.setListItemId(listItemId);
 		this.setDestId(destId);
 		if(synId>0) setSynId(synId);
@@ -35,7 +36,7 @@ public class RelationMidwifeRecommendation extends Relation implements Serializa
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getRelationType()
 	 */
-	public int getRelationType() {return SUBTYPE_MREC;}	
+	public int getRelationType() {return TYPE_REC;}	
 
 	/* (non-Javadoc)
 	 * @see beans.relation.Relation#getLabel()
@@ -66,6 +67,7 @@ public class RelationMidwifeRecommendation extends Relation implements Serializa
 	}
 	
 	public void calculatePoints(int pos, boolean isExp) {
-		//TODO
+		Point p = new AddRelationAction().calculateNewItemPosInCanvas(pos, isExp);
+		this.setXAndY(p);
 	}
 }
