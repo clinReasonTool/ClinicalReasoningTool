@@ -1299,6 +1299,11 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 				new ActionHelper().reOrderItems(patho);
 				break;
 		  }
+		  case Box.BOXTYPE_REC:{
+				recs.remove(rel);
+				new ActionHelper().reOrderItems(recs);
+				break;
+		  }
 		}
 	}
 	

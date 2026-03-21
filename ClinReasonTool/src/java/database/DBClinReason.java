@@ -522,6 +522,7 @@ public class DBClinReason /*extends HibernateUtil*/{
 		patIllScript.setConns(selectConnsForScript(s, patIllScript.getId()));
 		patIllScript.setAims(selecAimsForScript(s, patIllScript.getId()));
 		patIllScript.setInformation(selectInfosForScript(s, patIllScript.getId()));
+		patIllScript.setRecs(selectRecsForScript(s, patIllScript.getId()));
 		//patIllScript.setNursingDiagnoses(selectNursingDDXForScript(s, patIllScript.getId()));	
 		//patIllScript.setMidwifeManagement(selectMMngForScript(s, patIllScript.getId()));
 		//patIllScript.setMidwifeFindings(selectMFdgForScript(s, patIllScript.getId()));
@@ -575,6 +576,12 @@ public class DBClinReason /*extends HibernateUtil*/{
 		
 	private List<RelationInformation> selectInfosForScript(Session s, long patIllscriptId){
 		Criteria criteria = s.createCriteria(RelationInformation.class,"RelationInformation");
+		criteria.add(Restrictions.eq("destId", new Long(patIllscriptId)));
+		criteria.addOrder(Order.asc("order"));
+		return criteria.list();	
+	}
+	private List<RelationRecommendation> selectRecsForScript(Session s, long patIllscriptId){
+		Criteria criteria = s.createCriteria(RelationRecommendation.class,"RelationRecommendation");
 		criteria.add(Restrictions.eq("destId", new Long(patIllscriptId)));
 		criteria.addOrder(Order.asc("order"));
 		return criteria.list();	
