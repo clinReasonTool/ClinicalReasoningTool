@@ -1,8 +1,10 @@
 package beans.relation;
 
+import java.awt.Point;
 import java.io.Serializable;
 import java.util.Set;
 
+import actions.beanActions.AddRelationAction;
 import beans.list.ListItem;
 import beans.list.Synonym;
 import controller.GraphController;
@@ -58,16 +60,9 @@ public class RelationAim extends Relation implements Serializable {
 	public Set<Synonym> getSynonyma() {
 		return aim.getSynonyma();
 	}
-	@Override
-	/*public String getIdWithPrefix() {
-		return GraphController.PREFIX_NURSINGAIM+this.getId();
-	}*/
 	
 	public void calculatePoints(int pos, boolean isExp) {
-		//TODO
-	}
-	public int getDiscriminator() {
-		// TODO Auto-generated method stub
-		return 0;
+		Point p = new AddRelationAction().calculateNewItemPosInCanvas(pos, isExp);
+		this.setXAndY(p);
 	}
 }
