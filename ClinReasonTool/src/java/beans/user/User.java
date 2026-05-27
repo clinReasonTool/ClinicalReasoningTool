@@ -3,9 +3,8 @@ package beans.user;
 import javax.faces.bean.SessionScoped;
 
 import net.casus.util.Utility;
-import util.CRTLogger;
-import util.Encoder;
-import util.StringUtilities;
+import util.*;
+import database.DBUser;
 
 /**
  * A user object. We create it when a user comes from a VP system or when an admin logs in to edit an expert script.
@@ -29,7 +28,7 @@ public class User {
 	/**
 	 * system the externalId is from (TODO could be more than one)
 	 */
-	private int systemId;
+	//private int systemId;
 	
 	/**
 	 * currently only needed for login of admins/exp script editors
@@ -46,13 +45,16 @@ public class User {
 	 * if true, this user is allowed to edit or create expert scripts
 	 */
 	private boolean editor = false;
+	
+	private long groupId;
 
 	private UserSetting userSetting = new UserSetting();
 	
 	public User(){}
-	public User(int systemId, String extUserId){
-		this.systemId = systemId;
+	public User(/*int systemId,*/ String extUserId, String groupId){
+		//this.systemId = systemId;
 		this.extUserId =extUserId;
+		this.groupId = Long.parseLong(groupId);
 		this.extUserId2 = decodeUserId(extUserId);
 	}
 	
@@ -60,8 +62,8 @@ public class User {
 	public void setUserId(long userId) {this.userId = userId;}
 	public String getExtUserId() {return extUserId;}
 	public void setExtUserId(String extUserId) {this.extUserId = extUserId;}
-	public int getSystemId() {return systemId;}
-	public void setSystemId(int systemId) {this.systemId = systemId;}
+	//public int getSystemId() {return systemId;}
+	//public void setSystemId(int systemId) {this.systemId = systemId;}
 	public boolean isEditor() {return editor;}
 	public void setEditor(boolean editor) {this.editor = editor;}
 	public String getUserName() {return userName;}
@@ -74,6 +76,9 @@ public class User {
 	public void setExtUserId2(String extUserId2) {this.extUserId2 = extUserId2;}	
 	public boolean isAdmin() {return admin;}
 	public void setAdmin(boolean admin) {this.admin = admin;}
+	
+	public long getGroupId() {return groupId;}
+	public void setGroupId(long groupId) {this.groupId = groupId;}
 	/**
 	 * @return the userId from the original / parent system as long
 	 */
@@ -106,5 +111,12 @@ public class User {
 			if(this.getUserId() == ((User)o).getUserId()) return true;
 		}
 		return false;
+	}
+	
+	public void updateGroupId(String groupId) {
+		if((this.groupId>0) || (groupId == null)) return;
+		
+		this.groupId = Long.parseLong(groupId);
+		new DBUser().saveAndCommit(this);
 	}
 }

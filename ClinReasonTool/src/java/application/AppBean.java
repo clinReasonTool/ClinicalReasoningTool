@@ -108,6 +108,7 @@ public class AppBean extends ApplicationWrapper implements HttpSessionListener{
 
 	    //does not have to be done on every restart:
 	   // new JsonCreator().initJsonExport(context);
+	    new JsonCreator().exportNursingChapterSeaList(context);
 
 	   //doTestStuff(context);
 	    startms = System.currentTimeMillis();

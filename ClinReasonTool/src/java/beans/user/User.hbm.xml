@@ -12,12 +12,13 @@
 			</generator>
 		</id>	
 		<property name="extUserId" column="user_id_ext" type="string" />
-		<property name="systemId" column="system_id" type="int" />
+		<!--<property name="systemId" column="system_id" type="int" />-->
 		<property name="userName" column="username" type="string" />
 		<property name="password" column="password" type="string" />
 		<property name="editor" column="editor" type="boolean" />
 		<property name="admin" column="admin" type="boolean" />
 		<property name="extUserId2" column="user_id_ext2" type="string" />
+		<property name="groupId" column="group_id" type="long" />
 		
 		<!--  <component  name="adress" class="Adress" insert="true" update="true" lazy="false">        
 	        <property name="streetName" column="street" type="string" not-null="false" />

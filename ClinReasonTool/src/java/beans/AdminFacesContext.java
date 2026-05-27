@@ -41,6 +41,7 @@ public class AdminFacesContext extends FacesContextWrapper implements MyFacesCon
 	public static final String CRT_FC_KEY = "adminContext";
 	
 	private User user;
+	
 	/**
 	 * This is the locale of the navigation etc.
 	 */
@@ -244,7 +245,7 @@ public class AdminFacesContext extends FacesContextWrapper implements MyFacesCon
 			String vp = AjaxController.getInstance().getRequestParamByKeyNoDecrypt(AjaxController.REQPARAM_VP);
 			String cmp_checksum_src = "" + checksum_uid + "_" + vp +  "_" + ts;
 			String cmp_checksum =  Encoder.getInstance().encodeQueryParam(cmp_checksum_src);
-			CRTLogger.out("checksum == cmp_checksum?" + checksum.equals(cmp_checksum), CRTLogger.LEVEL_PROD);
+			//CRTLogger.out("checksum == cmp_checksum?" + checksum.equals(cmp_checksum), CRTLogger.LEVEL_PROD);
 		} catch (Throwable e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

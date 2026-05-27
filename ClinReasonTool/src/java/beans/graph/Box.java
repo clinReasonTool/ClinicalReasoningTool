@@ -167,10 +167,14 @@ public class Box {
 		return BOXTYPE_FDG;
 	}
 	
-	public String getListUrl(Locale loc) {
+	public String getListUrl(Locale loc, long groupId) {
 		String result = "";
-		if(this.listType==BOX_WITH_LIST)
+		if(this.listType==BOX_WITH_LIST) {
 			result = JsonCreator.getDisplayListName("standard", "standard", loc.getLanguage());
+			if(groupId==51) //if(groupId==1547) //ugly ChapterSea hack
+				result = JsonCreator.getDisplayListName("nursing_cs", "nursing_cs", "en");
+		}
+		
 			//result = AppBean.getProperty("lists.standard_","");
 			//result = AppBean.getProperty("lists.standard" + (loc.getLanguage()!=null&&loc.getLanguage().length()>0 ? "." + loc.getLanguage() : ""),result);
 		

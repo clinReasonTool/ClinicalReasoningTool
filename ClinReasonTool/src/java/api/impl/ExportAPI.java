@@ -44,12 +44,12 @@ public class ExportAPI extends AbstractAPIImpl {
 		Map resultObj = new TreeMap();
 		IllnessScriptController isc = new IllnessScriptController();
 		try {
-			String extUserId = AjaxController.getInstance().getRequestParamByKeyNoDecrypt(AjaxController.REQPARAM_EXTUID);
-			int systemId = 2; //AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_SYSTEM, 2);
-			User user = user =  new UserController().getUser(systemId, extUserId);
+			//String extUserId = AjaxController.getInstance().getRequestParamByKeyNoDecrypt(AjaxController.REQPARAM_EXTUID);
+			//int systemId = 2; //AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_SYSTEM, 2);
+			//User user = user =  new UserController().getUser(/*systemId,*/ extUserId);
 			long vpId = StringUtilities.getLongFromString((String) ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("vp_id"), -1);
 			if (vpId > 0) {
-				PatientIllnessScript expScript = new DBClinReason().selectExpertPatIllScriptByVPId( vpId+"_"+systemId); 
+				PatientIllnessScript expScript = new DBClinReason().selectExpertPatIllScriptByVPId( vpId+"_2"); 
 				if (expScript != null && expScript.getSummSt() != null && expScript.getSummSt().getText() != null) {
 					resultObj.put("status", "ok");
 					resultObj.put("expert.text", expScript.getSummSt().getText());

@@ -86,13 +86,15 @@ public class Auth implements Serializable{
         ExternalContext externalContext = context.getExternalContext();
        // HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
         String extUserId = AjaxController.getInstance().getRequestParamByKeyNoDecrypt("userid_ext");
-        int systemId = 2; //AjaxController.getInstance().getIntRequestParamByKey("system_id", 2);
+        String groupId = AjaxController.getInstance().getRequestParamByKeyNoDecrypt("groupid");
+        //int systemId = 2; //AjaxController.getInstance().getIntRequestParamByKey("system_id", 2);
         if(extUserId==null || extUserId.trim().isEmpty()) return;
         try {
-        	User user = new DBUser().selectUserByExternalId(extUserId, systemId);
+        	User user = new DBUser().selectUserByExternalId(extUserId/*, systemId*/);
         	if(user==null){ //create user:
-        		user = new UserController().createAndSaveExpertUser(systemId, extUserId);
+        		user = new UserController().createAndSaveExpertUser(/*systemId,*/ extUserId, groupId);
         	}
+        	user.updateGroupId(groupId);
         	AdminFacesContext cnxt =  (AdminFacesContext) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(AdminFacesContext.CRT_FC_KEY);
         	if(cnxt!=null) cnxt.setUser(user);
         	externalContext.getSessionMap().put("user", user);

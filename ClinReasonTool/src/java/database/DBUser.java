@@ -16,12 +16,12 @@ import beans.user.User;
  */
 public class DBUser extends DBClinReason{
 
-    public User selectUserByExternalId(String extUserId, int systemId){
+    public User selectUserByExternalId(String extUserId/*, int systemId*/){
     	if(extUserId==null || extUserId.trim().equals("")) return null;
     	Session s = instance.getInternalSession(Thread.currentThread(), false);
     	Criteria criteria = s.createCriteria(User.class,"User");
     	criteria.add(Restrictions.eq("extUserId", extUserId));
-    	criteria.add(Restrictions.eq("systemId", new Integer(systemId)));
+    	//criteria.add(Restrictions.eq("systemId", new Integer(systemId)));
 
     	return (User) criteria.uniqueResult();
     }
