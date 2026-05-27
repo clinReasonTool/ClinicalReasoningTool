@@ -64,6 +64,11 @@ a {
 }
 a:focus{outline:none !important;}
 
+a.option_button.disabled  {
+	 border: 1px solid #bbbbbb;
+	 color: #bbbbbb !important;
+}
+
 a.option_button  {
 	 border: 1px solid #666666;
 	 color: #111111;
