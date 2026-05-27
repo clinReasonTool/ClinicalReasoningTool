@@ -329,4 +329,15 @@ public class DBList extends DBClinReason {
     	Criteria criteria = s.createCriteria(TransformRule.class,"TransformRule");
     	return criteria.list();
     }        
+    
+    
+    /**
+     * hack for ChapterSea nursing implementation
+     */
+    public List<ChapterSeaNursingItem>loadChapterSeaNursingList() {
+    	Session s = instance.getInternalSession(Thread.currentThread(), false);
+    	Criteria criteria = s.createCriteria(ChapterSeaNursingItem.class,"ChapterSeaNursingItem");
+    	return criteria.list();
+    	
+    }
 }

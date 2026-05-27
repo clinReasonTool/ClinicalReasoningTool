@@ -1,0 +1,17 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core">
+    
+	 <div class="footer">
+		<span id="submitBtnSpan" class="submitBtn submitBtnOff">
+			<a href="javascript:doSubmitDDXDialog();" style="color:#ffffff" mytooltip="#{prop['ddx.submit']}" id="submitBtnA">#{prop['ddx.submitFinal']}</a>
+		</span>
+		<span id="errorsymbol" class="errorsymbol errors_#{crtContext.patillscript.errorNum}">
+			<h:panelGroup id="ddxubmitPG">
+				<a href="javascript:openErrorDialog();" style="color:#ffffff;"><i style="color:#ffffff;" mytooltip="#{prop['ddx.errors']} (#{crtContext.patillscript.errorNum})" class="fa fa-exclamation-circle"></i></a>		
+			</h:panelGroup>
+		</span>
+	</div>  
+</ui:composition>

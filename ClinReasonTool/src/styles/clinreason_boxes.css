@@ -80,6 +80,11 @@ a.option_button  {
   	 -moz-border-radius: 4px;
 }
 
+a.option_button.disabled  {
+	 border: 1px solid #bbbbbb;
+	 color: #bbbbbb !important;
+}
+
 .ui-widget-content { /*needs to be at the beginning, otherwise the slider background will be overwritten*/
 	border: 1px solid #dddddd;
 	background: #ffffff url("../jquery112/ui-lightness/images/ui-bg_highlight-soft_100_eeeeee_1x100.png") 50% top repeat-x;

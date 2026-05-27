@@ -4,7 +4,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
 
- <div id="box#{boxNumber}_#{itembox.id}"  class="expbox expbox#{boxNumber}s row#{rowNumber} expboxinvis" mytooltip="#{expbox.labelOrSynLabel}" style="left:#{expbox.x}px; top:#{expbox.boxY}px;">
+ <div id="box#{boxNumber}_#{expbox.id}"  class="expbox expbox#{boxNumber} row#{rowNumber} expboxinvis ddxclass_#{expbox.expCssClass}" mytooltip="#{expbox.labelOrSynLabel}" style="left:#{expbox.x}px; top:#{expbox.boxY}px;">
  	#{expbox.prefix} #{expbox.shortLabelOrSynShortLabel}
  <script language="Javascript">
  	exp_arr.push("expbox#{boxNumber}_#{expbox.id}");
@@ -12,3 +12,7 @@
  <div class="icons_exp"><i class="fa fa-user-md"></i></div>
  </div>
 </ui:composition>
+
+
+
+

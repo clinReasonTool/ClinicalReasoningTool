@@ -16,7 +16,7 @@ import beans.scripts.*;
 import beans.graph.Graph;
 import beans.helper.TypeAheadBean;
 import beans.relation.Relation;
-import beans.relation.RelationMidwifeRecommendation;
+import beans.relation.RelationRecommendation;
 import beans.scoring.ScoreBean;
 import beans.scripts.IllnessScriptInterface;
 import controller.NavigationController;
@@ -116,7 +116,7 @@ public class AddMidwifeRecAction /*implements AddAction, Scoreable*/{
 	 * @see actions.scoringActions.Scoreable#triggerScoringAction(java.beans.Beans)
 	 */
 	public void triggerScoringAction(Beans rel, boolean isJoker) {
-		new ScoringAddAction().scoreAction(((RelationMidwifeRecommendation) rel).getListItemId(), this.patIllScript, isJoker, Relation.SUBTYPE_MREC);
+		new ScoringAddAction().scoreAction(((RelationRecommendation) rel).getListItemId(), this.patIllScript, isJoker, Relation.SUBTYPE_MREC);
 		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_MREC_LIST, Relation.SUBTYPE_MREC);
 	}
 	

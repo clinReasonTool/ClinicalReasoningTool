@@ -7,7 +7,7 @@ import beans.LogEntry;
 import beans.scripts.*;
 import beans.graph.Graph;
 import beans.graph.MultiVertex;
-import beans.relation.RelationMidwifeRecommendation;
+import beans.relation.RelationRecommendation;
 import beans.relation.Relation;
 import beans.scoring.ScoreBean;
 import controller.NavigationController;

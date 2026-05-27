@@ -1,11 +1,11 @@
-<!--<?xml version="1.0"?>
+<?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="beans.relation">
 
-	<class name="RelationMidwifeRecommendation" table="crt.relation_recommendation">
+	<class name="RelationRecommendation" table="crt.relation_recommendation">
 		<cache usage="nonstrict-read-write" />
-		<comment>Info Relation</comment>	
+		<comment>Relation</comment>	
 		<id name="id" type="long" column="id">
 			<generator class="sequence">
 				<param name ="sequence">CRT.CR_SEQ</param>
@@ -19,8 +19,9 @@
 		<property name="y" column="y" type="int"/>
 		<property name="stage" column="stage" type="int"/>
 		<property name="comment" column="ccomment" type="string"/>
-				
+		<property name="discriminator" column="discriminator" type="int" />	
+		
 		<many-to-one name="recommendation" class="beans.list.ListItem" column="source_id"  lazy="false" insert="false" update="false" fetch="join" />
 	
 </class>
-</hibernate-mapping>-->
+</hibernate-mapping>

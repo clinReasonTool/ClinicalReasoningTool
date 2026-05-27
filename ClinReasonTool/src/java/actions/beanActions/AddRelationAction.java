@@ -180,9 +180,11 @@ public class AddRelationAction implements AddAction, Scoreable{
 	/* (non-Javadoc)
 	 * @see actions.scoringActions.Scoreable#triggerScoringAction(java.beans.Beans)
 	 */
-	public void triggerScoringAction(Beans relProb, boolean isJoker){		
-		new ScoringAddAction().scoreAction(((Relation) relProb).getListItemId(), this.patIllScript, isJoker, Relation.TYPE_PROBLEM);
+	public void triggerScoringAction(Beans rel, boolean isJoker){		
+		new ScoringAddAction().scoreAction(((Relation) rel).getListItemId(), this.patIllScript, isJoker, box.getBoxType());
 		new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_PROBLEM_LIST, Relation.TYPE_PROBLEM);
+		//new ScoringAddAction().scoreAction(((Relation) rel).getListItemId(), this.patIllScript, isJoker, Relation.TYPE_PROBLEM);
+		//new ScoringListAction(this.patIllScript).scoreList(ScoreBean.TYPE_PROBLEM_LIST, Relation.TYPE_PROBLEM);
 
 	}
 
@@ -215,6 +217,7 @@ public class AddRelationAction implements AddAction, Scoreable{
 		  case Box.BOXTYPE_AIM: return new RelationAim();
 		  case Box.BOXTYPE_INF: return new RelationInformation();
 		  case Box.BOXTYPE_PAT: return new RelationPatho();
+		  case Box.BOXTYPE_REC: return new RelationRecommendation();
 		}
 		return null;
 	}

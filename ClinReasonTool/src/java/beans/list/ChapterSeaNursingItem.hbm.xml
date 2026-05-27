@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="beans.list">
+
+	<class name="ChapterSeaNursingItem" table="crt.clinreason_nursing_list">
+		<cache usage="nonstrict-read-write" />
+		<comment>ChapterSeaNursingItem</comment>	
+	
+		<id name="item_id" type="long" column="item_id">
+			<generator class="sequence">
+				<param name ="sequence">CRT.LIST_SEQ</param>
+			</generator>
+		</id>
+					
+		<property name="name" column="name" type="string" length="300"/>
+		<property name="source" column="source" type="string" length="20"/>
+		<property name="language" column="language" type="locale" length="5"/>
+
+</class>
+</hibernate-mapping>

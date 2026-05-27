@@ -29,8 +29,8 @@ $(function() {
 		$( "#log" ).scrollTop( 0 );
 	}
 	
-	/* collect all possible urls */
 	var my_listUrl = listUrl; // should be listUrl
+	//if(groupId=="51") my_listUrl = listUrl2;
 	var inputUrls = new Array();
 	inputUrls[my_listUrl] =  new Array();
 	$(".search input.f_text").each(function(index, value) {
@@ -48,7 +48,6 @@ $(function() {
 		}
 	});
 	
-	/* no loop over all urls and the assigned list of ids (search input text fields for autocomplete */
 	for (var key in inputUrls) {
 		loadListAndAssign(key,inputUrls[key]);
 	}

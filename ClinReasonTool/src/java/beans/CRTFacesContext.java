@@ -118,10 +118,12 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 	private void setUser(){
 		String setUserIdStr = AjaxController.getInstance().getRequestParamByKey(AjaxController.REQPARAM_USER);
 		String extUserId = AjaxController.getInstance().getRequestParamByKeyNoDecrypt(AjaxController.REQPARAM_USER_EXT);
+		String groupId = AjaxController.getInstance().getRequestParamByKeyNoDecrypt("groupid");
 		int systemId = 2; //AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_SYSTEM, -1);
 		if(setUserIdStr==null && extUserId==null){
 			return;
 		}
+		if(user!=null) user.updateGroupId(groupId);
 		//userIdStr is same as userId of loaded user -> return
 		if(user!=null && setUserIdStr!=null && user.getUserId()==Long.valueOf(setUserIdStr).longValue()) return; 
 		//extUserId of loaded user is same as extUserId -> return
@@ -132,7 +134,7 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 		}
 
 		else if(extUserId!=null && !extUserId.trim().equals("")){
-			user =  new UserController().getUser(systemId, extUserId);
+			user =  new UserController().getUser(extUserId, groupId);
 			userHasChanged(); //user is different
 		}
 		if(user==null){
@@ -393,14 +395,14 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 	 */
 	private void loadScriptForReportAccess(){
 		String vpId = AjaxController.getInstance().getRequestParamByKeyNoDecrypt(AjaxController.REQPARAM_VP);
-		int systemId = 2; //AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_SYSTEM, -1); 
+		//int systemId = 2; //AjaxController.getInstance().getIntRequestParamByKey(AjaxController.REQPARAM_SYSTEM, -1); 
 		String extUId = AjaxController.getInstance().getRequestParamByKeyNoDecrypt(AjaxController.REQPARAM_EXTUID); //encrypted session id
 		String learnerId = AjaxController.getInstance().getRequestParamByKeyNoDecrypt(AjaxController.REQPARAM_REPORT_LEANER_ID); //encrypted learner id 
-		
+		//String groupId = AjaxController.getInstance().getRequestParamByKeyNoDecrypt("groupid");
 		if(this.user!=null && this.patillscript!=null && this.patillscript.getExtUId().equals(extUId)) return; //then script has already been loaded
 		long crtLearnerId = -1;
 		if(learnerId!=null){
-			 learner = new DBUser().selectUserByExternalId(learnerId, systemId);
+			 learner = new DBUser().selectUserByExternalId(learnerId/*, systemId*/);
 			if(learner!=null) crtLearnerId = learner.getUserId();
 		} 
 		//TODO check for shared secret!
@@ -557,13 +559,13 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 
 	public FacesContext getWrapped() {return FacesContext.getCurrentInstance();}
 	
-	/*public ExpViewPatientIllnessScript getExpPatIllScript(){
+	public ExpViewPatientIllnessScript getExpPatIllScript(){
 		int stage = 1;
 		if(patillscript!=null) stage = patillscript.getCurrentStage();
-		return new ExpViewPatientIllnessScript(patillscript, stage);
-	}*/
+		return new ExpViewPatientIllnessScript(patillscript, stage, graph);
+	}
 	
-	public PatientIllnessScript getExpPatIllScript(){
+	public PatientIllnessScript getExpertPatIllScript(){
 		if(this.patillscript==null) return null;
 		return AppBean.getExpertPatIllScript(patillscript.getVpId());
 	}

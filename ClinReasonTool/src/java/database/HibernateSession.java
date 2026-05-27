@@ -95,7 +95,7 @@ public class HibernateSession {
 			//cfg.addClass(beans.relation.RelationMidwifeHypothesis.class);
 			//cfg.addClass(beans.relation.RelationMidwifeFinding.class);
 			//cfg.addClass(beans.relation.RelationMidwifeManagement.class);
-			//cfg.addClass(beans.relation.RelationMidwifeRecommendation.class);
+			cfg.addClass(beans.relation.RelationRecommendation.class);
 			cfg.addClass(beans.LogEntry.class);
 			cfg.addClass(beans.relation.Connection.class);
 			cfg.addClass(beans.relation.RelationManagement.class);			
@@ -123,6 +123,7 @@ public class HibernateSession {
 			cfg.addClass(beans.relation.summary.JsonTest.class); //testing only
 			cfg.addClass(beans.helper.VPMapOverviewItem.class);
 			cfg.addClass(beans.helper.CaseDifficulty.class);
+			cfg.addClass(beans.list.ChapterSeaNursingItem.class); //hack for ChapterSea nursing implementation
 			//cfg.addClass(test.LMMeshMapping.class);
 			
 			if (factory==null) {

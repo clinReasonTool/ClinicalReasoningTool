@@ -42,7 +42,7 @@
 <script language="JavaScript">
 //<![CDATA[
 var isViaAPI = "#{adminContext.openedViaAPI}";
-
+//var groupId = "#{adminContext.user.groupId}";
 var hideCnxTitle = "#{prop['cnx.hide']}";
 var showCnxTitle = "#{prop['cnx.show']}";
 var submitDialogTitle = "#{prop['submit.dialog.title']}";
@@ -53,8 +53,9 @@ var displayOwnEntryWarnMsg = "";
 var msg2="Please connect the hypotheses with the findings";
 var scriptId = "#{adminContext.patillscript.id}";
 var listUrl="../jsonp_#{adminContext.patillscript.locale}.json";
-var listUrl1 = listUrl;
-var listUrl2 = "";
+//var listUrl2 = "../jsonp_nursing_cs_en.json";
+//var listUrl1 = listUrl;
+//var listUrl2 = "";
 
 //var listNursingUrl="../jsonp_n_#{adminContext.patillscript.locale}.json";
 var scriptlang = "#{adminContext.patillscript.locale}";
@@ -99,10 +100,11 @@ var box4TitleNum = #{adminContext.patillscript.box4TitleNum};
 
 var isEmptyScript = "#{adminContext.patillscript.isEmptyScript}";
 var userId = "#{adminContext.userIdExt}"; //hack for showing language change only for certain userIds
+var diagnosesBox = #{adminContext.patillscript.diagnosesBox};
 
 $(function() {
+	
 	//if(displayAll==1) currentStage = maxStage;
-	//if(scriptlang=="de") listUrl = "../jsonp_de.json";
 	$(".listdialog").hide();
 	//$("#jdialogError").hide();
 	$("#connContext").hide();
@@ -153,7 +155,19 @@ $(function() {
 		autoOpen: false,
 		modal: true,
 		width: "auto",
-		height: "auto"
+		height: "auto",
+		/*close: function() {
+			alert("close");
+			//cancelChBoxType();
+		}*/
+		create: function() {
+            $(this).closest('div.ui-dialog')
+                   .find('.ui-dialog-titlebar-close')
+                   .click(function(e) {
+                	   cancelChBoxType();
+                       e.preventDefault();
+                   });
+        }
 	});
 	
 	$("#jdialogToolbox").dialog({
@@ -346,7 +360,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box1_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text boxListSearchFieldEdit" id="box1list" placeholder="#{prop['add']} #{adminContext.patillscript.box1.title}" listUrl="../#{adminContext.patillscript.box1.getListUrl(adminContext.patillscript.locale)}"></input>
+		  			<input class="f_text boxListSearchFieldEdit" id="box1list" placeholder="#{prop['add']} #{adminContext.patillscript.box1.title}" listUrl="../#{adminContext.patillscript.box1.getListUrl(adminContext.patillscript.locale, adminContext.user.groupId)}"></input>
 		  			<input type="hidden" id="box1ListType" value="#{adminContext.patillscript.box1.listType}"></input>
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box1ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
@@ -385,7 +399,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box2_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text boxListSearchFieldEdit" id="box2list" placeholder="#{prop['add']} #{adminContext.patillscript.box2.title}" listUrl="../#{adminContext.patillscript.box2.getListUrl(adminContext.patillscript.locale)}"></input>
+		  			<input class="f_text boxListSearchFieldEdit" id="box2list" placeholder="#{prop['add']} #{adminContext.patillscript.box2.title}" listUrl="../#{adminContext.patillscript.box2.getListUrl(adminContext.patillscript.locale, adminContext.user.groupId)}"></input>
 		  			<input type="hidden" id="box2ListType" value="#{adminContext.patillscript.box2.listType}"></input>
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box2ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
@@ -424,7 +438,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box3_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text boxListSearchFieldEdit" id="box3list" placeholder="#{prop['add']} #{adminContext.patillscript.box3.title}" listUrl="../#{adminContext.patillscript.box3.getListUrl(adminContext.patillscript.locale)}"></input>
+		  			<input class="f_text boxListSearchFieldEdit" id="box3list" placeholder="#{prop['add']} #{adminContext.patillscript.box3.title}" listUrl="../#{adminContext.patillscript.box3.getListUrl(adminContext.patillscript.locale, adminContext.user.groupId)}"></input>
 		  			<input type="hidden" id="box3ListType" value="#{adminContext.patillscript.box3.listType}"></input>
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box3ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
@@ -463,7 +477,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box4_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text boxListSearchFieldEdit" id="box4list" placeholder="#{prop['add']} #{adminContext.patillscript.box4.title}" listUrl="../#{adminContext.patillscript.box4.getListUrl(adminContext.patillscript.locale)}"></input>
+		  			<input class="f_text boxListSearchFieldEdit" id="box4list" placeholder="#{prop['add']} #{adminContext.patillscript.box4.title}" listUrl="../#{adminContext.patillscript.box4.getListUrl(adminContext.patillscript.locale, adminContext.user.groupId)}"></input>
 		  			<input type="hidden" id="box4ListType" value="#{adminContext.patillscript.box4.listType}"></input>
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box4ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
@@ -536,6 +550,7 @@ Do you want to keep the items you have entered so far in this box? (Only availab
  	<span class="options_spacer"></span>
 	<a href="javascript:cancelChBoxType();"  class="option_button">Cancel</a>
 </div>
+
 </div>
 </body>
 </f:view>

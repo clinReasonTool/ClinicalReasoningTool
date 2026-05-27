@@ -65,6 +65,8 @@ public class JsonCreator {
 			exportGenericList("standard",new Locale(lang));
 			exportGenericList("nursing",new Locale(lang));
 			exportGenericList("context",new Locale(lang));
+			
+			
 		}
 		else{
 			// loop thru all types
@@ -84,6 +86,8 @@ public class JsonCreator {
 				}
 			}
 		}
+		//This is an ugly hack to satisfy ChapterSea nursing with their own list
+		exportNursingChapterSeaList(this.context);
 	}
 		
 	public void setContext(ServletContext context){
@@ -120,15 +124,19 @@ public class JsonCreator {
 		return null;
 	}
 	
+	public List exportGenericList(String type, Locale loc){
+		List<ListItem> items = new DBList().selectListItemsByTypesAndLang(loc, AppBeanPropertyHelper.getArray("lists.dbtypes.", type, null), AppBeanPropertyHelper.getInt("lists.professionType.", type, -1), AppBeanPropertyHelper.getInt("lists.professionVariant.", type, -1));
+		return exportGenericList(type, loc, items);
+	}
 	/**
 	 * We export the list of the given language from the database into a JSON file for use in the user interface 
 	 * We also store the list items in the SummaryController for using it for the statement analysis and assessment.
 	 * @param loc
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List exportGenericList(String type, Locale loc){
+	public List exportGenericList(String type, Locale loc, List items){
 		// dababase call configurable by lists.dbtypes.<type>=<STring delimioted by , (comma) with categories; lists.professionType.<type>=0 | 1; listvaliant for future extension
-		List<ListItem> items = new DBList().selectListItemsByTypesAndLang(loc, AppBeanPropertyHelper.getArray("lists.dbtypes.", type, null), AppBeanPropertyHelper.getInt("lists.professionType.", type, -1), AppBeanPropertyHelper.getInt("lists.professionVariant.", type, -1));
+		//List<ListItem> items = new DBList().selectListItemsByTypesAndLang(loc, AppBeanPropertyHelper.getArray("lists.dbtypes.", type, null), AppBeanPropertyHelper.getInt("lists.professionType.", type, -1), AppBeanPropertyHelper.getInt("lists.professionVariant.", type, -1));
 		if(items==null || items.isEmpty()) {
 			CRTLogger.out("JsonCreator.exportGenericList(\"" + type + "\"," + loc + ") => items null | empty: " + items, CRTLogger.LEVEL_ERROR);
 			return null; //then something went really wrong!
@@ -139,7 +147,7 @@ public class JsonCreator {
 		try{
 			int lines = 0; int json_lines = 0;
 
-			// preprocess for standard list onlky (until now -> configure by lists.preprocess.<type>=true | false
+			// preprocess for standard list only (until now -> configure by lists.preprocess.<type>=true | false
 			if (AppBeanPropertyHelper.getBoolean("lists.preprocess.", type, false)) {
 				lines = exportGenericList_preprocess(loc, items, itemsAndSyns, lines);
 			}
@@ -344,5 +352,20 @@ public class JsonCreator {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * hack for ChapterSea nursing implementation
+	 */
+	public List exportNursingChapterSeaList(ServletContext contextIn) {
+		if(contextIn!=null) context = contextIn;
+		try {
+			List l = new DBList().loadChapterSeaNursingList();
+			return exportGenericList("nursing_cs", new Locale("en"), l);
+		}
+		catch(Exception e) {
+			CRTLogger.out("Error during ChapterSea Nursing list export", CRTLogger.LEVEL_PROD);
+			return null;
+		}	
 	}
 }
