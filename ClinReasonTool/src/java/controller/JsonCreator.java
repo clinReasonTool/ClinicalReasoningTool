@@ -63,14 +63,15 @@ public class JsonCreator {
 		
 		if(lang!=null){
 			exportGenericList("standard",new Locale(lang));
-			exportGenericList("nursing",new Locale(lang));
+			//exportGenericList("nursing",new Locale(lang));
 			exportGenericList("context",new Locale(lang));
+			exportGenericList("nursing_cs",new Locale(lang));
 			
 			
 		}
 		else{
 			// loop thru all types
-			String list_types = AppBean.getProperty("lists.types","standard,context,nursing");
+			String list_types = AppBean.getProperty("lists.types","standard,context, nursing, nursing_cs");
 			List<String> list_types_list = net.casus.util.StringUtilities.getStringListFromString(list_types, ",");
 			Iterator<String> list_types_list_it = list_types_list.iterator();
 			while(list_types_list_it.hasNext()) {
@@ -87,7 +88,7 @@ public class JsonCreator {
 			}
 		}
 		//This is an ugly hack to satisfy ChapterSea nursing with their own list
-		exportNursingChapterSeaList(this.context);
+		//exportNursingChapterSeaList(this.context);
 	}
 		
 	public void setContext(ServletContext context){
@@ -125,7 +126,14 @@ public class JsonCreator {
 	}
 	
 	public List exportGenericList(String type, Locale loc){
-		List<ListItem> items = new DBList().selectListItemsByTypesAndLang(loc, AppBeanPropertyHelper.getArray("lists.dbtypes.", type, null), AppBeanPropertyHelper.getInt("lists.professionType.", type, -1), AppBeanPropertyHelper.getInt("lists.professionVariant.", type, -1));
+		List<ListItem> items = null;
+		//if(type!="nursing")
+			items = new DBList().selectListItemsByTypesAndLang(loc, AppBeanPropertyHelper.getArray("lists.dbtypes.", type, null), AppBeanPropertyHelper.getInt("lists.professionType.", type, -1), AppBeanPropertyHelper.getInt("lists.professionVariant.", type, -1));
+		
+		//else {
+		//	items = new DBList().selectListItemsByTypesAndLang(loc, AppBeanPropertyHelper.getArray("lists.dbtypes.", type, null), AppBeanPropertyHelper.getInt("lists.professionType.", type, -1), AppBeanPropertyHelper.getInt("lists.professionVariant.", type, -1));
+
+		//}
 		return exportGenericList(type, loc, items);
 	}
 	/**
@@ -357,7 +365,7 @@ public class JsonCreator {
 	/**
 	 * hack for ChapterSea nursing implementation
 	 */
-	public List exportNursingChapterSeaList(ServletContext contextIn) {
+	/*public List exportNursingChapterSeaList(ServletContext contextIn) {
 		if(contextIn!=null) context = contextIn;
 		try {
 			List l = new DBList().loadChapterSeaNursingList();
@@ -367,5 +375,5 @@ public class JsonCreator {
 			CRTLogger.out("Error during ChapterSea Nursing list export", CRTLogger.LEVEL_PROD);
 			return null;
 		}	
-	}
+	}*/
 }

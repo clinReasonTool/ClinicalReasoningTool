@@ -169,9 +169,15 @@ public class Box {
 	
 	public String getListUrl(Locale loc, long groupId) {
 		String result = "";
+		String groupIdHackStr = AppBean.getProperty("groupid.extralist", "-1").trim();
+		long groupIdHack = Long.parseLong(groupIdHackStr); 
+		try{
+			groupIdHack = Long.parseLong(groupIdHackStr);
+		}
+		catch(Exception e) {}
 		if(this.listType==BOX_WITH_LIST) {
 			result = JsonCreator.getDisplayListName("standard", "standard", loc.getLanguage());
-			if(groupId==51) //if(groupId==1547) //ugly ChapterSea hack
+			if(groupId==groupIdHack) //if(groupId==1547) //ugly ChapterSea hack
 				result = JsonCreator.getDisplayListName("nursing_cs", "nursing_cs", "en");
 		}
 		
