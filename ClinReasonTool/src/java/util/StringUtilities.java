@@ -184,7 +184,8 @@ public class StringUtilities {
 			return false;
 		if(item1.startsWith("Type I") && item2.startsWith("Type II") || item2.startsWith("Type I") && item1.startsWith("Type II"))
 			return false;
-
+		//Hack to keep this explicitly added item in the list;
+		if(item1.equalsIgnoreCase("Full Blood Count") || item2.equalsIgnoreCase("Full Blood Count")) return false;
 		if(isMatchBasedOnLevelAndFuzzy(item1, item2, item1lower, item2lower, loc, leven, fuzzy, isStrict)) return true;
 		
 		//if we have multiple words we split them and compare them separately

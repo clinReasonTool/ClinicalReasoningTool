@@ -177,6 +177,7 @@ public class DBList extends DBClinReason {
     	criteria.add(Restrictions.eq("language", loc));
     	//do NOT include items that have been added by learners:
     	criteria.add(Restrictions.ne("source", ListItem.TYPE_OWN));
+    	
     	criteria.addOrder(Order.asc("name"));
     	
     	//for nursing export MESH and NADA - TODO This is a hack for ChapterSea!!!!
@@ -184,6 +185,8 @@ public class DBList extends DBClinReason {
     		criteria.add(Restrictions.eq("nursing", 1));
     		criteria.add(Restrictions.in("source", new String[]{"MESH", "NADA"}));
     	}
+    	else 
+    		criteria.add(Restrictions.ne("source", "NADA"));
     	
     	criteria.add(Restrictions.eq("ignored", false));
     	List l = criteria.list();

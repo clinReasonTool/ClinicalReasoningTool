@@ -62,11 +62,10 @@ public class JsonCreator {
 		catch(Exception e){}
 		
 		if(lang!=null){
+			exportGenericList("nursing_cs",new Locale(lang));
 			exportGenericList("standard",new Locale(lang));
 			//exportGenericList("nursing",new Locale(lang));
-			exportGenericList("context",new Locale(lang));
-			exportGenericList("nursing_cs",new Locale(lang));
-			
+			exportGenericList("context",new Locale(lang));			
 			
 		}
 		else{
@@ -268,7 +267,7 @@ public class JsonCreator {
 		if(item.isIgnored()) return false;
 		//D:
 		if(item.getItemType().equals("D") && item.getLevel()>=10) return false;
-		if(item.getItemType().equals("A")) return false;
+		//if(item.getItemType().equals("A")) return false;
 		if(item.getFirstCode()==null) return true;
 		if(item.getFirstCode().startsWith("D20.0") || item.getFirstCode().startsWith("D20.1")) return false;
 		if(item.getFirstCode().startsWith("D20.3") || item.getFirstCode().startsWith("D20.4")) return false;
