@@ -34,6 +34,7 @@
 	     <property name="deleteFlag" column="delete_flag" type="boolean"/>
 	     <property name="finalDDXType" column="final_ddx_type" type="int"/>
 	     <property name="sessionId" column="session_id" type="long"/>
+	      <property name="groupId" column="group_id" type="long"/>
 	    
 	     <!-- we keep the types for the moment to turn them into real boxes upon opening of a VP-->
 	  	 <property name="box1Type" column="box1_type" type="int" update="false"/>

@@ -7,10 +7,10 @@ import util.*;
 /**
  * hack for ChapterSea nursing implementation -> this corresponds to the ListItem class.
  * @author ingahege
- *
+ * @deprecated
  */
-public class ChapterSeaNursingItem implements Serializable, ListInterface, Comparable{
-	private String name; 
+public class ChapterSeaNursingItem /*implements Serializable, ListInterface, Comparable*/{
+/*	private String name; 
 	private long item_id = -1;
 	private String source; //NADA
 	private Locale language; //currently only en.
@@ -32,9 +32,7 @@ public class ChapterSeaNursingItem implements Serializable, ListInterface, Compa
 		this.name = name;
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+
 	public String toString(){
 		return this.name + ", Id: " + this.item_id;
 	}
@@ -70,5 +68,5 @@ public class ChapterSeaNursingItem implements Serializable, ListInterface, Compa
 	@Override
 	public long getListItemId() {
 		return item_id;
-	}
+	}*/
 }

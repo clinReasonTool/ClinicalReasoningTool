@@ -92,9 +92,9 @@ public class Auth implements Serializable{
         try {
         	User user = new DBUser().selectUserByExternalId(extUserId/*, systemId*/);
         	if(user==null){ //create user:
-        		user = new UserController().createAndSaveExpertUser(/*systemId,*/ extUserId, groupId);
+        		user = new UserController().createAndSaveExpertUser(/*systemId,*/ extUserId/*, groupId*/);
         	}
-        	user.updateGroupId(groupId);
+        	//user.updateGroupId(groupId);
         	AdminFacesContext cnxt =  (AdminFacesContext) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(AdminFacesContext.CRT_FC_KEY);
         	if(cnxt!=null) cnxt.setUser(user);
         	externalContext.getSessionMap().put("user", user);

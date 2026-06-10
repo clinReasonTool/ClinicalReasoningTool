@@ -52,12 +52,8 @@ var displayOwnEntryWarnMsg = "";
 
 var msg2="Please connect the hypotheses with the findings";
 var scriptId = "#{adminContext.patillscript.id}";
-var listUrl="../jsonp_#{adminContext.patillscript.locale}.json";
-//var listUrl2 = "../jsonp_nursing_cs_en.json";
-//var listUrl1 = listUrl;
-//var listUrl2 = "";
+var listUrl="../jsonp_#{adminContext.patillscript.locale}.json"; //should not be used!!! see list url in each box instead
 
-//var listNursingUrl="../jsonp_n_#{adminContext.patillscript.locale}.json";
 var scriptlang = "#{adminContext.patillscript.locale}";
 var noEntryFound = "#{prop['list.noentry']}";
 var lang="#{adminContext.locale}";
@@ -360,7 +356,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box1_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text boxListSearchFieldEdit" id="box1list" placeholder="#{prop['add']} #{adminContext.patillscript.box1.title}" listUrl="../#{adminContext.patillscript.box1.getListUrl(adminContext.patillscript.locale, adminContext.user.groupId)}"></input>
+		  			<input class="f_text boxListSearchFieldEdit" id="box1list" placeholder="#{prop['add']} #{adminContext.patillscript.box1.title}" listUrl="../#{adminContext.patillscript.box1.getListUrl(adminContext.patillscript.locale, adminContext.patillscript.groupId)}"></input>
 		  			<input type="hidden" id="box1ListType" value="#{adminContext.patillscript.box1.listType}"></input>
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box1ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
@@ -399,7 +395,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box2_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text boxListSearchFieldEdit" id="box2list" placeholder="#{prop['add']} #{adminContext.patillscript.box2.title}" listUrl="../#{adminContext.patillscript.box2.getListUrl(adminContext.patillscript.locale, adminContext.user.groupId)}"></input>
+		  			<input class="f_text boxListSearchFieldEdit" id="box2list" placeholder="#{prop['add']} #{adminContext.patillscript.box2.title}" listUrl="../#{adminContext.patillscript.box2.getListUrl(adminContext.patillscript.locale, adminContext.patillscript.groupId)}"></input>
 		  			<input type="hidden" id="box2ListType" value="#{adminContext.patillscript.box2.listType}"></input>
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box2ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
@@ -438,7 +434,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box3_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text boxListSearchFieldEdit" id="box3list" placeholder="#{prop['add']} #{adminContext.patillscript.box3.title}" listUrl="../#{adminContext.patillscript.box3.getListUrl(adminContext.patillscript.locale, adminContext.user.groupId)}"></input>
+		  			<input class="f_text boxListSearchFieldEdit" id="box3list" placeholder="#{prop['add']} #{adminContext.patillscript.box3.title}" listUrl="../#{adminContext.patillscript.box3.getListUrl(adminContext.patillscript.locale, adminContext.patillscript.groupId)}"></input>
 		  			<input type="hidden" id="box3ListType" value="#{adminContext.patillscript.box3.listType}"></input>
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box3ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>
@@ -477,7 +473,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
 		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box4_prefix" style="display:none;" />
 		  			
-		  			<input class="f_text boxListSearchFieldEdit" id="box4list" placeholder="#{prop['add']} #{adminContext.patillscript.box4.title}" listUrl="../#{adminContext.patillscript.box4.getListUrl(adminContext.patillscript.locale, adminContext.user.groupId)}"></input>
+		  			<input class="f_text boxListSearchFieldEdit" id="box4list" placeholder="#{prop['add']} #{adminContext.patillscript.box4.title}" listUrl="../#{adminContext.patillscript.box4.getListUrl(adminContext.patillscript.locale, adminContext.patillscript.groupId)}"></input>
 		  			<input type="hidden" id="box4ListType" value="#{adminContext.patillscript.box4.listType}"></input>
 		  			&nbsp;
 		  			<a href="javascript:displayBoxListSettings('box4ListSettings',true)"  class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-gear"></i></a>

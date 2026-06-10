@@ -51,10 +51,10 @@ public class User {
 	private UserSetting userSetting = new UserSetting();
 	
 	public User(){}
-	public User(/*int systemId,*/ String extUserId, String groupId){
+	public User(/*int systemId,*/ String extUserId/*, String groupId*/){
 		//this.systemId = systemId;
 		this.extUserId =extUserId;
-		this.groupId = Long.parseLong(groupId);
+		//this.groupId = Long.parseLong(groupId);
 		this.extUserId2 = decodeUserId(extUserId);
 	}
 	
@@ -113,10 +113,10 @@ public class User {
 		return false;
 	}
 	
-	public void updateGroupId(String groupId) {
+	/*public void updateGroupId(String groupId) {
 		if((this.groupId>0) || (groupId == null)) return;
 		
 		this.groupId = Long.parseLong(groupId);
 		new DBUser().saveAndCommit(this);
-	}
+	}*/
 }
