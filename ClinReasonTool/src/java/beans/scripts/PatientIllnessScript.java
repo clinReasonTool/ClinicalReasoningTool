@@ -44,6 +44,7 @@ import util.StringUtilities;
 public class PatientIllnessScript extends Beans implements Comparable, IllnessScriptInterface, Serializable /*, PropertyChangeListener*/ {
 
 	
+	
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The VP has one or more final diagnoses

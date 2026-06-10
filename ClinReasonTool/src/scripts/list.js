@@ -207,7 +207,7 @@ function doMatch(request,response, in_data){
 		}
 		//if the only entry is the "add own entry" we change it in expert mode to "no entries found"
 		//(-> we could also hide it in player mode if there is an exact match -> just set label to "") 
-		if(my_map.length==1 && isExp){ 
+		if(my_map.length==1 && isExp && my_map[0].value=="-99"){ 
 			my_map[0].label = noEntryFound;
 		}
 		//we have found no match, so we are checking for typos (currently not for expert edit, but could be done, too?)

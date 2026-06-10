@@ -9,7 +9,7 @@ function addBoxItem(itemId, name, typedinName, box){
 	clearErrorMsgs();
 	var prefix = $("#box"+box+"_prefix").val();
 	
-	if(name!=""){
+	if(name!="" && itemId!="-99"){
 		checkBoxColorOnAdd("box"+box+"_title", "box"+box+"s");
 		sendAjax(itemId, boxCallBack, "addBox"+box+"Item", name, prefix, typedinName, box);
 	}

@@ -123,7 +123,7 @@ public class HibernateSession {
 			cfg.addClass(beans.relation.summary.JsonTest.class); //testing only
 			cfg.addClass(beans.helper.VPMapOverviewItem.class);
 			cfg.addClass(beans.helper.CaseDifficulty.class);
-			cfg.addClass(beans.list.ChapterSeaNursingItem.class); //hack for ChapterSea nursing implementation
+			//cfg.addClass(beans.list.ChapterSeaNursingItem.class); //hack for ChapterSea nursing implementation
 			//cfg.addClass(test.LMMeshMapping.class);
 			
 			if (factory==null) {
