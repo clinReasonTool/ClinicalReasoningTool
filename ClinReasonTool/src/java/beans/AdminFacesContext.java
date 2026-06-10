@@ -185,8 +185,11 @@ public class AdminFacesContext extends FacesContextWrapper implements MyFacesCon
 	public void initPatIllScript(){ 
 		if(user==null) return;
 		long id = AjaxController.getInstance().getLongRequestParamByKey(AjaxController.REQPARAM_SCRIPT);
+        long groupId = AjaxController.getInstance().getLongRequestParamByKey("groupid");
+
 		if(this.patillscript!=null && (id<0 || this.patillscript.getId()==id)){
 			if(this.graph==null || this.graph.getPatIllScriptId()!=this.patillscript.getId()) initGraph();
+			this.patillscript.updateGroupId(groupId);
 			return; //current script already loaded....
 		}
 		if(id<=0) return;
@@ -237,12 +240,13 @@ public class AdminFacesContext extends FacesContextWrapper implements MyFacesCon
 	public boolean isOpenedViaAPI(){
 		boolean isViaAPI =  AjaxController.getInstance().getBooleanRequestParamByKey(AjaxController.REQPARAM_API, false);
 		String vpId = AjaxController.getInstance().getRequestParamByKey("vp_id");
-		
+		long groupId = -1;
 		try {
 			String checksum =  AjaxController.getInstance().getRequestParamByKeyNoDecrypt(AjaxController.REQPARAM_CHECKSUM);
 			String checksum_uid =  AjaxController.getInstance().getRequestParamByKeyNoDecrypt(AjaxController.REQPARAM_CHECKSUM_UID);
 			String ts = AjaxController.getInstance().getRequestParamByKeyNoDecrypt(AjaxController.REQPARAM_TS);
 			String vp = AjaxController.getInstance().getRequestParamByKeyNoDecrypt(AjaxController.REQPARAM_VP);
+			groupId = AjaxController.getInstance().getLongRequestParamByKey("groupid");
 			String cmp_checksum_src = "" + checksum_uid + "_" + vp +  "_" + ts;
 			String cmp_checksum =  Encoder.getInstance().encodeQueryParam(cmp_checksum_src);
 			//CRTLogger.out("checksum == cmp_checksum?" + checksum.equals(cmp_checksum), CRTLogger.LEVEL_PROD);
@@ -258,7 +262,10 @@ public class AdminFacesContext extends FacesContextWrapper implements MyFacesCon
 				}
 				if(this.user!=null && vpId!=null && (this.patillscript==null || !this.patillscript.getVpIdCrop().trim().equals(vpId))){ //load script and init graph:
 					this.patillscript = new ExpPortfolio(this.user).getOrCreateExpScriptFromVPSystem();
-					if(this.patillscript!=null) initGraph();
+					if(this.patillscript!=null) {
+						initGraph();
+						this.patillscript.updateGroupId(groupId);
+					}
 				}
 			}
 			catch (Exception e){

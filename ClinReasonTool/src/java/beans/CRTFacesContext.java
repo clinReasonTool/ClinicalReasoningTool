@@ -123,7 +123,7 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 		if(setUserIdStr==null && extUserId==null){
 			return;
 		}
-		if(user!=null) user.updateGroupId(groupId);
+		//if(user!=null) user.updateGroupId(groupId);
 		//userIdStr is same as userId of loaded user -> return
 		if(user!=null && setUserIdStr!=null && user.getUserId()==Long.valueOf(setUserIdStr).longValue()) return; 
 		//extUserId of loaded user is same as extUserId -> return
@@ -134,7 +134,7 @@ public class CRTFacesContext extends FacesContextWrapper implements MyFacesConte
 		}
 
 		else if(extUserId!=null && !extUserId.trim().equals("")){
-			user =  new UserController().getUser(extUserId, groupId);
+			user =  new UserController().getUser(extUserId);
 			userHasChanged(); //user is different
 		}
 		if(user==null){

@@ -105,6 +105,11 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	private int courseOfTime = -1;
 	
 	/**
+	 * groupId of the case transferred from CASUS
+	 */
+	private long groupId = -1;
+	
+	/**
 	 * created by learner or expert
 	 */
 	private int type = IllnessScriptInterface.TYPE_LEARNER_CREATED;
@@ -260,6 +265,9 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	
 	public int getShowAll() { return showAll;}
 	public void setShowAll(int showAll) {this.showAll = showAll;}
+	
+	public long getGroupId() {return groupId;}
+	public void setGroupId(long groupId) {this.groupId = groupId;}
 	
 	public void toggleShowAll() {
 		if(showAll == 0) showAll = 1;
@@ -1342,4 +1350,16 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	}
 	
 	public List getDiagnoses() {return diagnoses;}
+	
+	/**
+	 * groupId of CASUS case is updated in script if necessary
+	 * @param groupIdNew
+	 */
+	public void updateGroupId(long groupIdNew) {
+		if(groupIdNew<=0) return;
+		if(groupId == groupIdNew) return;
+		this.setGroupId(groupIdNew);
+		new DBClinReason().saveAndCommit(this);
+		
+	}
 }
