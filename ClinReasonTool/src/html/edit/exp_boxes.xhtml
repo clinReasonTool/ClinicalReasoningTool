@@ -100,6 +100,13 @@ var diagnosesBox = #{adminContext.patillscript.diagnosesBox};
 
 $(function() {
 	
+	$(".search input.f_text").keyup(function(event) {
+		//alert("hallo");
+	    if (event.keyCode === 13) {
+	    	addBoxItemWithoutList(event);
+	    }
+	});
+	
 	//if(displayAll==1) currentStage = maxStage;
 	$(".listdialog").hide();
 	//$("#jdialogError").hide();
@@ -182,13 +189,7 @@ $(function() {
 	});
 	
 	
-	$(".search input.f_text").keyup(function(event) {
-		//alert("hallo");
-	    if (event.keyCode === 13) {
-	    	addBoxItemWithoutList(event);
-	    }
-	});
-	
+
 	/*$("#boxesSel").dialog({
 		autoOpen: false,
 		modal: true,
@@ -353,7 +354,7 @@ var ajaxUrl = "/crt/src/html/edit/tabs_ajax.xhtml";
   		   		</ui:include>
   		   		<span class="option_button" style="padding:4px 8px 4px 8px"><i class="fa fa-info-circle" mytooltip="#{adminContext.patillscript.box1.tooltip}"></i></span>
 	   		</div>
-		  			<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
+		  	<div class="search boxchild"><span class="icon"><i class="icon-search"></i></span>
 		  			<input type="text" id="box1_prefix" style="display:none;" />
 		  			
 		  			<input class="f_text boxListSearchFieldEdit" id="box1list" placeholder="#{prop['add']} #{adminContext.patillscript.box1.title}" listUrl="../#{adminContext.patillscript.box1.getListUrl(adminContext.patillscript.locale, adminContext.patillscript.groupId)}"></input>

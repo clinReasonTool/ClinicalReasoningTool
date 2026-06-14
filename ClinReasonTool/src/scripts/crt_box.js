@@ -9,10 +9,17 @@ function addBoxItem(itemId, name, typedinName, box){
 	clearErrorMsgs();
 	var prefix = $("#box"+box+"_prefix").val();
 	
-	if(name!="" && itemId!="-99"){
+	if(name!="-999" && name!="-99" && itemId!="-99"){
 		checkBoxColorOnAdd("box"+box+"_title", "box"+box+"s");
 		sendAjax(itemId, boxCallBack, "addBox"+box+"Item", name, prefix, typedinName, box);
 	}
+	//player: student works without list:
+	else if (name=="-999" && !isExp)
+		addBoxItemWithoutList2(box, typedinName);
+	//player: student does not find entry in list and adds own one:
+	else if (itemId=="-99" && !isExp)
+		addBoxItemWithoutList2(box, typedinName);
+	
 }
 
 
@@ -23,8 +30,18 @@ new entry.
 function addBoxItemWithoutList(event){
 	var box = event.target.id.substring(3,4); //e.g. box1list
 	var name = event.target.value;
+	addBoxItemWithoutList2(box, name);
+	//sendAjax(-99, boxCallBack, "addBox"+box+"Item", name, "", "", box);	
+}
+
+/**
+** user has entered an entry in a box working without a list and clicked on enter, so we submit the 
+new entry. 
+ */
+function addBoxItemWithoutList2(box, name){
 	sendAjax(-99, boxCallBack, "addBox"+box+"Item", name, "", "", box);	
 }
+
 
 
 //id, callback, type, methodName, typedinName, box

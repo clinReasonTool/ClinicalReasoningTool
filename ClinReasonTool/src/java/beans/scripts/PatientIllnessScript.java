@@ -409,9 +409,7 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		updateStage(AjaxController.getInstance().getRequestParamByKey(AjaxController.REQPARAM_STAGE));
 		return currentStage;
 	}	
-	public void setCurrentStage(int currentStage) { 
-		this.currentStage = currentStage;
-		}		
+	public void setCurrentStage(int currentStage) { this.currentStage = currentStage;}		
 	public List<MyError> getErrors() {return errors;}
 	
 	public int getOrderNr() {return orderNr;}
