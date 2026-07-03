@@ -403,7 +403,10 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 		if(maxSubmittedStage>0) return maxSubmittedStage;
 		return submittedStage; //default
 	}
-	public void setMaxSubmittedStage(int maxSubmittedStage) {this.maxSubmittedStage = maxSubmittedStage;}
+	public void setMaxSubmittedStage(int maxSubmittedStage) 
+	{
+		this.maxSubmittedStage = maxSubmittedStage;
+	}
 	
 	public int getCurrentStageWithUpdate() {
 		updateStage(AjaxController.getInstance().getRequestParamByKey(AjaxController.REQPARAM_STAGE));

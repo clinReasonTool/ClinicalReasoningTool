@@ -226,7 +226,7 @@ select.f_select{
 	cursor:pointer;
 }
 
-.submitBtn{
+.submitBtn1, .submitBtn2, .submitBtn3, .submitBtn4{
 	width:140px;
 	height: 100%;
 	float:right;
@@ -242,7 +242,7 @@ select.f_select{
 	text-align:center;
 	
 }
-.submitBtn a{
+.submitBtn1 a, .submitBtn2 a, .submitBtn3 a, .submitBtn4 a{
 	color:#ffffff;
 }
 
@@ -251,7 +251,7 @@ select.f_select{
 	width: 100%; /*250px;*/
 }
 
-a#ddx_submit_btn, errorsymbol.a{
+a#ddx_submit_btn1, a#ddx_submit_btn2, a#ddx_submit_btn3, a#ddx_submit_btn4, errorsymbol.a{
     height: 100%;
     padding-left: 5px;
     padding-right: 5px;
@@ -264,11 +264,11 @@ a#ddx_submit_btn, errorsymbol.a{
 	color:#ffffff;
 }
 
-.submitBtnOff{
+.submitBtnOff1,.submitBtnOff2, .submitBtnOff3, .submitBtnOff4 {
 	background-color:#c2c2c2;
 }
 
-.submitBtn a{
+.submitBtn1 a,.submitBtn2 a, .submitBtn3 a, .submitBtn4 a {
 	color:#ffffff !important;
 	vertical-align:middle;
 	font-color:#ffffff;
@@ -289,7 +289,7 @@ a#ddx_submit_btn, errorsymbol.a{
 	display:none;
 }
 
-.errorsymbol{
+.errorsymbol1, .errorsymbol2, .errorsymbol3, .errorsymbol4 {
 	color:#ffffff;
 	background-color:#c00815;
 	height:100%;
@@ -1277,9 +1277,9 @@ input.cmn-toggle-round:checked + label:after {
 	color:orange;
 }
 
-.hide_0, .showSOl_false, .noSOl_true{
+/*.hide_0, .showSOl_false, .noSOl_true{
 	display:none;
-}
+}*/
 
 
 /*hide final diagnosis stage change for non-final diagnoses*/ 

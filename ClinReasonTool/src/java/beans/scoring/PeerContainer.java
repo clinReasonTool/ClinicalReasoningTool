@@ -47,6 +47,7 @@ public class PeerContainer {
 	}
 	
 	public void addPeerBean(PeerBean bean, String vpId){
+		if(peerBeans==null) return;
 		List<PeerBean> peers = getPeerBeans(vpId);
 		if(peers!=null) peers.add(bean); //List already there, so we add the peerBean
 		else{

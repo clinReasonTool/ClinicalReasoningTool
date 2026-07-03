@@ -364,21 +364,37 @@ function workingDDXOff(id, box){
 	//if(tier==7) return "#f3546a"; //MnM
 	return "#ffffff";
  }
-
+/**
+** hide / show ddx dubmit button dynamically in the box that contains the differentials.
+ */
 function checkSubmitBtn(){
+	if(isExp) return;
+	hideSubmitBtns();
+	if(maxSubmittedStage=="0"){
+		
+		return;
+	}
 	var ddxNum = $( ".box"+diagnosesBox+"s").length;
 	//enable submit button:
 	if(ddxNum>0 && submitted!="true"){
-		$("#submitBtnSpan").removeClass("submitBtnOff");
+		$("#submitBtnSpan"+diagnosesBox).removeClass("submitBtnOff"+diagnosesBox);
 	}
 	//disable submit button:
-	else if((ddxNum<=0 || submitted=="true") && !$("#submitBtnSpan").hasClass("submitBtnOff")){
-		$("#submitBtnSpan").addClass("submitBtnOff");		
+	else if((ddxNum<=0 || submitted=="true") && !$("#submitBtnSpan"+diagnosesBox).hasClass("submitBtnOff"+diagnosesBox)){
+		$("#submitBtnSpan"+diagnosesBox).addClass("submitBtnOff"+diagnosesBox);		
 	}
 	if( submitted=="true"){
-		$("#submitBtnA").html(submittedButonName);
+		$("#submitBtnA"+diagnosesBox).html(submittedButonName);
 	}
-	else $("#submitBtnA").html(submitButonName);
+	else $("#submitBtnA"+diagnosesBox).html(submitButonName);
+	$("#submitBtnSpan"+diagnosesBox).show();
+}
+
+function hideSubmitBtns(){
+	$("#submitBtnSpan1").hide();   
+	$("#submitBtnSpan2").hide();
+	$("#submitBtnSpan3").hide();
+	$("#submitBtnSpan4").hide();
 }
 
 /*
