@@ -550,14 +550,14 @@ public class Graph extends DirectedWeightedMultigraph<MultiVertex, MultiEdge> {
 					startIdWithPrefix = GraphController.getPrefixByType(sourceVertex.getBox())+sourceVertex.getLearnerVertex().getId(); //GraphController.getPrefixByType(sourceVertex.getType())+sourceVertex.getLearnerVertex().getId(); 	
 				}
 				else if(sourceVertex.getExpertVertex()!=null){
-					startIdWithPrefix = GraphController.getPrefixByType(sourceVertex.getType())+sourceVertex.getExpertVertex().getId(); 	
+					startIdWithPrefix = GraphController.getPrefixByType(sourceVertex.getBox())+sourceVertex.getExpertVertex().getId(); 	
 				}
 				if(targetVertex.getLearnerVertex()!=null){
-					targetIdWithPrefix = GraphController.getPrefixByType(targetVertex.getType())+targetVertex.getLearnerVertex().getId();
+					targetIdWithPrefix = GraphController.getPrefixByType(targetVertex.getBox())+targetVertex.getLearnerVertex().getId();
 				}
 				else if(targetVertex.getExpertVertex()!=null){
 					//startIdWithPrefix = GraphController.getPrefixByType(sourceVertex.getType())+sourceVertex.getExpertVertex().getId(); 	
-					targetIdWithPrefix = GraphController.getPrefixByType(targetVertex.getType())+targetVertex.getExpertVertex().getId();
+					targetIdWithPrefix = GraphController.getPrefixByType(targetVertex.getBox())+targetVertex.getExpertVertex().getId();
 				}
 				if(cnxId>0 && startIdWithPrefix!=null && targetIdWithPrefix!=null && showExpEdge){
 					sb.append("{\"id\":\""+GraphController.PREFIX_CNX + cnxId+"\",");
