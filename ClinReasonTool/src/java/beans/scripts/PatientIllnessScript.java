@@ -990,22 +990,33 @@ public class PatientIllnessScript extends Beans implements Comparable, IllnessSc
 	public void setLogEntries(List<LogEntry> le ){this.logentries = le;}
 	
 
-	/***** backwards compatibility ***/
+	/***** backwards compatibility 
+	 * @deprecated
+	 * ***/
 	public int getBox1Type() {
-		if(box1!=null && box1.getBoxType()>0) return box1.getBoxType();
+		//if(box1!=null && box1.getBoxType()>0) return box1.getBoxType();
 		return box1Type;
 	}
 	public void setBox1Type(int box1Type) {this.box1Type = box1Type;}
+	/**
+	 * @deprecated
+	 */
 	public int getBox2Type() {
-		if(box2!=null && box2.getBoxType()>0) return box2.getBoxType();
+		//if(box2!=null && box2.getBoxType()>0) return box2.getBoxType();
 		return box2Type;}
 	public void setBox2Type(int box2Type) {this.box2Type = box2Type;}
+	/**
+	 * @deprecated
+	 */
 	public int getBox3Type() {
-		if(box3!=null && box3.getBoxType()>0) return box3.getBoxType();
+		//if(box3!=null && box3.getBoxType()>0) return box3.getBoxType();
 		return box3Type;}
 	public void setBox3Type(int box3Type) {this.box3Type = box3Type;}
+	/**
+	 * @deprecated
+	 */
 	public int getBox4Type() {
-		if(box4!=null && box4.getBoxType()>0) return box4.getBoxType();
+		//if(box4!=null && box4.getBoxType()>0) return box4.getBoxType();
 		return box4Type;}
 	public void setBox4Type(int box4Type) {this.box4Type = box4Type;}	
 	
